@@ -8,6 +8,9 @@ The following options are available via config.js settings:
 
  1. Mouse Point Latitude and Longitude - files: index.html, style.css, script.js - see wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
 
+2. Additional maps- files: layers.js = see wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
+
+3. US Layers - allow to remove - file: layers.js - see wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
 
 # Webserver (html sub-directory) changes by Allan Kissack
 
