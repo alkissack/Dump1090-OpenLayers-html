@@ -135,8 +135,9 @@ MapzenAPIKey = null;
 // -------------------------------------------------------------------------------------------
 ShowPermanentLabels  = false;  // Not yet implemented
 ShowHoverOverLabels  = false;  // Not yet implemented
-ShowMouseLatLong     = false;  // Not yet implemented
+ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
 ShowAdditionalMaps   = false;  // Not yet implemented
 ShowUKMilLayers      = false;  // Not yet implemented
 ShowUKCivviLayers    = false;  // Not yet implemented
+ShowAdditionalData   = false;  // Not yet implemented
 
