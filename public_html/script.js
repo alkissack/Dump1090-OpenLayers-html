@@ -436,6 +436,208 @@ function initialize_map() {
 
         var layers = createBaseLayers();
 
+	// --------------------------------------------------------------
+        // AKISSACK - ADD LAYERS ----------------------  ref: AK4A starts
+	// --------------------------------------------------------------
+
+	if (ShowUKCivviLayers ) {
+
+             var vordmeLayer = new ol.layer.Vector({
+                name: 'vordme',
+                type: 'overlay',
+                title: 'VOR/DME',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_VOR+DME+NDB+TACAN.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+  		style: (function() {
+    			var style = new ol.style.Style({
+      				image: new ol.style.Icon({
+        			src: 'layers/img/vor+ndb.png'
+      			}),
+      			text: new ol.style.Text({
+        			text: 'field-1',
+        			scale: 1,
+				offsetX: 1,
+           			offsetY: -11,
+        			fill: new ol.style.Fill({
+          				color: '#003300'
+        			}),
+        			//stroke: new ol.style.Stroke({
+          			//	color: '#ccffcc',
+          			//	width: 3.5
+        			//})
+      			})
+    		});
+    		var styles = [style];
+    		return function(feature, resolution) {
+      			style.getText().setText(feature.get("field_2"));
+      			return styles;
+    		};
+  		})()
+            });
+
+	    //UK_NavigationPoints.geojson
+            var navPointsLayer = new ol.layer.Vector({
+                name: 'navigation',
+                type: 'overlay',
+                title: 'Nav Points',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_NavigationPoints.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+
+  		style: (function() {
+    			var style = new ol.style.Style({
+      				image: new ol.style.Icon({
+        				src: 'layers/img/point.png'
+      				}),
+      				text: new ol.style.Text({
+        				text: 'field-1',
+        				scale: 0.75,
+					offsetX: -1,
+           				offsetY: 10,
+        				fill: new ol.style.Fill({
+          					color: '#000033'
+        				}),
+      				})
+    			});
+
+    			var styles = [style];
+    			return function(feature, resolution) {
+      				style.getText().setText(feature.get("field_2"));
+      				return styles;
+    			};
+  	      })()
+            });
+	    navPointsLayer .setVisible(false);
+
+            var airwaysLayer = new ol.layer.Vector({
+                name: 'airways',
+                type: 'overlay',
+                title: 'Airways',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Airways.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     	 color : 'rgba(0, 102,0, 0.07)'
+                	}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0, 64,0, 0.5)',
+                        	width: 0.2
+                	})
+		})
+            });
+            var ukCTALayer = new ol.layer.Vector({
+                name: 'ukcta',
+                type: 'overlay',
+                title: 'CTA/TMA',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_AT_Areas.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	//fill: new ol.style.Fill({
+                     	// color : 'rgba(0, 102,0, 0.1)'
+                	//}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0,64,0, 0.2)',
+                        	width: 1
+                	})
+		})
+
+            });
+
+            var atzLayer = new ol.layer.Vector({
+                name: 'atz',
+                type: 'overlay',
+                title: 'CTR',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_ATZ.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0, 80, 0, 0.5)',
+                        	width: 1
+                	})
+		})
+
+            });
+
+            var airportLayer = new ol.layer.Vector({
+                name: 'airways',
+                type: 'overlay',
+                title: 'Airports',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Civi_Airports.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(200,16,64, 0.5)',
+                        	width: 1.5
+                	})
+		})
+            });
+
+            var ukairspaceLayer = new ol.layer.Vector({
+                name: 'ukair',
+                type: 'overlay',
+                title: 'UK Airspace',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Airspace.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0,102,0, 0.2)',
+                        	width: 3
+                	})
+		})
+            });
+
+            layers.push(new ol.layer.Group({
+                title: 'UK',
+                layers: [
+			airwaysLayer,
+			ukairspaceLayer,
+			airportLayer,
+			atzLayer,
+			ukCTALayer, 
+			navPointsLayer,
+			vordmeLayer
+                ]
+            }));	
+	}
+
+	// --------------------------------------------------------------
+        // AKISSACK - ADD LAYERS ----------------------  ref: AK4A ends
+	// --------------------------------------------------------------
+
         var iconsLayer = new ol.layer.Vector({
                 name: 'ac_positions',
                 type: 'overlay',
