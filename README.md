@@ -1,8 +1,7 @@
 # Dump1090-OpenLayers3-html
-Modifications to the OL3 html files (part of the dump1090-fa branch)
+Modifications to the OL3 html files (part of the dump1090-fa branch).  The contents of public_html are a complete replacement to the webserver root directory on your dump1090 or dump1090-fa installation.  Better to rename your existing html folder, and copy this one in (calling it html).  Set your options at teh bottom of config.js, clear your browser cache and re-load your dump1090 page.
 
-Originaly amended for my own purposes, but having had several requests to 
-share these changes I have decided to place them in this forum.
+Originaly amended for my own purposes, but having had several requests to share these changes I have decided to place them in this forum. The new layers are only really useful if you have aircraft in UK airspace.  Other modifications can provide value in other regions.
 
 The following options are available via config.js settings:
 
@@ -12,6 +11,9 @@ The following options are available via config.js settings:
 
 3. US Layers - allow to remove - file: layers.js - see wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
 
+4. UK Civilian layers - file: layer.js and supporting files in \layers\ directory - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
+
+5. UK Military layers - file: layer.js and supporting files in \layers\ directory - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays
 # Webserver (html sub-directory) changes by Allan Kissack
 
 Originaly from:
