@@ -111,7 +111,7 @@ ShowFlags = true;
 FlagPath = "flags-tiny/";
 
 // Set to true to enable the ChartBundle base layers (US coverage only)
-ChartBundleLayers = false;
+ChartBundleLayers = true;
 
 // Provide a Bing Maps API key here to enable the Bing imagery layer.
 // You can obtain a free key (with usage limits) at
@@ -133,11 +133,12 @@ MapzenAPIKey = null;
 
 // Options to enable/disable modifications provided in Dump1090-OpenLayers3-html by Al Kissack
 // -------------------------------------------------------------------------------------------
-ShowPermanentLabels  = false;  // Not yet implemented
-ShowHoverOverLabels  = false;  // Not yet implemented
 ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps 
+ShowUSLayers	     = false;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
+
+ShowPermanentLabels  = false;  // Not yet implemented
+ShowHoverOverLabels  = false;  // Not yet implemented
 ShowUKMilLayers      = false;  // Not yet implemented
 ShowUKCivviLayers    = false;  // Not yet implemented
 ShowAdditionalData   = false;  // Not yet implemented
-

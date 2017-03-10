@@ -89,7 +89,13 @@ function createBaseLayers() {
                 world.push(createMapzenLayer());
         }
 
-        if (ChartBundleLayers) {
+	// ------------------------------------------------------------
+        // AKISSACK - US Layers ---------------------- ref: AK3A starts
+	// ------------------------------------------------------------
+
+	if (ShowUSLayers) {
+
+            if (ChartBundleLayers) {
                 var chartbundleTypes = {
                         sec: "Sectional Charts",
                         tac: "Terminal Area Charts",
@@ -112,28 +118,34 @@ function createBaseLayers() {
                                 type: 'base',
                                 group: 'chartbundle'}));
                 }
-        }
+            }
 
-        var nexrad = new ol.layer.Tile({
+
+            var nexrad = new ol.layer.Tile({
                 name: 'nexrad',
                 title: 'NEXRAD',
                 type: 'overlay',
                 opacity: 0.5,
                 visible: false
-        });
-        us.push(nexrad);
+            });
+            us.push(nexrad);
 
-        var refreshNexrad = function() {
+            var refreshNexrad = function() {
                 // re-build the source to force a refresh of the nexrad tiles
                 var now = new Date().getTime();
                 nexrad.setSource(new ol.source.XYZ({
                         url : 'http://mesonet{1-3}.agron.iastate.edu/cache/tile.py/1.0.0/nexrad-n0q-900913/{z}/{x}/{y}.png?_=' + now,
                         attributions: 'NEXRAD courtesy of <a href="http://mesonet.agron.iastate.edu/">IEM</a>'
                 }));
-        };
+            };
 
-        refreshNexrad();
-        window.setInterval(refreshNexrad, 5 * 60000);
+            refreshNexrad();
+            window.setInterval(refreshNexrad, 5 * 60000);
+
+	} 
+	// ------------------------------------------------------------
+        // AKISSACK - US Layers ---------------------- ref: AK3A ends
+	// ------------------------------------------------------------
 
         if (world.length > 0) {
                 layers.push(new ol.layer.Group({
