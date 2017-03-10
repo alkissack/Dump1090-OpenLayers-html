@@ -638,6 +638,136 @@ function initialize_map() {
         // AKISSACK - ADD LAYERS ----------------------  ref: AK4A ends
 	// --------------------------------------------------------------
 
+	// --------------------------------------------------------------
+        // AKISSACK - ADD LAYERS ----------------------  ref: AK5A starts
+	// --------------------------------------------------------------
+
+	if (ShowUKMilLayers ) {
+            var dangerLayer = new ol.layer.Vector({
+                name: 'danger',
+                type: 'overlay',
+                title: 'Danger Areas',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Danger_Areas.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     	 color : 'rgba(255, 0,0, 0.05)'
+                	}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(255, 0,0, 0.5)',
+                        	width: 0.75
+                	})
+		})
+            });
+	    dangerLayer.setVisible(false);
+
+            var AARLayer = new ol.layer.Vector({
+                name: 'aar',
+                type: 'overlay',
+                title: 'AAR Areas',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Mil_AAR_Zones.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     	 color : 'rgba(0,0,255, 0.05)'
+                	}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0,0,128, 0.5)',
+                        	width: 0.75
+                	})
+		})
+
+            });
+	    AARLayer.setVisible(false);
+
+            var matzLayer = new ol.layer.Vector({
+                name: 'matz',
+                type: 'overlay',
+                title: 'MATZ',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_MATZ.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     	 color : 'rgba(0,0,255, 0.05)'
+                	}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(128,0,0, 0.5)',
+                        	width: 0.75
+                	})
+		})
+            });
+
+            var matzafLayer = new ol.layer.Vector({
+                name: 'matzaf',
+                type: 'overlay',
+                title: 'Airfields',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Mil_Airfield_runways.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(200,16,64, 0.5)',
+                        	width: 1
+                	})
+		})
+            });
+
+            var ukmilLayer = new ol.layer.Vector({
+                name: 'ukmil',
+                type: 'overlay',
+                title: 'TACAN Routes',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Military_TACAN_Routes.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0,0,102,0.2)',
+                        	width: 3
+                	})
+		})
+            });
+	    ukmilLayer.setVisible(false);
+
+            layers.push(new ol.layer.Group({
+                title: 'UK Military',
+                layers: [
+			matzLayer,
+			matzafLayer,
+			dangerLayer,
+			ukmilLayer,
+			AARLayer 
+                ]
+            }));
+
+	}
+
+	// --------------------------------------------------------------
+        // AKISSACK - ADD LAYERS ----------------------  ref: AK5A ends
+	// --------------------------------------------------------------
+
         var iconsLayer = new ol.layer.Vector({
                 name: 'ac_positions',
                 type: 'overlay',

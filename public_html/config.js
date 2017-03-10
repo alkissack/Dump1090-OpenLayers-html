@@ -137,8 +137,8 @@ ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps 
 ShowUSLayers	     = false;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
 ShowUKCivviLayers    = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
+ShowUKMilLayers      = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays
 
 ShowPermanentLabels  = false;  // Not yet implemented
 ShowHoverOverLabels  = false;  // Not yet implemented
-ShowUKMilLayers      = false;  // Not yet implemented
 ShowAdditionalData   = false;  // Not yet implemented
