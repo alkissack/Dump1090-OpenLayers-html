@@ -1,6 +1,9 @@
 # Dump1090-OpenLayers3-html
 Modifications to the OL3 html files (part of the dump1090-fa branch)
 
+Originaly amended for my own purposes, but having had several requests to 
+share these changes I have decided to place them in this forum.
+
 # Webserver (html sub-directory) changes by Allan Kissack
 
 Originaly from:
