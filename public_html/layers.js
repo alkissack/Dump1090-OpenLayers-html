@@ -9,12 +9,60 @@ function createBaseLayers() {
         var world = [];
         var us = [];
 
+	// ------------------------------------------------------------
+        // AKISSACK - DEFAULT MAPS ------------------- ref: AK2A starts
+	// ------------------------------------------------------------
+	if (ShowAdditionalMaps) {
+            world.push(new ol.layer.Tile({
+               	source: new ol.source.OSM({
+        		"url" : "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+      		}),
+               	name: 'osm light',
+               	title: 'OpenStreetMap Light',
+               	type: 'base',
+            }));
+	}
+	// ------------------------------------------------------------
+        // ---------------------------------------------- ref: AK2A ends
+	// ------------------------------------------------------------
+
         world.push(new ol.layer.Tile({
                 source: new ol.source.OSM(),
                 name: 'osm',
                 title: 'OpenStreetMap',
                 type: 'base',
         }));
+
+	// ------------------------------------------------------------
+        // AKISSACK - additional MAPS ---------------- ref: AK2B starts
+	// ------------------------------------------------------------
+	if (ShowAdditionalMaps) {
+            world.push(new ol.layer.Tile({
+                source: new ol.source.OSM({
+                  "url" : "http://{a-d}.tile.stamen.com/terrain/{z}/{x}/{y}.png", 
+                  "attributions" : 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ' 
+                                 + 'Data by <a _href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+                }),
+                name: 'terrain',
+                title: 'Terrain + Roads',
+                type: 'base',
+            }));
+
+            world.push(new ol.layer.Tile({
+               	source: new ol.source.OSM({
+                 		"url" : "http://{a-d}.tile.stamen.com/terrain-background/{z}/{x}/{y}.png", 
+                 		"attributions" : 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. ' 
+                                + 'Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+               	}),
+               	name: 'terrain',
+               	title: 'Terrain',
+               	type: 'base',
+            }));
+
+	}
+	// ------------------------------------------------------------
+        // ---------------------------------------------- ref: AK2B ends
+	// ------------------------------------------------------------
 
         if (BingMapsAPIKey) {
                 world.push(new ol.layer.Tile({
