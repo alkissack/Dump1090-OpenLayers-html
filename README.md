@@ -4,6 +4,10 @@ Modifications to the OL3 html files (part of the dump1090-fa branch)
 Originaly amended for my own purposes, but having had several requests to 
 share these changes I have decided to place them in this forum.
 
+The following options are available via config.js settings:
+1. 
+
+
 # Webserver (html sub-directory) changes by Allan Kissack
 
 Originaly from:
