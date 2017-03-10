@@ -573,6 +573,30 @@ function initialize_map() {
                 }
         });
 
+
+	//------------------------------------------------------------------------------------
+    	// AKISSACK - MOUSE POSITION ----------------------------------------------- Ref: AK1C
+	//------------------------------------------------------------------------------------
+	var llFormat = function(dgts)
+	{
+  		return (
+    			function(coord1) {
+        			var coord2 = [coord1[1], coord1[0]]; 
+      				return ol.coordinate.toStringXY(coord2,dgts);
+  			});        
+	}
+	var mousePosition = new ol.control.MousePosition({ 
+              coordinateFormat: llFormat(4),  // ol.coordinate.createStringXY(4),
+              projection: 'EPSG:4326',
+              target: document.getElementById('mouseposition'),
+              undefinedHTML: '&nbsp;'
+        });
+ 
+        OLMap.addControl(mousePosition);
+	//------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------ AKISSACK
+	//------------------------------------------------------------------------------------
+
 	// Add home marker if requested
 	if (SitePosition) {
                 var markerStyle = new ol.style.Style({

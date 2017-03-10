@@ -202,3 +202,8 @@ select.error, textarea.error, input.error {
     top: 86px !important;
     right: 10px !important;
 }
+
+/* AKISSACK - ref: AK1B ------------------------------------------------------------------------------------ */
+div#mouseposition  { position: absolute; top: 0px; left: 10px; opacity: 1; text-align: left; color: black;  }
+div.mp { width: 130px; }
+/* --------------------------------------------------------------------------------------------------------- */
