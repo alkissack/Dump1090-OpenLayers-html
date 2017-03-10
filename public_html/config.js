@@ -130,3 +130,13 @@ BingMapsAPIKey = null;
 //   MapzenAPIKey = "your key here";
 //
 MapzenAPIKey = null;
+
+// Options to enable/disable modifications provided in Dump1090-OpenLayers3-html by Al Kissack
+// -------------------------------------------------------------------------------------------
+ShowPermanentLabels  = false;  // Not yet implemented
+ShowHoverOverLabels  = false;  // Not yet implemented
+ShowMouseLatLong     = false;  // Not yet implemented
+ShowAdditionalMaps   = false;  // Not yet implemented
+ShowUKMilLayers      = false;  // Not yet implemented
+ShowUKCivviLayers    = false;  // Not yet implemented
+
