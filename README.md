@@ -5,7 +5,8 @@ Originaly amended for my own purposes, but having had several requests to
 share these changes I have decided to place them in this forum.
 
 The following options are available via config.js settings:
-1. Mouse Point Latitude and Longitude
+
+-Mouse Point Latitude and Longitude
 
 
 # Webserver (html sub-directory) changes by Allan Kissack
