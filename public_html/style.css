@@ -206,4 +206,21 @@ select.error, textarea.error, input.error {
 /* AKISSACK - ref: AK1B Starts ---------------------------------------------------------------------------- */
 div#mouseposition  { position: absolute; top: 0px; left: 10px; opacity: 1; text-align: left; color: black;  }
 div.mp { width: 130px; }
-/* ---------------------------------------------------------------------------------------- ref: AK1B Ends */
+/* ----------------------------------------------------------------------------------------- ref: AK1B Ends */
+
+/* AKISSACK -  HOVER OVER LABELS (also in script.js/PlaneObject.js/index.html) ----------- ref: AK6C starts */
+.ofInterest { color: red; }
+#popinfo {
+  max-width: 200px;
+  background-color: white;
+  color: black;
+  opacity: 0.850;
+  font-size: 8pt;
+  font-family: sans-serif;
+  margin: 5px;
+  border: 1px solid black;
+  border-radius: 10px 10px 10px 0;
+  padding: 2px 5px 2px 5px;
+  white-space:pre-wrap;
+}
+/* AKISSACK -  HOVER OVER LABELS (also in script.js/PlaneObject.js/index.html) ------------ ref: AK6C ends */

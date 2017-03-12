@@ -136,7 +136,7 @@ MapzenAPIKey = null;
 ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps 
 ShowPermanentLabels  = false;  // Not yet implemented
-ShowHoverOverLabels  = false;  // Not yet implemented
+ShowHoverOverLabels  = false;   // Not yet implemented
 ShowAdditionalData   = false;  // Not yet implemented
 // UK ONLY :
 ShowUSLayers	     = false;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers

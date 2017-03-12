@@ -929,6 +929,81 @@ function initialize_map() {
 	// Ref: AK1C Ends ----------------------------------------------------------- AKISSACK
 	//------------------------------------------------------------------------------------
 
+	//------------------------------------------------------------------------------------
+	// AKISSACK - HOVER OVER LABELS ------------------------------------- ref: AK6D starts
+	//------------------------------------------------------------------------------------
+	if (ShowHoverOverLabels)  {
+            var overlay = new ol.Overlay({
+          	    element: document.getElementById('popinfo'),
+          	    positioning: 'bottom-left'
+            });
+            overlay.setMap(OLMap);
+
+            // trap mouse moving over
+            OLMap.on('pointermove', function(evt) {
+                var feature = OLMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                    overlay.setPosition(evt.coordinate);
+                    var popname = feature.get('name');
+                    if (popname == '~') {
+           	        var vsi = '' ;
+	                if (Planes[feature.hex].vert_rate >256) {
+                            vsi = 'climbing';
+                        } else {
+                            if (Planes[feature.hex].vert_rate < -256) {
+                    	        vsi = 'descending';
+                    	    } else vsi = 'level';
+	                };
+			if (ShowAdditionalData ) {
+                            popname = (Planes[feature.hex].ac_aircraft ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
+		            popname = popname + ' ['+ (Planes[feature.hex].category     ? Planes[feature.hex].category     : '?')+']';
+
+                            popname = popname + '\n('+ (Planes[feature.hex].flight ? Planes[feature.hex].flight.trim() : 'No Call') +')';
+                            popname = popname + ' #' +  feature.hex.toUpperCase();
+
+                            popname = popname + '\n' + (Planes[feature.hex].altitude ? parseInt(Planes[feature.hex].altitude) : '?') ;
+                            popname = popname + ' ft and ' +  vsi;
+
+                            popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '') ;
+                            popname = popname + ' ' +  (Planes[feature.hex].operator ? Planes[feature.hex].operator : '') ;
+			} else {
+			    popname = 'ICAO: ' + Planes[feature.hex].icao;
+		            popname = popname + '\nType: '+ (Planes[feature.hex].icaotype     ? Planes[feature.hex].icaotype           : '?');
+		            popname = popname + '\nReg:  '+ (Planes[feature.hex].registration ? Planes[feature.hex].registration       : '?');
+			    popname = popname + '\nFt:   '+ (Planes[feature.hex].altitude     ? parseInt(Planes[feature.hex].altitude) : '?') ;
+			}
+
+
+		        //if (myDisplay = true) {
+                        //  popname = popname + '\n'+ (Planes[feature.hex].ac_shortname ? Planes[feature.hex].ac_shortname : '-');
+                        //  popname = popname + ' ' + (Planes[feature.hex].category     ? Planes[feature.hex].category     : '?');
+                        //  popname = popname + ' ' + ( Planes[feature.hex].ac_category ? Planes[feature.hex].ac_category  : '-');
+		        //}
+                        //popname = popname + '\nx '+  Planes[feature.hex].ac_seen;
+                        //popname = popname + ' - '   +  Planes[feature.hex].seen.toFixed(0)+' sec';
+
+                    };
+                    overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                    return feature;
+                }, null, function(layer) {
+                    //return (layer == iconsLayer) ;
+                    return (layer == iconsLayer) ;
+                });
+
+                overlay.getElement().style.display = feature ? '' : 'none'; // EAK--> Needs GMAP/INDEX.HTML
+                document.body.style.cursor = feature ? 'pointer' : '';
+            });
+	} else {
+            var overlay = new ol.Overlay({
+          	    element: document.getElementById('popinfo'),
+          	    positioning: 'bottom-left'
+            });
+            overlay.setMap(OLMap);
+	}
+	//------------------------------------------------------------------------------------
+	// -------------------------------------------------------------------- ref: AK6D ends
+	//------------------------------------------------------------------------------------
+
+
 	// Add home marker if requested
 	if (SitePosition) {
                 var markerStyle = new ol.style.Style({

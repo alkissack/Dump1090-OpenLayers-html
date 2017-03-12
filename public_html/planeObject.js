@@ -488,7 +488,22 @@ PlaneObject.prototype.updateMarker = function(moved) {
                         this.markerStatic.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
                 }
         } else {
-                this.marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
+		// ----------------------------------------------------------------------------------
+                // AKISSACK - HOVER OVER LABELS ------------------------------------ ref: AK6A starts
+		// ----------------------------------------------------------------------------------
+		if (ShowHoverOverLabels)  {
+                	var myPopUpName = '~';
+   			this.marker = new ol.Feature({
+                		geometry: new ol.geom.Point(ol.proj.fromLonLat(this.position)) ,
+                		name : myPopUpName
+                	});
+		} else {
+			this.marker = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
+		}
+		// ----------------------------------------------------------------------------------
+                // ------------------------------------------------------------------- ref: AK6A ends
+		// ----------------------------------------------------------------------------------
+                
                 this.marker.hex = this.icao;
                 this.marker.setStyle(this.markerStyle);
                 PlaneIconFeatures.push(this.marker);
