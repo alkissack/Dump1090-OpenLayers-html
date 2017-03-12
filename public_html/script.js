@@ -967,20 +967,11 @@ function initialize_map() {
                             popname = popname + ' ' +  (Planes[feature.hex].operator ? Planes[feature.hex].operator : '') ;
 			} else {
 			    popname = 'ICAO: ' + Planes[feature.hex].icao;
+		            popname = popname + '\nFlt:  '+ (Planes[feature.hex].flight       ? Planes[feature.hex].flight             : '?');
 		            popname = popname + '\nType: '+ (Planes[feature.hex].icaotype     ? Planes[feature.hex].icaotype           : '?');
 		            popname = popname + '\nReg:  '+ (Planes[feature.hex].registration ? Planes[feature.hex].registration       : '?');
 			    popname = popname + '\nFt:   '+ (Planes[feature.hex].altitude     ? parseInt(Planes[feature.hex].altitude) : '?') ;
 			}
-
-
-		        //if (myDisplay = true) {
-                        //  popname = popname + '\n'+ (Planes[feature.hex].ac_shortname ? Planes[feature.hex].ac_shortname : '-');
-                        //  popname = popname + ' ' + (Planes[feature.hex].category     ? Planes[feature.hex].category     : '?');
-                        //  popname = popname + ' ' + ( Planes[feature.hex].ac_category ? Planes[feature.hex].ac_category  : '-');
-		        //}
-                        //popname = popname + '\nx '+  Planes[feature.hex].ac_seen;
-                        //popname = popname + ' - '   +  Planes[feature.hex].seen.toFixed(0)+' sec';
-
                     };
                     overlay.getElement().innerHTML = (popname  ?  popname   :'' );
                     return feature;
