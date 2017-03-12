@@ -15,6 +15,8 @@ The following options are available via config.js settings:
 
 5. UK Military layers - file: layer.js and supporting files in \layers\ directory - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays
 
+6. Hover over labels - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
+
 # Credits:
 Webserver (html sub-directory) changes by Allan Kissack
 
