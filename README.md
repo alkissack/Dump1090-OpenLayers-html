@@ -17,6 +17,9 @@ The following options are available via config.js settings:
 
 6. Hover over labels - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
 
+7. Permanent labels - 
+
+
 # Credits:
 Webserver (html sub-directory) changes by Allan Kissack
 
