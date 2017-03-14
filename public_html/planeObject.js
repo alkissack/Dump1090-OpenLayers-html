@@ -359,9 +359,34 @@ PlaneObject.prototype.updateIcon = function() {
                         });
                 } else {
                         this.markerIcon = icon;
-                        this.markerStyle = new ol.style.Style({
+
+			// ---------------------------------------------------------------------------------------
+			// AKISSACK - PERMANENT LABELS - Part 1 --------------------------------------------------
+			// ---------------------------------------------------------------------------------------
+			if (ShowPermanentLabels ) {
+			    var labelText = '';
+                            this.markerStyle = new ol.style.Style({
+         			text: new ol.style.Text({
+        		      		text: labelText ,
+        		      		fill: new ol.style.Fill({color: 'blue'}),
+        		      		stroke: new ol.style.Stroke({color: 'yellow', width: 7}),
+                              		textAlign: 'left',
+                              		textBaseline: "bottom",
+                              		font: 'normal 10px tahoma',
+        		      		offsetX: +15,
+        		      		offsetY: +30
+        			}),
                                 image: this.markerIcon
-                        });
+                            });
+			} else {
+                            this.markerStyle = new ol.style.Style({
+                                image: this.markerIcon
+                            });
+			}
+			// ---------------------------------------------------------------------------------------
+                       	// ----------------------------------------------------------------------------- AKISSACK
+			// ---------------------------------------------------------------------------------------
+
                         this.markerStaticIcon = null;
                         this.markerStaticStyle = new ol.style.Style({});
                 }
@@ -484,8 +509,79 @@ PlaneObject.prototype.updateMarker = function(moved) {
         this.updateIcon();
         if (this.marker) {
                 if (moved) {
-                        this.marker.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
-                        this.markerStatic.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
+                    this.marker.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
+
+		    // ---------------------------------------------------------------------
+                    // AKISSACK - PERMANENT LABEL PART 2 - Update ---------------------------------
+		    // ---------------------------------------------------------------------
+		    if (ShowPermanentLabels) {	
+                        // Update label as as well as moving we may have gone up or down
+                	var v = '-';  // An indication of level, climbing or decending
+                	var labelText = '';
+           		if (this.vert_rate >256) {
+                  		v = UP_TRIANGLE;
+                	} else {
+                  		if (this.vert_rate < -256) {
+                    			v = DOWN_TRIANGLE;
+                  		}
+	                };
+			labelText = (this.flight ? this.flight : '-');
+			labelText = labelText +' ['+(this.altitude ? parseInt(this.altitude/100) : '?')+v+']';
+			labelText = labelText + '\n'+ (this.registration ? this.registration  : '');
+
+
+                        if (this.selected && !SelectedAllPlanes ) {
+                        	this.labelColour = '#ffff00' //this.labelColour = 'yellow' changed for semi transparency					
+                        } else {
+                        	this.labelColour = '#ffffff' //this.labelColour = 'white'			
+                        }
+  
+			if (ShowAdditionalData) {
+			    labelText = labelText +'\n'+this.ac_shortname;
+			    if ((this.my_vet != 5 && this.my_vet != 6 && !this.selected)  || SelectedAllPlanes ){
+                                
+                            }
+			}
+			//var zmm = OLMap.getView().getZoom();
+                        if (ZoomLvl <= 8) labelText = '';
+
+			var hexColour      = this.labelColour;  // New section for semi transparency
+			var myStrokeColour = ol.color.asArray(hexColour);
+			myStrokeColour     = myStrokeColour .slice();
+			myStrokeColour[3]  = (this.selected ? 0.5:0.25);  // change the alpha of the colour
+			if (ShowAdditionalData) {
+			    hexColour = (this.is_interesting ? '#ff0000' : '#0000ff');
+			} else {hexColour = '#0000ff'}
+			var myFillColour   = ol.color.asArray(hexColour);
+			myFillColour       = myFillColour.slice();
+			myFillColour[3]    = (this.selected ? 0.8:0.7);
+
+
+                        var newS = new ol.style.Style({
+         		       text: new ol.style.Text({
+        		              text: labelText ,
+        		              fill: new ol.style.Fill({
+					color: myFillColour //(this.is_interesting ? 'rgb(255,0,0)' : 'rgb(0,0,255)')
+				      }),
+        		              stroke: new ol.style.Stroke({
+					color: myStrokeColour, //this.labelColour, 
+					width: 4
+				      }),
+                                      textAlign: 'left',
+                                      textBaseline: "bottom",
+                                      font: 'normal 9px tahoma',
+        		              offsetX: +15,
+        		              offsetY: +30
+        		        }),
+                                image: this.markerIcon
+                        });
+                        this.marker.setStyle(newS);
+		    }
+		    // ----------------------------------------------------------------------------------
+                    // ------------------------------------------------------------------------- AKISSACK
+		    // ----------------------------------------------------------------------------------
+
+                    this.markerStatic.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
                 }
         } else {
 		// ----------------------------------------------------------------------------------

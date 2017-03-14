@@ -5,7 +5,19 @@ var NBSP='\u00a0';
 var DEGREES='\u00b0'
 var UP_TRIANGLE='\u25b2'; // U+25B2 BLACK UP-POINTING TRIANGLE
 var DOWN_TRIANGLE='\u25bc'; // U+25BC BLACK DOWN-POINTING TRIANGLE
-
+// ---------------------------------------------------------------------------------------
+// AKISACK - Add some characters for labels ----------------------------------------------
+// ---------------------------------------------------------------------------------------
+var UP_TRI='\u25b3';    // U+25B4 Hollow BLACK UP-POINTING TRIANGLE
+var DOWN_TRI='\u25bd';  // U+25BE Hollow BLACK DOWN-POINTING TRIANGLE
+var UP_TRIS='\u23eb';   // U+25B4 double BLACK UP-POINTING TRIANGLE
+var LEVEL='\u2014';     // level
+var DOWN_TRIS='\u23ec'; // U+25BE double BLACK DOWN-POINTING TRIANGLE
+var UP_AR='\u2b61';     // U+25B4  UP-POINTING Arrow
+var DOWN_AR='\u2b63';   // U+25BE DOWN-POINTING Arrow
+// ---------------------------------------------------------------------------------------
+// ------------------------------------------------------------------------------ AKISSACK
+// ---------------------------------------------------------------------------------------
 var TrackDirections = ["North","Northeast","East","Southeast","South","Southwest","West","Northwest"];
 
 var UnitLabels = {
