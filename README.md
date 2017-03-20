@@ -19,6 +19,8 @@ The following options are available via config.js settings:
 
 7. Permanent labels - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 
+and also some additional modifications:
+
 9. Miscellaneous changes - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 
 
