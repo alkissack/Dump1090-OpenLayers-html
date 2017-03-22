@@ -182,9 +182,19 @@ var ICAO_Ranges = [
         { start: 0x068000, end: 0x068FFF, country: "Uganda", flag_image: "Uganda.png" },
         { start: 0x508000, end: 0x50FFFF, country: "Ukraine", flag_image: "Ukraine.png" },
         { start: 0x896000, end: 0x896FFF, country: "United Arab Emirates", flag_image: "UAE.png" },
-        { start: 0x400000, end: 0x43FFFF, country: "United Kingdom", flag_image: "United_Kingdom.png" },
+// AKISSACK - ALLOW FOR MILITARY FLAGS ------------------------------------------------------------- AK9B Starts
+        //{ start: 0x400000, end: 0x43FFFF, country: "United Kingdom", flag_image: "United_Kingdom.png" },
+        { start: 0x400000, end: 0x42FFFF, country: "United Kingdom", flag_image: "United_Kingdom.png" },
+        { start: 0x430000, end: 0x43DFFF, country: "United Kingdom", flag_image: "RAF.png" },
+        { start: 0x43E000, end: 0x43FFFF, country: "United Kingdom", flag_image: "Isle_of_Man.png" },
+
         { start: 0x080000, end: 0x080FFF, country: "United Republic of Tanzania", flag_image: "Tanzania.png" },
-        { start: 0xA00000, end: 0xAFFFFF, country: "United States", flag_image: "United_States_of_America.png" },
+
+        //{ start: 0xA00000, end: 0xAFFFFF, country: "United States", flag_image: "United_States_of_America.png" },
+        { start: 0xA00000, end: 0xADEFFF, country: "United States", flag_image: "United_States_of_America.png" },
+        { start: 0xADF000, end: 0xAEFFFF, country: "United States", flag_image: "USAF.png" },
+        { start: 0xAF0000, end: 0xAFFFFF, country: "United States", flag_image: "United_States_of_America.png" },
+// ----------------------------------------------------------------------------------------------- AK9B Ends
         { start: 0xE90000, end: 0xE90FFF, country: "Uruguay", flag_image: "Uruguay.png" },
         { start: 0x507C00, end: 0x507FFF, country: "Uzbekistan", flag_image: "Uzbekistan.png" },
         { start: 0xC90000, end: 0xC903FF, country: "Vanuatu", flag_image: "Vanuatu.png" },
@@ -206,7 +216,13 @@ var ICAO_Ranges = [
         { start: 0x600000, end: 0x67FFFF, country: "Unassigned (MID region)", flag_image: "blank.png" },
         { start: 0x680000, end: 0x6FFFFF, country: "Unassigned (ASIA region)", flag_image: "blank.png" },
         { start: 0x900000, end: 0x9FFFFF, country: "Unassigned (NAM / PAC regions)", flag_image: "blank.png" },
-        { start: 0xB00000, end: 0xBFFFFF, country: "Unassigned (reserved for future use)", flag_image: "blank.png" },
+// AKISSACK - ALLOW FOR ADDITIONAL USAF USE ---------------------------------------------------------  AK9B Starts
+	// AKISSACK - Possible, but not confirmed, USAF use
+        { start: 0xB00000, end: 0xB196FF, country: "Unassigned (reserved for future use)", flag_image: "blank.png" },
+        { start: 0xB19700, end: 0xB197FF, country: "United States", flag_image: "United_States_of_America.png" },
+        { start: 0xB19800, end: 0xBFFFFF, country: "Unassigned (reserved for future use)", flag_image: "blank.png" },
+        //{ start: 0xB00000, end: 0xBFFFFF, country: "Unassigned (reserved for future use)", flag_image: "blank.png" },
+// ---------------------------------------------------------------------------------------- AK9B Ends
         { start: 0xEC0000, end: 0xEFFFFF, country: "Unassigned (CAR region)", flag_image: "blank.png" },
         { start: 0xD00000, end: 0xDFFFFF, country: "Unassigned (reserved for future use)", flag_image: "blank.png" },
         { start: 0xF00000, end: 0xFFFFFF, country: "Unassigned (reserved for future use)", flag_image: "blank.png" },
