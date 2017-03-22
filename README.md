@@ -3,7 +3,7 @@ Modifications to the OL3 html files (part of the dump1090-fa branch).  The conte
 
 Originaly amended for my own purposes, but having had several requests to share these changes I have decided to place them in this forum. The new layers are only really useful if you have aircraft in UK airspace.  Other modifications can provide value in other regions.
 
-The following options are available via config.js settings:
+## The following options are available via config.js settings:
 
 1. Mouse Point Latitude and Longitude - files: index.html, style.css, script.js - see wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
 
@@ -19,7 +19,7 @@ The following options are available via config.js settings:
 
 7. Permanent labels - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 
-and also some additional modifications:
+## Also some additional modifications:
 
 9. Miscellaneous changes - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 
