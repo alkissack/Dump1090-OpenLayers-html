@@ -131,14 +131,22 @@ BingMapsAPIKey = null;
 //
 MapzenAPIKey = null;
 
+// ----------------------------------------------------------------------------------------------------------------------------
 // Options to enable/disable modifications provided in Dump1090-OpenLayers3-html by Al Kissack
-// -------------------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------------------------------------------------------
 ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps 
 ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
-ShowHoverOverLabels  = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
-ShowAdditionalData   = false;  // Not yet implemented
-// UK ONLY :
+ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
+// ----------------------------------------------------------------------------------------------------------------------------
+//           PERSONAL OPTIONS
+// ----------------------------------------------------------------------------------------------------------------------------
+ShowMyPreferences    = true ;  // Required to enable the TWO options below 	 
+ShowAdditionalData   = true ;  // Not yet implemented
+ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
+// ----------------------------------------------------------------------------------------------------------------------------
+//           UK ONLY :
+// ----------------------------------------------------------------------------------------------------------------------------
 ShowUSLayers	     = false;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
 ShowUKCivviLayers    = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
 ShowUKMilLayers      = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays

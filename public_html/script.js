@@ -313,7 +313,7 @@ function load_history_item(i) {
                 return;
         }
 
-        console.log("Loading history #" + i);
+        // Ref: AK9Y  --  console.log("Loading history #" + i);
         $("#loader_progress").attr('value',i);
 
         $.ajax({ url: 'data/history_' + i + '.json',
@@ -347,11 +347,11 @@ function end_load_history() {
                 // Process history
                 for (var h = 0; h < PositionHistoryBuffer.length; ++h) {
                         now = PositionHistoryBuffer[h].now;
-                        console.log("Applying history " + h + "/" + PositionHistoryBuffer.length + " at: " + now);
+                        // Ref: AK9Y  --  console.log("Applying history " + h + "/" + PositionHistoryBuffer.length + " at: " + now);
                         processReceiverUpdate(PositionHistoryBuffer[h]);
 
                         // update track
-                        console.log("Updating tracks at: " + now);
+                        // Ref: AK9Y  --  console.log("Updating tracks at: " + now);
                         for (var i = 0; i < PlanesOrdered.length; ++i) {
                                 var plane = PlanesOrdered[i];
                                 plane.updateTrack((now - last) + 1);

@@ -46,6 +46,19 @@ function PlaneObject(icao) {
         this.markerSvgKey = null;
         this.filter = {};
 
+	// Akissack - additional variables for various modifications - Ref: AK9Z Start
+	this.is_vetted      = false ;
+	this.is_interesting = '' ;  // 'Y' or not
+	this.my_vet	    = '' ;  // 1 = Mil/noTrail 2 = Civ/noTrail 5 = Mil/Trail 6 = Civ/Trail 0 = ?/noTrail 3,4,7 = ERR
+	this.my_trail	    = '' ;  // trail on by default
+	this.ac_type        = '' ;  // icao type
+	this.ac_shortname   = '' ;  // Short a/c name
+	this.ac_aircraft    = '' ;   // Long a/c name
+        this.ac_category    = '';   // My category for images -  eg 2prop
+	this.country	    = '';
+	this.operator       = '';
+	// Akissack - additional variables for various modifications - Ref: AK9Z Ends
+
         // start from a computed registration, let the DB override it
         // if it has something else.
         this.registration = registration_from_hexid(this.icao);
@@ -70,7 +83,27 @@ function PlaneObject(icao) {
                 if ("wtc" in data) {
                         this.wtc = data.wtc;
                 }
-
+		// -------------------------------------------------
+		// AKISSACK - Load my details from json ------Ref: AK9E starts
+		// -------------------------------------------------
+		if (ShowMyPreferences && ShowAdditionalData) {
+		  if (this.icao.substring(0,3) == '43c' || this.icao.substring(0,2) == 'ae' ) {this.is_interesting = 'Y';}
+		  if ("Int" in data) {
+		    if (data.Int == 1) this.is_interesting = 'Y';
+		  }
+		  if ("Trail" in data) {
+		     if (data.Trail == 5  || data.Trail == 6) {this.my_trail = true;}
+		  }
+		  if ("Country" in data) {this.country = data.Country;}
+		  if ("Owner" in data)   {this.operator = data.Owner;}
+		  if ("Force" in data)   {this.operator = data.Force;}
+		  if ("Image" in data)   {this.ac_category = data.Image;}
+		  if ("Short" in data)   {this.ac_shortname = data.Short;}
+		  if ("Type" in data)    {this.ac_aircraft = data.Type;}
+		}
+		// -------------------------------------------------
+		// -------------------------------------- Ref: AK9E ends
+		// -------------------------------------------------
                 if (this.selected) {
 		        refreshSelected();
                 }
@@ -297,7 +330,17 @@ PlaneObject.prototype.getMarkerColor = function() {
         if (l < 5) l = 5;
         else if (l > 95) l = 95;
 
-        return 'hsl(' + (h/5).toFixed(0)*5 + ',' + (s/5).toFixed(0)*5 + '%,' + (l/5).toFixed(0)*5 + '%)'
+	// ---------------------------   AKISSACK mono colour  Ref: AK9C Start
+	if (ShowMyPreferences && ShowSimpleColours) {
+            var myColour = '#333399' ;
+            if (this.is_interesting) {
+               myColour = '#993333' ;
+            }
+	    return myColour;  
+        } else {
+           // ---------------------------   AKISSACK mono colour  Ref: AK9C ends
+           return 'hsl(' + (h/5).toFixed(0)*5 + ',' + (s/5).toFixed(0)*5 + '%,' + (l/5).toFixed(0)*5 + '%)'
+	}
 }
 
 PlaneObject.prototype.updateIcon = function() {
@@ -307,7 +350,16 @@ PlaneObject.prototype.updateIcon = function() {
         var opacity = 1.0;
         var outline = (this.position_from_mlat ? OutlineMlatColor : OutlineADSBColor);
         var baseMarker = getBaseMarker(this.category, this.icaotype, this.typeDescription, this.wtc);
-        var weight = ((this.selected && !SelectedAllPlanes ? 2 : 1) / baseMarker.scale / scaleFactor).toFixed(1);
+	if (ShowMyPreferences) { // Ref: AK9D starts
+            var adjWeight = (this.is_interesting ? 0.5 : 0.25)
+            var weight    = ((this.selected ? 0.75 : adjWeight ) / baseMarker.scale).toFixed(1);
+	    if (this.is_interesting == 'Y') {
+	        outline = 'rgb(128, 0, 0)' ;
+            }
+	} else {
+	    var weight = ((this.selected && !SelectedAllPlanes ? 2 : 1) / baseMarker.scale / scaleFactor).toFixed(1);
+	} //Ref: AK9D ends
+
         var rotation = (this.track === null ? 0 : this.track);
         var transparentBorderWidth = (32 / baseMarker.scale / scaleFactor).toFixed(1);
 
