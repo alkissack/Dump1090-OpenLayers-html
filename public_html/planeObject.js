@@ -674,22 +674,31 @@ PlaneObject.prototype.updateLines = function() {
         var estimateStyle = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                         color: '#a08080',
-                        width: 1,		// Reduced width Ref: AK9A 
+                        width: 0.75,		// Reduced width Ref: AK9A 
                         lineDash: [3, 3]     
                 })
         });
 
-        var airStyle = new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                        color: '#000000',
-                        width: 1		// Reduced width Ref: AK9A 
-                })
-        });
+	if (ShowMyPreferences) { // AKISSACK 
+        	var airStyle = new ol.style.Style({
+			stroke: new ol.style.Stroke({
+				color: (this.is_interesting == 'Y' ? '#ff0000' : '#0000ff'),
+        	                width: 0.75		// Reduced width Ref: AK9A 
+        	        })
+	        });
+	} else {
+        	var airStyle = new ol.style.Style({
+                	stroke: new ol.style.Stroke({
+	                       	color: '#000000',
+                        	width: 0.75		// Reduced width Ref: AK9A 
+                	})
+       		});
+	}
 
         var groundStyle = new ol.style.Style({
                 stroke: new ol.style.Stroke({
                         color: '#408040',
-                        width: 1		// Reduced width Ref: AK9A 
+                        width: 0.75		// Reduced width Ref: AK9A 
                 })
         });
 
