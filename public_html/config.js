@@ -141,9 +141,12 @@ ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PERSONAL OPTIONS
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyPreferences    = true ;  // Required to enable the TWO options below 	 
+ShowMyPreferences    = false ;  // Required to enable the THREE options below 	 
 ShowAdditionalData   = true ;  // Not yet implemented
 ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
+				// ******************************************************************************
+ShowHTMLColumns	     = false ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
+				// ******************************************************************************
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
 // ----------------------------------------------------------------------------------------------------------------------------

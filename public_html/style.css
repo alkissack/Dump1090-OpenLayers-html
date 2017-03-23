@@ -94,7 +94,7 @@ html, body {
 
 #sidebar_container {
     display: flex;
-    width: 470px;
+    width: 500px;  /* AKISSACK  ------------ Ref: AK9F */
     left: 0 !important;
 }
 
@@ -123,7 +123,8 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 #spinny { width: 128px; height: 128px; position: absolute; top: 50%; left: 50%; margin: -64px 0 0 -64px; }
 #loader_progress { width: 250px; height: 20px; position: absolute; top: 50%; left: 50%; margin: 128px 0 0 -125px; }
 
-#tableinfo { font-size: small; }
+#tableinfo { font-size: 10pt;  font-family: monospace;} /* AKISSACK  ------------ Ref: AK9F */
+/* #tableinfo { font-size: small; } */
 
 #sudo_buttons {
     display: flex;
@@ -156,6 +157,8 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
     font-family: monospace;
     text-transform: uppercase;
 }
+
+
 
 .vPosition  { background-color: #C3FFDF; }
 .mlat       { background-color: #C7EAFC; }

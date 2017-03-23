@@ -1297,36 +1297,69 @@ function refreshTableInfo() {
 			}
 			if (tableplane.icao == SelectedPlane)
                                 classes += " selected";
+
+			if (tableplane.is_interesting == 'Y') {  // AKISSACK ------------ Ref: AK9F
+                                classes += " ofInterest ";
+			}
                         
                         if (tableplane.squawk in SpecialSquawks) {
                                 classes = classes + " " + SpecialSquawks[tableplane.squawk].cssClass;
                                 show_squawk_warning = true;
-			}			                
+			}			
 
-                        // ICAO doesn't change
-                        if (tableplane.flight) {
-                                tableplane.tr.cells[2].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight, tableplane.flight);
-                        } else {
-                                tableplane.tr.cells[2].innerHTML = "";
-                        }
-                        tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
-                        tableplane.tr.cells[4].textContent = (tableplane.icaotype !== null ? tableplane.icaotype : "");
-                        tableplane.tr.cells[5].textContent = (tableplane.squawk !== null ? tableplane.squawk : "");
-                        tableplane.tr.cells[6].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
-                        tableplane.tr.cells[7].textContent = format_speed_brief(tableplane.speed, DisplayUnits);
-                        tableplane.tr.cells[8].textContent = format_vert_rate_brief(tableplane.vert_rate, DisplayUnits);
-                        tableplane.tr.cells[9].textContent = format_distance_brief(tableplane.sitedist, DisplayUnits);
-                        tableplane.tr.cells[10].textContent = format_track_brief(tableplane.track);
-                        tableplane.tr.cells[11].textContent = tableplane.messages;
-                        tableplane.tr.cells[12].textContent = tableplane.seen.toFixed(0);
-                        tableplane.tr.cells[13].textContent = (tableplane.rssi !== null ? tableplane.rssi : "");
-                        tableplane.tr.cells[14].textContent = (tableplane.position !== null ? tableplane.position[1].toFixed(4) : "");
-                        tableplane.tr.cells[15].textContent = (tableplane.position !== null ? tableplane.position[0].toFixed(4) : "");
-                        tableplane.tr.cells[16].textContent = format_data_source(tableplane.getDataSource());
-                        tableplane.tr.cells[17].innerHTML = getAirframesModeSLink(tableplane.icao);
-                        tableplane.tr.cells[18].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight);
-                        tableplane.tr.cells[19].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
-                        tableplane.tr.className = classes;
+			if (ShowMyPreferences) {
+				tableplane.tr.cells[0].innerHTML = getAirframesModeSLinkIcao(tableplane.icao);  // AKISSACK ------------ Ref: AK9F                
+                        	tableplane.tr.cells[2].textContent = (tableplane.flight !== null ? tableplane.flight : "");
+			} else {
+                        	// ICAO doesn't change
+                        	if (tableplane.flight) {
+                                	tableplane.tr.cells[2].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight, tableplane.flight);
+                        	} else {
+                               		tableplane.tr.cells[2].innerHTML = "";
+                        	}
+			}
+			if (ShowMyPreferences && ShowHTMLColumns) { // ------------ Ref: AK9F
+                        	tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
+                        	tableplane.tr.cells[4].textContent = (tableplane.icaotype !== null ? tableplane.icaotype : "");
+                        	tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "");
+                         	tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "");
+                        	tableplane.tr.cells[7].textContent = (tableplane.ac_category !== null ? tableplane.ac_category : "");
+                        	tableplane.tr.cells[8].textContent = (tableplane.squawk !== null ? tableplane.squawk : "");
+                        	tableplane.tr.cells[9].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
+                        	tableplane.tr.cells[10].textContent = format_speed_brief(tableplane.speed, DisplayUnits);
+                        	tableplane.tr.cells[11].textContent = format_vert_rate_brief(tableplane.vert_rate, DisplayUnits);
+                        	tableplane.tr.cells[12].textContent = format_distance_brief(tableplane.sitedist, DisplayUnits);  // Column index change needs to be reflected above in initialize_map()
+                        	tableplane.tr.cells[13].textContent = format_track_brief(tableplane.track);
+                        	tableplane.tr.cells[14].textContent = tableplane.messages;
+                        	tableplane.tr.cells[15].textContent = tableplane.seen.toFixed(0);
+                        	tableplane.tr.cells[16].textContent = (tableplane.rssi !== null ? tableplane.rssi : "");
+                        	tableplane.tr.cells[17].textContent = (tableplane.position !== null ? tableplane.position[1].toFixed(4) : "");
+                        	tableplane.tr.cells[18].textContent = (tableplane.position !== null ? tableplane.position[0].toFixed(4) : "");
+                        	tableplane.tr.cells[19].textContent = format_data_source(tableplane.getDataSource());
+                        	tableplane.tr.cells[20].innerHTML = getAirframesModeSLink(tableplane.icao);
+                        	tableplane.tr.cells[21].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight);
+                        	tableplane.tr.cells[22].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
+                        	tableplane.tr.className = classes;
+			} else {
+                        	tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
+                        	tableplane.tr.cells[4].textContent = (tableplane.icaotype !== null ? tableplane.icaotype : "");
+                        	tableplane.tr.cells[5].textContent = (tableplane.squawk !== null ? tableplane.squawk : "");
+                        	tableplane.tr.cells[6].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
+                        	tableplane.tr.cells[7].textContent = format_speed_brief(tableplane.speed, DisplayUnits);
+                        	tableplane.tr.cells[8].textContent = format_vert_rate_brief(tableplane.vert_rate, DisplayUnits);
+                        	tableplane.tr.cells[9].textContent = format_distance_brief(tableplane.sitedist, DisplayUnits);
+                        	tableplane.tr.cells[10].textContent = format_track_brief(tableplane.track);
+                        	tableplane.tr.cells[11].textContent = tableplane.messages;
+                        	tableplane.tr.cells[12].textContent = tableplane.seen.toFixed(0);
+                        	tableplane.tr.cells[13].textContent = (tableplane.rssi !== null ? tableplane.rssi : "");
+                        	tableplane.tr.cells[14].textContent = (tableplane.position !== null ? tableplane.position[1].toFixed(4) : "");
+                        	tableplane.tr.cells[15].textContent = (tableplane.position !== null ? tableplane.position[0].toFixed(4) : "");
+                        	tableplane.tr.cells[16].textContent = format_data_source(tableplane.getDataSource());
+                        	tableplane.tr.cells[17].innerHTML = getAirframesModeSLink(tableplane.icao);
+                        	tableplane.tr.cells[18].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight);
+                        	tableplane.tr.cells[19].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
+                        	tableplane.tr.className = classes;
+			}
 		}
 	}
 
@@ -1366,7 +1399,15 @@ function sortBySquawk()   { sortBy('squawk',  compareAlpha,   function(x) { retu
 function sortByAltitude() { sortBy('altitude',compareNumeric, function(x) { return (x.altitude == "ground" ? -1e9 : x.altitude); }); }
 function sortBySpeed()    { sortBy('speed',   compareNumeric, function(x) { return x.speed; }); }
 function sortByVerticalRate()   { sortBy('vert_rate',      compareNumeric, function(x) { return x.vert_rate; }); }
-function sortByDistance() { sortBy('sitedist',compareNumeric, function(x) { return x.sitedist; }); }
+function sortByDistance() { // AKISSACK - Order by distance, but show interesting aircraft first in the table  ------------ Ref: AK9F
+	if (ShowMyPreferences){
+		sortBy('sitedist',compareNumeric, function(x) {
+			return ( x.is_interesting == 'Y' ? ( x.sitedist + 0 ) : ( x.sitedist == null ? null : ( x.sitedist + 1000000 )  ) ) ;
+		});
+	} else {
+		sortBy('sitedist',compareNumeric, function(x) { return x.sitedist; }); 
+	}
+}
 function sortByTrack()    { sortBy('track',   compareNumeric, function(x) { return x.track; }); }
 function sortByMsgs()     { sortBy('msgs',    compareNumeric, function(x) { return x.messages; }); }
 function sortBySeen()     { sortBy('seen',    compareNumeric, function(x) { return x.seen; }); }
@@ -1608,15 +1649,33 @@ function setColumnVisibility() {
     var infoTable = $("#tableinfo");
 
     showColumn(infoTable, "#registration", !mapIsVisible);
-    showColumn(infoTable, "#aircraft_type", !mapIsVisible);   
-    showColumn(infoTable, "#vert_rate", !mapIsVisible);
-    showColumn(infoTable, "#rssi", !mapIsVisible);
-    showColumn(infoTable, "#lat", !mapIsVisible);
-    showColumn(infoTable, "#lon", !mapIsVisible);
-    showColumn(infoTable, "#data_source", !mapIsVisible);
-    showColumn(infoTable, "#airframes_mode_s_link", !mapIsVisible);
-    showColumn(infoTable, "#flightaware_mode_s_link", !mapIsVisible);
-    showColumn(infoTable, "#flightaware_photo_link", !mapIsVisible);
+    if (ShowMyPreferences) {
+    	// AKISSACK - Adjust table columns ------------------ Ref: AK9F 
+    	showColumn(infoTable, "#aircraft_type", !mapIsVisible);   
+    	showColumn(infoTable, "#myAc", !mapIsVisible);   
+    	showColumn(infoTable, "#myAcCat", !mapIsVisible);   
+    	showColumn(infoTable, "#myAcType", !mapIsVisible);   
+    	showColumn(infoTable, "#msgs", !mapIsVisible);
+    	showColumn(infoTable, "#seen", !mapIsVisible);
+    	showColumn(infoTable, "#vert_rate", !mapIsVisible);
+    	showColumn(infoTable, "#rssi", !mapIsVisible);
+    	showColumn(infoTable, "#lat", !mapIsVisible);
+    	showColumn(infoTable, "#lon", !mapIsVisible);
+    	showColumn(infoTable, "#data_source", !mapIsVisible);
+    	showColumn(infoTable, "#airframes_mode_s_link", !mapIsVisible);
+    	showColumn(infoTable, "#flightaware_mode_s_link", !mapIsVisible);
+    	showColumn(infoTable, "#flightaware_photo_link", !mapIsVisible);
+    } else {
+    	showColumn(infoTable, "#aircraft_type", !mapIsVisible);   
+    	showColumn(infoTable, "#vert_rate", !mapIsVisible);
+    	showColumn(infoTable, "#rssi", !mapIsVisible);
+    	showColumn(infoTable, "#lat", !mapIsVisible);
+    	showColumn(infoTable, "#lon", !mapIsVisible);
+    	showColumn(infoTable, "#data_source", !mapIsVisible);
+    	showColumn(infoTable, "#airframes_mode_s_link", !mapIsVisible);
+    	showColumn(infoTable, "#flightaware_mode_s_link", !mapIsVisible);
+    	showColumn(infoTable, "#flightaware_photo_link", !mapIsVisible);
+    }
 }
 
 function setSelectedInfoBlockVisibility() {
@@ -1816,5 +1875,12 @@ function getAirframesModeSLink(code) {
         return "<a href=\"http://www.airframes.org/\" onclick=\"$('#airframes_post_icao').attr('value','" + code + "'); document.getElementById('horrible_hack').submit.call(document.getElementById('airframes_post')); return false;\">Airframes.org: " + code.toUpperCase() + "</a>";
     }
 
+    return "";   
+}
+
+function getAirframesModeSLinkIcao(code) {  // AKISSACK  Ref: AK9F
+    if (code !== null && code.length > 0 && code[0] !== '~' && code !== "000000") {
+        return "<a href=\"http://www.airframes.org/\" onclick=\"$('#airframes_post_icao').attr('value','" + code + "'); document.getElementById('horrible_hack').submit.call(document.getElementById('airframes_post')); return false;\">" + code.toUpperCase() + "</a>";
+    }
     return "";   
 }
