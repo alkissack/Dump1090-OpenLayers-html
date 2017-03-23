@@ -23,8 +23,8 @@ DisplayUnits = "nautical";
 // degrees.
 
 // Default center of the map.
-DefaultCenterLat = 45.0;
-DefaultCenterLon = 9.0;
+DefaultCenterLat = 51.0;
+DefaultCenterLon = 0.0;
 // The google maps zoom level, 0 - 16, lower is further out
 DefaultZoomLvl   = 7;
 
@@ -34,7 +34,7 @@ DefaultZoomLvl   = 7;
 SiteShow    = false;           // true to show a center marker
 SiteLat     = 45.0;            // position of the marker
 SiteLon     = 9.0;
-SiteName    = "My Radar Site"; // tooltip of the marker
+SiteName    = "Rx"; // tooltip of the marker
 
 // -- Marker settings -------------------------------------
 
@@ -102,7 +102,7 @@ SiteCirclesDistances = new Array(100,150,200);
 ShowClocks = false;
 
 // Controls page title, righthand pane when nothing is selected
-PageName = "FlightAware dump1090";
+PageName = "FlightAware";
 
 // Show country flags by ICAO addresses?
 ShowFlags = true;
@@ -138,19 +138,21 @@ ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps 
 ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
-// ----------------------------------------------------------------------------------------------------------------------------
-//           PERSONAL OPTIONS
-// ----------------------------------------------------------------------------------------------------------------------------
-ShowMyPreferences    = false ;  // Required to enable the THREE options below 	 
-ShowAdditionalData   = true ;  // Not yet implemented
-ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
-				// ******************************************************************************
-ShowHTMLColumns	     = false ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
-				// ******************************************************************************
+
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
 // ----------------------------------------------------------------------------------------------------------------------------
 ShowUSLayers	     = false;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
 ShowUKCivviLayers    = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
 ShowUKMilLayers      = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays
+
+// ----------------------------------------------------------------------------------------------------------------------------
+//           PERSONAL OPTIONS      https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
+// ----------------------------------------------------------------------------------------------------------------------------
+ShowMyPreferences    = true ;  // Required to enable the THREE options below 	 
+ShowAdditionalData   = true ;  // Not yet implemented
+ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
+				// ******************************************************************************
+ShowHTMLColumns	     = true ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
+				// ******************************************************************************
 

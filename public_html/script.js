@@ -185,7 +185,8 @@ var PositionHistorySize = 0;
 function initialize() {
         // Set page basics
         document.title = PageName;
-        $("#infoblock_name").text(PageName);
+        // $("#infoblock_name").text(PageName); AKISSACK - Ref: AK9W
+	$("#infoblock_name").text('');
 
         PlaneRowTemplate = document.getElementById("plane_row_template");
 
@@ -1146,7 +1147,9 @@ function refreshPageTitle() {
                 subtitle += MessageRate.toFixed(1) + '/s';
         }
 
-        document.title = PageName + ' - ' + subtitle;
+        //document.title = PageName + ' - ' + subtitle;  // AKISSACK Ref: AK9X
+	document.title = subtitle+ ' - ' + PageName ;    // AKISSACK Ref: AK9X
+
 }
 
 // Refresh the detail window about the plane
@@ -1168,7 +1171,8 @@ function refreshSelected() {
         }
         
         $('#dump1090_infoblock').css('display','block');
-        $('#dump1090_version').text(Dump1090Version);
+        //$('#dump1090_version').text(Dump1090Version);     AKISSACK Ref: AK9W
+        $('#dump1090_version').text('');                 // AKISSACK Ref: AK9W
         $('#dump1090_total_ac').text(TrackedAircraft);
         $('#dump1090_total_ac_positions').text(TrackedAircraftPositions);
         $('#dump1090_total_history').text(TrackedHistorySize);
