@@ -950,7 +950,7 @@ function initialize_map() {
                 var feature = OLMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
                     overlay.setPosition(evt.coordinate);
                     var popname = feature.get('name');
-                    if (popname == '~') {
+                    if (popname === '~') {
            	        var vsi = '' ;
 	                if (Planes[feature.hex].vert_rate >256) {
                             vsi = 'climbing';
@@ -978,9 +978,11 @@ function initialize_map() {
 		            popname = popname + '\nReg:  '+ (Planes[feature.hex].registration ? Planes[feature.hex].registration       : '?');
 			    popname = popname + '\nFt:   '+ (Planes[feature.hex].altitude     ? parseInt(Planes[feature.hex].altitude) : '?') ;
 			}
-                    };
-                    overlay.getElement().innerHTML = (popname  ?  popname   :'' );
-                    return feature;
+			overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                    	return feature;  
+                    }
+		    else
+			return null;
                 }, null, function(layer) {
                     //return (layer == iconsLayer) ;
                     return (layer == iconsLayer) ;
