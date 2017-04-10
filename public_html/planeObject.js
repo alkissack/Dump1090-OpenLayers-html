@@ -413,7 +413,7 @@ PlaneObject.prototype.updateIcon = function() {
                         this.markerIcon = icon;
 
 			// ---------------------------------------------------------------------------------------
-			// AKISSACK - PERMANENT LABELS - Part 1 --------------------------------------------------
+			// AKISSACK - PERMANENT LABELS - Part 1 ----------------------------------------- ref: AK7A
 			// ---------------------------------------------------------------------------------------
 			if (ShowPermanentLabels ) {
 			    var labelText = '';
@@ -564,7 +564,7 @@ PlaneObject.prototype.updateMarker = function(moved) {
                     this.marker.setGeometry(new ol.geom.Point(ol.proj.fromLonLat(this.position)));
 
 		    // ---------------------------------------------------------------------
-                    // AKISSACK - PERMANENT LABEL PART 2 - Update ---------------------------------
+                    // AKISSACK - PERMANENT LABEL PART 2 - Update ---------------- ref: AK7A
 		    // ---------------------------------------------------------------------
 		    if (ShowPermanentLabels) {	
                         // Update label as as well as moving we may have gone up or down
