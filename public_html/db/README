@@ -3,5 +3,3 @@ originally derived from Virtual Radar Server's BasicAircraftLookup.sqb
 (see tools/vrs-basicaircraft-to-json.py). As that database is no longer being
 updated, the data is directly included here rather than periodically refreshing
 from the online copy.
-
-Amended by AlKissack to provide additional aircraft information (UK flights promarily)
