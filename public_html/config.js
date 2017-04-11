@@ -34,7 +34,7 @@ DefaultZoomLvl   = 7;
 SiteShow    = false;           // true to show a center marker
 SiteLat     = 45.0;            // position of the marker
 SiteLon     = 9.0;
-SiteName    = "Rx"; // tooltip of the marker
+SiteName    = "Rx"; 	       // tooltip of the marker
 
 // -- Marker settings -------------------------------------
 
@@ -149,11 +149,12 @@ ShowUKMilLayers      = true;   // https://github.com/alkissack/Dump1090-OpenLaye
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PERSONAL OPTIONS      https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyPreferences    = false ;  // Required to enable the THREE options below 	 
-ShowAdditionalData   = true ;  // Not yet implemented
+ShowMyPreferences    = true ;  // Required to enable the FOUR options below 	 
+ShowAdditionalData   = true ;  // 
+ShowMyIcons          = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
 ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 			       // ******************************************************************************
-ShowHTMLColumns	     = true ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
+ShowHTMLColumns	     = false ; // *** You need to use the alternate index.html (allan.html) for this option  ***
 			       // ******************************************************************************
 // ----------------------------------------------------------------------------------------------------------------------------
 
