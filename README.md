@@ -23,7 +23,7 @@ Originaly amended for my own purposes, but having had several requests to share 
 
 9. Miscellaneous changes - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 
-A. Personalised icons - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/A.-Aircraft-icon-changes
+10. Personalised icons - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/A.-Aircraft-icon-changes
 
 
 # Credits:
