@@ -16,7 +16,8 @@ var FollowSelected = false;
 // --------------------------------------------------------------------------------------
 // AKISSACK - Variables -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-var acsntext = ' ';                           // Default label for label data - ref: AK7C 
+var acsntext = ' ';                // Default label for label data - ref: AK7C 
+var SelectedMilPlanes  = false;    // Allow selection of all planes of interest Ref: AK9G
 // --------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------- AKISSACK
 var SpecialSquawks = {
@@ -1005,13 +1006,20 @@ function initialize_map() {
 
 	// Add home marker if requested
 	if (SitePosition) {
+		if (ShowMyPreferences) {  // Personal preferences Ref: AK9V
+			var homeRad = 2 ;
+			var homeWid = 1 ; 
+		} else {
+			var homeRad = 7 ;
+			var homeWid = 2 ; 
+		}
                 var markerStyle = new ol.style.Style({
                         image: new ol.style.Circle({
-                                radius: 7,
+                                radius: homeRad ,   // Ref: AK9V
                                 snapToPixel: false,
                                 fill: new ol.style.Fill({color: 'black'}),
                                 stroke: new ol.style.Stroke({
-                                        color: 'white', width: 2
+                                        color: 'white', width: homeWid  // Ref: AK9V
                                 })
                         })
                 });
@@ -1081,12 +1089,16 @@ function createSiteCircleFeatures() {
        StaticFeatures.remove(circleFeature); 
     });
     SiteCircleFeatures.clear();
-
+    if (ShowMyPreferences) {  // Personal preferences Ref: AK9V
+	var rangeWid = 0.25 ;
+    } else {
+	var rangeWid = 1 ;
+    }
     var circleStyle = new ol.style.Style({
             fill: null,
             stroke: new ol.style.Stroke({
                     color: '#000000',
-                    width: 1
+                    width: rangeWid //
             })
     });
 
@@ -1547,6 +1559,49 @@ function selectAllPlanes() {
 
 	refreshSelected();
 }
+
+// AKISSACK --------------- Ref: AK9G
+function selectMilPlanes() {
+	// if mil planes are already selected, deselect them all
+	if (SelectedMilPlanes) {
+		deselectMilPlanes();
+	} else {
+		// If SelectedPlane has something in it, clear out the selected
+		if (SelectedPlane != null) {
+			Planes[SelectedPlane].selected = false;
+			Planes[SelectedPlane].clearLines();
+			Planes[SelectedPlane].updateMarker();
+			$(Planes[SelectedPlane].tr).removeClass("selected");
+		}
+
+		SelectedPlane = null;
+		SelectedMilPlanes = true;
+
+		for(var key in Planes) {
+			if (Planes[key].visible && !Planes[key].isFiltered() && Planes[key].my_trail) {
+				Planes[key].selected = true;
+				Planes[key].updateLines();
+				Planes[key].updateMarker();
+			}
+		}
+	}
+
+	refreshSelected();
+}
+
+// deselect all the mil' planes
+function deselectMilPlanes() {
+	for(var key in Planes) {
+		Planes[key].selected = false;
+		Planes[key].clearLines();
+		Planes[key].updateMarker();
+		$(Planes[key].tr).removeClass("selected");
+	}
+	SelectedPlane = null;
+	SelectedMilPlanes = false;
+	refreshSelected();
+}
+// ----------------- AKISSACK
 
 // on refreshes, try to find new planes and mark them as selected
 function selectNewPlanes() {
