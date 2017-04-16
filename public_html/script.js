@@ -7,6 +7,7 @@ var StaticFeatures = new ol.Collection();
 var SiteCircleFeatures = new ol.Collection();
 var PlaneIconFeatures = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
+var MyFeatures = new ol.Collection();		// AKISSACK Ref: AK9U
 var Planes        = {};
 var PlanesOrdered = [];
 var PlaneFilter   = {};
@@ -771,6 +772,22 @@ function initialize_map() {
 
 	}
 
+	if (ShowMyLayer) {                       // AKISSACK Ref: AK9U
+            var myLayer = new ol.layer.Vector({
+                name: 'my_layer',
+                type: 'overlay',
+                title: 'My Layer',
+                source: new ol.source.Vector({
+                     features: MyFeatures,
+                })
+            });
+            layers.push(new ol.layer.Group({
+                title: 'Private',
+                layers: [
+			myLayer                ]
+            }));
+	}
+
 	// --------------------------------------------------------------
         // AKISSACK - ADD LAYERS ----------------------  ref: AK5A ends
 	// --------------------------------------------------------------
@@ -932,6 +949,98 @@ function initialize_map() {
         });
  
         if (ShowMouseLatLong) OLMap.addControl(mousePosition);
+
+	if (myLayer) {    // AKISSACK Ref: AK9U
+
+            var fCoin = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/coin.png'
+                })
+            });
+            var fCoins = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/coins.png'
+                })
+            });
+            var fCoinr = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/coinr.png'
+                })
+            });
+    
+	    var fSpade = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/spade.png'
+                })
+            });
+	    var fSpader = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/spader.png'
+                })
+            });
+	    var fSpec = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/spec.png'
+                })
+            });
+	    var fMil = new ol.style.Style({
+                image: new ol.style.Icon({
+                        src: 'sql/img/mil.png'
+                })
+            });
+
+		$(function ()
+        	//-----------------------------------------------------------------------
+        	// Send a http request with AJAX http://api.jquery.com/jQuery.ajax/
+        	// install: apt-get install mysql-client php5-mysql
+        	//-----------------------------------------------------------------------
+  		{
+    		   $.ajax({
+      		       url: 'sql/sql-finds-layer.php',
+    		       data: "",
+   		       dataType: 'json',
+    		       success: function(data)  {processMdData(data)}
+       	            });
+		});
+
+		function processMdData(allFindData) {
+		    for ( var i in allFindData ) {
+		        var oneFind = allFindData[i] ;
+        	        var fLonLat = [oneFind[3], oneFind[2]] ;
+			//console.log("Finds (" + fLonLat  + ")");
+                        var f = new ol.Feature({
+                            	geometry: new ol.geom.Point(ol.proj.transform([ +oneFind[3], +oneFind[2] ], 'EPSG:4326', 'EPSG:3857')),
+                            	name: oneFind[0] + '<br>' + oneFind[1]
+                        });
+			if (oneFind[4] === 'coin') {
+				f.setStyle(fCoin);
+			} else {
+				if (oneFind[4] === 'coins') {
+					f.setStyle(fCoins);
+				} else {
+					if  (oneFind[4] === 'coinr') {
+						f.setStyle(fCoinr);
+					} else {
+						if  (oneFind[4] === 'mil') {
+							f.setStyle(fMil);
+						} else {
+							if  (oneFind[4] === 'spec') {
+								f.setStyle(fSpec);
+							} else {
+								if  (oneFind[4] === 'spader') {
+									f.setStyle(fSpader);
+								} else {
+									f.setStyle(fSpade);
+								}
+							}
+						}
+					}
+				}
+			}
+			MyFeatures.push(f);
+                    }
+	        }
+	}
 	//------------------------------------------------------------------------------------
 	// Ref: AK1C Ends ----------------------------------------------------------- AKISSACK
 	//------------------------------------------------------------------------------------

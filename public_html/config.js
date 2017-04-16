@@ -11,8 +11,8 @@ PlaneCountInTitle = true;
 MessageRateInTitle = false;
 
 // -- Output Settings -------------------------------------
-// The DisplayUnits setting controls whether nautical (ft, NM, knots), 
-// metric (m, km, km/h) or imperial (ft, mi, mph) units are used in the 
+// The DisplayUnits setting controls whether nautical (ft, NM, knots),
+// metric (m, km, km/h) or imperial (ft, mi, mph) units are used in the
 // plane table and in the detailed plane info. Valid values are
 // "nautical", "metric", or "imperial".
 DisplayUnits = "nautical";
@@ -135,7 +135,7 @@ MapzenAPIKey = null;
 // Options to enable/disable modifications provided in Dump1090-OpenLayers3-html by Al Kissack
 // ----------------------------------------------------------------------------------------------------------------------------
 ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
-ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps 
+ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
 ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
 
@@ -149,12 +149,16 @@ ShowUKMilLayers      = true;   // https://github.com/alkissack/Dump1090-OpenLaye
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PERSONAL OPTIONS      https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyPreferences    = true ;  // Required to enable the FOUR options below 	 
-ShowAdditionalData   = true ;  // 
+ShowMyPreferences    = true ;  // Required to enable the FOUR options below
+ShowAdditionalData   = true ;  //
 ShowMyIcons          = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
 ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 			       // ******************************************************************************
-ShowHTMLColumns	     = false ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
+ShowHTMLColumns	     = true ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
 			       // ******************************************************************************
+// ----------------------------------------------------------------------------------------------------------------------------
+//           PRIVATE OPTIONS
+// ----------------------------------------------------------------------------------------------------------------------------
+ShowMyLayer          = false;
 // ----------------------------------------------------------------------------------------------------------------------------
 
