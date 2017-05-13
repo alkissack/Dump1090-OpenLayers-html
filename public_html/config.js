@@ -154,7 +154,7 @@ ShowAdditionalData   = true ;  //
 ShowMyIcons          = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
 ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 			       // ******************************************************************************
-ShowHTMLColumns	     = true ;  // *** You need to use the alternate index.html (allan.html) for this option  ***
+ShowHTMLColumns	     = false ; // *** You need to use the alternate index.html (allan.html) for this option  ***
 			       // ******************************************************************************
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PRIVATE OPTIONS
