@@ -1071,7 +1071,7 @@ function initialize_map() {
 	                };
 			if (ShowAdditionalData ) {
                             popname = (Planes[feature.hex].ac_aircraft ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
-		            popname = popname + ' ['+ (Planes[feature.hex].category     ? Planes[feature.hex].category     : '?')+']';
+		            popname = popname + (Planes[feature.hex].category ? ' ['+ Planes[feature.hex].category+']': '');
 
                             popname = popname + '\n('+ (Planes[feature.hex].flight ? Planes[feature.hex].flight.trim() : 'No Call') +')';
                             popname = popname + ' #' +  feature.hex.toUpperCase();
@@ -1081,6 +1081,7 @@ function initialize_map() {
 
                             popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '') ;
                             popname = popname + ' ' +  (Planes[feature.hex].operator ? Planes[feature.hex].operator : '') ;
+                            popname = popname + ' ' + (Planes[feature.hex].sitedist ? format_distance_long(Planes[feature.hex].sitedist, DisplayUnits) : '') ;
 			} else {
 			    popname = 'ICAO: ' + Planes[feature.hex].icao;
 		            popname = popname + '\nFlt:  '+ (Planes[feature.hex].flight       ? Planes[feature.hex].flight             : '?');
@@ -1448,9 +1449,9 @@ function refreshTableInfo() {
 			if (ShowMyPreferences && ShowHTMLColumns) { // ------------ Ref: AK9F
                         	tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
                         	tableplane.tr.cells[4].textContent = (tableplane.icaotype !== null ? tableplane.icaotype : "");
-                        	tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "");
-                         	tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "");
-                        	tableplane.tr.cells[7].textContent = (tableplane.ac_category !== null ? tableplane.ac_category : "");
+                        	tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : ".");
+                         	tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "..");
+                        	tableplane.tr.cells[7].textContent = (tableplane.ac_category !== null ? tableplane.ac_category : "...");
                         	tableplane.tr.cells[8].textContent = (tableplane.squawk !== null ? tableplane.squawk : "");
                         	tableplane.tr.cells[9].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
                         	tableplane.tr.cells[10].textContent = format_speed_brief(tableplane.speed, DisplayUnits);

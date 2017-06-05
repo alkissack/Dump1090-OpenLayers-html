@@ -53,10 +53,10 @@ function PlaneObject(icao) {
 	this.my_trail	    = '' ;  // trail on by default
 	this.ac_type        = '' ;  // icao type
 	this.ac_shortname   = '' ;  // Short a/c name
-	this.ac_aircraft    = '' ;   // Long a/c name
-        this.ac_category    = '';   // My category for images -  eg 2prop
-	this.country	    = '';
-	this.operator       = '';
+	this.ac_aircraft    = '' ;  // Long a/c name
+        this.ac_category    = '' ;  // My category for images -  eg 2prop
+	this.country	    = '' ;
+	this.operator       = '' ;
 	// Akissack - additional variables for various modifications - Ref: AK9Z Ends
 
         // start from a computed registration, let the DB override it
@@ -83,9 +83,9 @@ function PlaneObject(icao) {
                 if ("wtc" in data) {
                         this.wtc = data.wtc;
                 }
-		// -------------------------------------------------
+		// -------------------------------------------------------------
 		// AKISSACK - Load my details from json ------Ref: AK9E starts
-		// -------------------------------------------------
+		// -------------------------------------------------------------
 		if (ShowMyPreferences && ShowAdditionalData) {
 		  if (this.icao.substring(0,3) == '43c' || this.icao.substring(0,2) == 'ae' ) {this.is_interesting = 'Y';}
 		  if ("Int" in data) {
@@ -101,9 +101,9 @@ function PlaneObject(icao) {
 		  if ("Short" in data)   {this.ac_shortname = data.Short;}
 		  if ("Type" in data)    {this.ac_aircraft = data.Type;}
 		}
-		// -------------------------------------------------
+		// -------------------------------------------------------
 		// -------------------------------------- Ref: AK9E ends
-		// -------------------------------------------------
+		// -------------------------------------------------------
                 if (this.selected) {
 		        refreshSelected();
                 }
