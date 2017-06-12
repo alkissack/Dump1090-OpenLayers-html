@@ -592,7 +592,7 @@ PlaneObject.prototype.updateMarker = function(moved) {
                         }
   
 			if (ShowAdditionalData) {
-			    labelText = labelText +'\n'+this.ac_shortname;
+			    labelText = labelText +' '+this.ac_shortname;
 			    if ((this.my_vet != 5 && this.my_vet != 6 && !this.selected)  || SelectedAllPlanes ){
                                 
                             }

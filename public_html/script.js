@@ -38,6 +38,8 @@ var PlaneRowTemplate = null;
 var TrackedAircraft = 0;
 var TrackedAircraftPositions = 0;
 var TrackedHistorySize = 0;
+var MaxRange = 0;     // AKISSACK
+var MinRange = 999;   // AKISSACK
 
 var SitePosition = null;
 
@@ -187,6 +189,7 @@ var PositionHistorySize = 0;
 function initialize() {
         // Set page basics
         document.title = PageName;
+	//MaxRange = 0 ; //AKISSACK
         // $("#infoblock_name").text(PageName); AKISSACK - Ref: AK9W
 	$("#infoblock_name").text('');
 
@@ -772,7 +775,7 @@ function initialize_map() {
 
 	}
 
-	if (ShowMyLayer) {                       // AKISSACK Ref: AK9U
+	if (ShowMyFindsLayer) {                       // AKISSACK Ref: AK9U
             var myLayer = new ol.layer.Vector({
                 name: 'my_layer',
                 type: 'overlay',
@@ -781,12 +784,13 @@ function initialize_map() {
                      features: MyFeatures,
                 })
             });
+
             layers.push(new ol.layer.Group({
                 title: 'Private',
-                layers: [
-			myLayer                ]
+                layers: [myLayer]
             }));
-	}
+	};
+
 
 	// --------------------------------------------------------------
         // AKISSACK - ADD LAYERS ----------------------  ref: AK5A ends
@@ -800,6 +804,36 @@ function initialize_map() {
                         features: PlaneIconFeatures,
                 })
         });
+
+	if (ShowSleafordRange) {                       // AKISSACK Ref: AK9V
+ 	    var rangeLayer = new ol.layer.Vector({
+            	name: 'range',
+               	type: 'overlay',
+               	title: 'Range',
+	   	source: new ol.source.Vector({
+	  		url: 'layers/AK_range.geojson',
+	  		format: new ol.format.GeoJSON({
+	       			defaultDataProjection :'EPSG:4326', 
+              			projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+               		stroke: new ol.style.Stroke({
+                       		color: 'rgba(0, 0, 255, 1)',
+                       		width: 0.25
+               		})
+		})
+            });
+
+            	//layers.push(new ol.layer.Group({
+                //	title: 'Range',
+                //	layers: [rangeLayer] 
+            	//}));
+	} else {
+		var rangeLayer = new ol.layer.Vector({});
+
+	};
+
 
         layers.push(new ol.layer.Group({
                 title: 'Overlays',
@@ -821,10 +855,12 @@ function initialize_map() {
                                         features: PlaneTrailFeatures,
                                 })
                         }),
-
+			rangeLayer,
                         iconsLayer
                 ]
         }));
+
+
 
         var foundType = false;
 
@@ -949,8 +985,14 @@ function initialize_map() {
         });
  
         if (ShowMouseLatLong) OLMap.addControl(mousePosition);
+	//------------------------------------------------------------------------------------
+	// Ref: AK1C Ends ----------------------------------------------------------- AKISSACK
+	//------------------------------------------------------------------------------------
 
-	if (myLayer) {    // AKISSACK Ref: AK9U
+	//------------------------------------------------------------------------------------
+	// // AKISSACK Ref: AK9U -------------------------------------------------------------
+	//------------------------------------------------------------------------------------
+	if (ShowMyFindsLayer) {    // AKISSACK Ref: AK9U
 
             var fCoin = new ol.style.Style({
                 image: new ol.style.Icon({
@@ -1007,6 +1049,7 @@ function initialize_map() {
 		    for ( var i in allFindData ) {
 		        var oneFind = allFindData[i] ;
         	        var fLonLat = [oneFind[3], oneFind[2]] ;
+			//var fid     = oneFind[0];  
 			//console.log("Finds (" + fLonLat  + ")");
                         var f = new ol.Feature({
                             	geometry: new ol.geom.Point(ol.proj.transform([ +oneFind[3], +oneFind[2] ], 'EPSG:4326', 'EPSG:3857')),
@@ -1042,7 +1085,7 @@ function initialize_map() {
 	        }
 	}
 	//------------------------------------------------------------------------------------
-	// Ref: AK1C Ends ----------------------------------------------------------- AKISSACK
+	// // AKISSACK Ref: AK9U ---------------------------------------------------- END
 	//------------------------------------------------------------------------------------
 
 	//------------------------------------------------------------------------------------
@@ -1056,10 +1099,17 @@ function initialize_map() {
             overlay.setMap(OLMap);
 
             // trap mouse moving over
+	    var hitTolerance = 100;
             OLMap.on('pointermove', function(evt) {
-                var feature = OLMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
+                var feature = OLMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer)  {
                     overlay.setPosition(evt.coordinate);
                     var popname = feature.get('name');
+		    //console.log(popname);
+
+		    if (ShowMyFindsLayer && (typeof popname != 'undefined') && popname != '~') {
+			overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                    	return feature;  
+		    }		
                     if (popname === '~') {
            	        var vsi = '' ;
 	                if (Planes[feature.hex].vert_rate >256) {
@@ -1071,7 +1121,7 @@ function initialize_map() {
 	                };
 			if (ShowAdditionalData ) {
                             popname = (Planes[feature.hex].ac_aircraft ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
-		            popname = popname + (Planes[feature.hex].category ? ' ['+ Planes[feature.hex].category+']': '');
+		            popname = popname + ' ['+ (Planes[feature.hex].category     ? Planes[feature.hex].category     : '?')+']';
 
                             popname = popname + '\n('+ (Planes[feature.hex].flight ? Planes[feature.hex].flight.trim() : 'No Call') +')';
                             popname = popname + ' #' +  feature.hex.toUpperCase();
@@ -1081,7 +1131,7 @@ function initialize_map() {
 
                             popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '') ;
                             popname = popname + ' ' +  (Planes[feature.hex].operator ? Planes[feature.hex].operator : '') ;
-                            popname = popname + ' ' + (Planes[feature.hex].sitedist ? format_distance_long(Planes[feature.hex].sitedist, DisplayUnits) : '') ;
+                            popname = popname + ' ' +  (Planes[feature.hex].sitedist ? format_distance_long(Planes[feature.hex].sitedist, DisplayUnits) : '...') ;
 			} else {
 			    popname = 'ICAO: ' + Planes[feature.hex].icao;
 		            popname = popname + '\nFlt:  '+ (Planes[feature.hex].flight       ? Planes[feature.hex].flight             : '?');
@@ -1093,15 +1143,21 @@ function initialize_map() {
                     	return feature;  
                     }
 		    else
+			//overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                    	//return feature;  
 			return null;
+
                 }, null, function(layer) {
-                    //return (layer == iconsLayer) ;
-                    return (layer == iconsLayer) ;
-                });
+			if (ShowMyFindsLayer) {
+	                    return (layer == iconsLayer, MyFeatures) ;
+			} else {
+			    return (layer == iconsLayer) ;
+           		}
+                } );
 
                 overlay.getElement().style.display = feature ? '' : 'none'; // EAK--> Needs GMAP/INDEX.HTML
                 document.body.style.cursor = feature ? 'pointer' : '';
-            });
+            } );
 	} else {
             var overlay = new ol.Overlay({
           	    element: document.getElementById('popinfo'),
@@ -1262,7 +1318,8 @@ function refreshPageTitle() {
 
         var subtitle = "";
 
-        if (PlaneCountInTitle) {
+        if (PlaneCountInTitle) {  // AKISSACK add Max' Range
+                subtitle += format_distance_brief(MinRange, DisplayUnits)+'-'+format_distance_brief(MaxRange, DisplayUnits)+'>';
                 subtitle += TrackedAircraftPositions + '/' + TrackedAircraft;
         }
 
@@ -1272,7 +1329,7 @@ function refreshPageTitle() {
         }
 
         //document.title = PageName + ' - ' + subtitle;  // AKISSACK Ref: AK9X
-	document.title = subtitle+ ' - ' + PageName ;    // AKISSACK Ref: AK9X
+	document.title = subtitle+ ' ' + PageName ;    // AKISSACK Ref: AK9X
 
 }
 
@@ -1401,6 +1458,8 @@ function refreshTableInfo() {
         TrackedAircraft = 0
         TrackedAircraftPositions = 0
         TrackedHistorySize = 0
+	MaxRange = 0	// AKISSACK
+	MinRange = 999999  // AKISSACK
 
         $(".altitudeUnit").text(get_unit_label("altitude", DisplayUnits));
         $(".speedUnit").text(get_unit_label("speed", DisplayUnits));
@@ -1414,6 +1473,14 @@ function refreshTableInfo() {
                         tableplane.tr.className = "plane_table_row hidden";
                 } else {
                         TrackedAircraft++;
+	   		if (MaxRange < tableplane.sitedist ){   // AKISSACK
+				MaxRange = tableplane.sitedist;
+				//console.log("+"+MaxRange);
+	    		}
+	   		if (tableplane.sitedist  && MinRange > tableplane.sitedist ){   // AKISSACK
+				MinRange = tableplane.sitedist;
+				//console.log("-"+MinRange);
+	    		}
                         var classes = "plane_table_row";
 
 		        if (tableplane.position !== null && tableplane.seen_pos < 60) {
@@ -1449,9 +1516,9 @@ function refreshTableInfo() {
 			if (ShowMyPreferences && ShowHTMLColumns) { // ------------ Ref: AK9F
                         	tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
                         	tableplane.tr.cells[4].textContent = (tableplane.icaotype !== null ? tableplane.icaotype : "");
-                        	tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : ".");
-                         	tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "..");
-                        	tableplane.tr.cells[7].textContent = (tableplane.ac_category !== null ? tableplane.ac_category : "...");
+                        	tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "");
+                         	tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "");
+                        	tableplane.tr.cells[7].textContent = (tableplane.ac_category !== null ? tableplane.ac_category : "");
                         	tableplane.tr.cells[8].textContent = (tableplane.squawk !== null ? tableplane.squawk : "");
                         	tableplane.tr.cells[9].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
                         	tableplane.tr.cells[10].textContent = format_speed_brief(tableplane.speed, DisplayUnits);

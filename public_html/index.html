@@ -1,4 +1,4 @@
-<!DOCTYPE HTML>
+<!DOCTYPE HTML>  <!-- AKISSACK - WHOLE FILE ------------ Ref: AK9F -->
 <html>
 	<head>
 		<meta charset="utf-8"/>
@@ -15,7 +15,7 @@
                 <script src="ol3/ol3-layerswitcher.js" type="text/javascript"></script>
 
 		<script type="text/javascript" src="config.js"></script>
-		<script type="text/javascript" src="markers.js"></script>  
+		<script type="text/javascript" src="markers.js"></script>
 		<script type="text/javascript" src="myMarkers.js"></script> <!-- AKISSACK Ref: AK10A -->
 		<script type="text/javascript" src="dbloader.js"></script>
 		<script type="text/javascript" src="registrations.js"></script>
@@ -141,6 +141,7 @@
 									<div id="sudo_buttons">
 										<span class="sidebarButton pointer" onclick="resetMap();">Reset Map</span>
 										<span class="sidebarButton pointer" onclick="selectAllPlanes();">Select All</span>
+										<span class="sidebarButton pointer" onclick="selectMilPlanes();">Select Mil</span> <!-- AKISSACK Ref: AK9G -->
 										<span class="sidebarButton pointer" onclick="deselectAllPlanes();">Select None</span>
 									</div>
 								</td>
@@ -159,13 +160,15 @@
 					</div> <!-- dump1090_infoblock -->
 
 					<div id="units_container">
+<!--  AKISSACK Remove units option from panel
 						<label for="units_selector">Units:</label>
 						<select name="units_selector" id="units_selector">
 							<option value="nautical">Aeronautical</option>
 							<option value="metric">Metric</option>
 							<option value="imperial">Imperial</option>
 						</select>
-					</div>
+-->	
+				</div>
 
 					<form id="altitude_filter_form">
 						<label>Filter by altitude:</label>
@@ -187,6 +190,9 @@
 									<td id="flight" onclick="sortByFlight();">Ident</td>
 									<td id="registration" onclick="sortByRegistration();">Registration</td>
 									<td id="aircraft_type" onclick="sortByAircraftType();"> Aircraft type</td>
+									<td id="myAc" onclick="sortByICAO();">Aircraft</td>  		<!-- AKISSACK [MYTB] -->
+									<td id="myAcAc" onclick="sortByICAO();">Name</td>      		<!-- AKISSACK [MYTB] -->
+									<td id="myAcCat" onclick="sortByICAO();">Icon</td>    		<!-- AKISSACK [MYTB] -->
 									<td id="squawk" onclick="sortBySquawk();">Squawk</td>
 									<td id="altitude" onclick="sortByAltitude();">Altitude (<span class="altitudeUnit"></span>)</td>
 									<td id="speed" onclick="sortBySpeed();">Speed (<span class="speedUnit"></span>)</td>
@@ -211,6 +217,9 @@
 									<td>FLIGHT</td>
 									<td>REGISTRATION</td>
 									<td>AIRCRAFT_TYPE</td>
+									<td class="typeColumn">MYAC</td>  		<!-- AKISSACK [MYTB] -->
+									<td style="text-align: right">MYACAC</td>   	<!-- AKISSACK [MYTB] -->
+                                                                        <td style="text-align: right">MYACCAT</td>   	<!-- AKISSACK [MYTB] -->
 									<td style="text-align: right">SQUAWK</td>
 									<td style="text-align: right">ALTITUDE</td>
 									<td style="text-align: right">SPEED</td>
