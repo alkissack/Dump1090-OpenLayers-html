@@ -806,6 +806,8 @@ function initialize_map() {
         });
 
 	if (ShowSleafordRange) {                       // AKISSACK Ref: AK9V
+	    // THis is just to show a range ringe (based on actual experience)
+	    // for my home QTH. Not usefull for anyone else other than as a technique 
  	    var rangeLayer = new ol.layer.Vector({
             	name: 'range',
                	type: 'overlay',
@@ -991,6 +993,8 @@ function initialize_map() {
 
 	//------------------------------------------------------------------------------------
 	// // AKISSACK Ref: AK9U -------------------------------------------------------------
+	//------------------------------------------------------------------------------------
+	// This section can be ignored.  It is just a test to show my metal detecting finds
 	//------------------------------------------------------------------------------------
 	if (ShowMyFindsLayer) {    // AKISSACK Ref: AK9U
 

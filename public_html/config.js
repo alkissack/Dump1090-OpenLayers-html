@@ -154,11 +154,12 @@ ShowAdditionalData   = true ;  //
 ShowMyIcons          = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
 ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 			       // ******************************************************************************
-ShowHTMLColumns	     = true ;  // *** You need to use the alternate base-index.html if this is false ***
+ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-index.html file instead         ***
 			       // ******************************************************************************
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PRIVATE OPTIONS
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyLayer          = false;
+ShowMyFindsLayer     = false;
+ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W
 // ----------------------------------------------------------------------------------------------------------------------------
 
