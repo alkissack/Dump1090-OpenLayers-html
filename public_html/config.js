@@ -159,7 +159,7 @@ ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-ind
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PRIVATE OPTIONS
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyFindsLayer     = false;
+ShowMyFindsLayer     = false;	// A more reasltic range layer for my antenna location --  AK9T
 ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W
 // ----------------------------------------------------------------------------------------------------------------------------
 
