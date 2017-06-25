@@ -19,6 +19,8 @@ Originaly amended for my own purposes, but having had several requests to share 
 
 7. Permanent labels - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 
+8. Maximum range plot - wiki 
+
 ## Also some additional modifications:
 
 9. Miscellaneous changes - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
