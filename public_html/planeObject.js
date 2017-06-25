@@ -54,9 +54,11 @@ function PlaneObject(icao) {
 	this.ac_type        = '' ;  // icao type
 	this.ac_shortname   = '' ;  // Short a/c name
 	this.ac_aircraft    = '' ;  // Long a/c name
-        this.ac_category    = '' ;  // My category for images -  eg 2prop
+    this.ac_category    = '' ;  // My category for images -  eg 2prop
 	this.country	    = '' ;
 	this.operator       = '' ;
+    this.siteBearing    = 0;    // ref: AK8F
+	this.siteNm	        = 0;    // ref: AK8F
 	// Akissack - additional variables for various modifications - Ref: AK9Z Ends
 
         // start from a computed registration, let the DB override it
@@ -494,7 +496,27 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
 
                 if (SitePosition !== null) {
                         var WGS84 = new ol.Sphere(6378137);
-                        this.sitedist = WGS84.haversineDistance(SitePosition, this.position);
+                        this.sitedist    = WGS84.haversineDistance(SitePosition, this.position);
+			//  AKISSACK - Store a bearing and nm distance for our range plot Ref AK8G
+			this.siteBearing = parseInt(getBearing(SitePosition[1],SitePosition[0],this.position[1],this.position[0]).toFixed(0));
+			this.siteNm      = parseInt((this.sitedist/1852).toFixed(0));
+
+			// AKISSACK - store bearing/distance from site for range plot
+			//this.siteBearing = Math.round(getBearing(SitePosition[1],SitePosition[0],this.position[1],this.position[0]));
+			//this.siteNm = (this.sitedist/1609).toFixed(0);
+
+			//var nmdistance = (this.sitedist/1609).toFixed(0);
+			////console.log(this.siteBearing+" "+nmdistance+" "+MaxRngRange[this.siteBearing]);
+                        //if (MaxRngRange[this.siteBearing] < nmdistance) {
+ 		        //  var oldmr = MaxRngRange[this.siteBearing];
+			//  MaxRngRange[this.siteBearing] = nmdistance;
+                        //  if (this.siteBearing = 90) {
+			//    console.log(this.siteBearing+"\u00B0"+" was "+oldmr +">"+MaxRngRange[this.siteBearing]+">"+nmdistance);
+			//  }
+			//  MaxRngLat[this.siteBearing]   = this.position[1];
+			//  MaxRngLon[this.siteBearing]   = this.position[0];		
+			//  //updateMySql(this.siteBearing,nmdist,this.position[1],this.position[0]);
+			//}
                 }
 
                 this.position_from_mlat = false;
@@ -535,6 +557,24 @@ PlaneObject.prototype.updateTick = function(receiver_timestamp, last_timestamp) 
 			if (this.updateTrack(receiver_timestamp - last_timestamp + (this.position_from_mlat ? 30 : 5))) {
                                 this.updateLines();
                                 this.updateMarker(true);
+
+				// AKISSACK store range plot details  Ref AK8H
+                        	if (MaxRngRange[this.siteBearing] < this.siteNm) {
+					//if( this.siteBearing > 90 && this.siteBearing < 110){
+					//	if (MaxRngRange[this.siteBearing] > this.siteNm) {
+					//		console.log("Error "+this.siteBearing+" "+MaxRngRange[this.siteBearing]+">"+this.siteNm);
+ 					//	} else {
+					//	console.log("Update "+this.siteBearing+" "+MaxRngRange[this.siteBearing]+">"+this.siteNm);
+					//	}
+					//}
+					MaxRngRange[this.siteBearing] = this.siteNm;
+					MaxRngLat[this.siteBearing]   = this.position[1];
+					MaxRngLon[this.siteBearing]   = this.position[0];
+					if (ShowSleafordRange) {
+					  // Store this in mySql so I will always have max ranges
+					  updateMySql(this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao);
+					}				};
+
                         } else { 
                                 this.updateMarker(false); // didn't move
                         }
@@ -643,7 +683,7 @@ PlaneObject.prototype.updateMarker = function(moved) {
                 // AKISSACK - HOVER OVER LABELS ------------------------------------ ref: AK6A starts
 		// ----------------------------------------------------------------------------------
 		if (ShowHoverOverLabels)  {
-                	var myPopUpName = '~';
+            var myPopUpName = '~';  // Set a default name
    			this.marker = new ol.Feature({
                 		geometry: new ol.geom.Point(ol.proj.fromLonLat(this.position)) ,
                 		name : myPopUpName
@@ -747,3 +787,55 @@ PlaneObject.prototype.destroy = function() {
         this.clearLines();
         this.clearMarker();
 };
+// AKISSACK Ref: AK8I
+function radians(n) {
+  return n * (Math.PI / 180);
+}
+function degrees(n) {
+  return n * (180 / Math.PI);
+}
+
+// AKISSACK 
+function getBearing(startLat,startLong,endLat,endLong){
+  startLat = radians(startLat);
+  startLong = radians(startLong);
+  endLat = radians(endLat);
+  endLong = radians(endLong);
+
+  var dLong = endLong - startLong;
+
+  var dPhi = Math.log(Math.tan(endLat/2.0+Math.PI/4.0)/Math.tan(startLat/2.0+Math.PI/4.0));
+  if (Math.abs(dLong) > Math.PI){
+    if (dLong > 0.0)
+       dLong = -(2.0 * Math.PI - dLong);
+    else
+       dLong = (2.0 * Math.PI + dLong);
+  }
+
+  return (degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
+}
+
+function xupdateMySql(bearing,dist,lat,lon){
+}
+
+function updateMySql(bearing,dist,lat,lon,icao){
+  $(function () 
+  {
+    $.ajax({                                      
+      url: 'sql/range_update_one.php',     
+      async: true , 
+      data: "bearing="+ bearing +"&range="+ dist+ "&lat="+ lat+ "&lon="+ lon+ "&icao="+ icao,
+      dataType: 'json',  
+      success: function(retData)  
+      {
+        //for (var i in retData)
+        //{
+	//  //console.log(retData[i]);
+        //  //$('#output').append(retData[i])
+        //  //            .append("<br />");
+        //} 
+      } 
+    });
+  }); 
+
+}

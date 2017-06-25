@@ -2,18 +2,19 @@
 "use strict";
 
 // Define our global variables
-var OLMap         = null;
-var StaticFeatures = new ol.Collection();
+var OLMap              = null;
+var StaticFeatures     = new ol.Collection();
 var SiteCircleFeatures = new ol.Collection();
-var PlaneIconFeatures = new ol.Collection();
+var PlaneIconFeatures  = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
-var MyFeatures = new ol.Collection();		// AKISSACK Ref: AK9U
-var Planes        = {};
-var PlanesOrdered = [];
-var PlaneFilter   = {};
-var SelectedPlane = null;
-var SelectedAllPlanes = false;
-var FollowSelected = false;
+var MyFeatures         = new ol.Collection();		// AKISSACK Ref: AK9U
+var MaxRangeFeatures   = new ol.Collection();       // AKISSACK Ref: AK8A
+var Planes             = {};
+var PlanesOrdered      = [];
+var PlaneFilter        = {};
+var SelectedPlane      = null;
+var SelectedAllPlanes  = false;
+var FollowSelected     = false;
 // --------------------------------------------------------------------------------------
 // AKISSACK - Variables -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
@@ -38,8 +39,12 @@ var PlaneRowTemplate = null;
 var TrackedAircraft = 0;
 var TrackedAircraftPositions = 0;
 var TrackedHistorySize = 0;
-var MaxRange = 0;     // AKISSACK
-var MinRange = 999;   // AKISSACK
+var MaxRange    = 0;     // AKISSACK Range display Ref: AK9T
+var CurMaxRange = 0;     // AKISSACK Range display Ref: AK9T
+var CurMinRange = 999;   // AKISSACK Range display Ref: AK9T
+var MaxRngRange = [];    // AKISSACK Range plot Ref: AK8B
+var MaxRngLat   = [];    // AKISSACK Range plot Ref: AK8B
+var MaxRngLon   = [];    // AKISSACK Range plot Ref: AK8B
 
 var SitePosition = null;
 
@@ -189,7 +194,12 @@ var PositionHistorySize = 0;
 function initialize() {
         // Set page basics
         document.title = PageName;
-	//MaxRange = 0 ; //AKISSACK
+	MaxRange = 0 ; //AKISSACK  Display range  Ref: AK8C
+        for (var j=0; j <= 360; j++) { //AKISSACK Range plot
+	  MaxRngRange[j] = 0;
+	  MaxRngLat[j]   = 53;  //  Need to set these from site position, not my lat/long
+	  MaxRngLon[j]   = -0.4;
+	}
         // $("#infoblock_name").text(PageName); AKISSACK - Ref: AK9W
 	$("#infoblock_name").text('');
 
@@ -805,8 +815,8 @@ function initialize_map() {
                 })
         });
 
-	if (ShowSleafordRange) {                       // AKISSACK Ref: AK9V
-	    // THis is just to show a range ringe (based on actual experience)
+	if (ShowSleafordRange) {                       // AKISSACK Ref: AK9T
+	    // This is just to show a range rings (based on actual experience)
 	    // for my home QTH. Not usefull for anyone else other than as a technique 
  	    var rangeLayer = new ol.layer.Vector({
             	name: 'range',
@@ -826,16 +836,31 @@ function initialize_map() {
                		})
 		})
             });
-
-            	//layers.push(new ol.layer.Group({
-                //	title: 'Range',
-                //	layers: [rangeLayer] 
-            	//}));
 	} else {
 		var rangeLayer = new ol.layer.Vector({});
-
 	};
 
+	if (ShowMaxRange) {    // AKISSACK Maximum Range Plot Ref: AK8D 
+ 	    var maxRangeLayer = new ol.layer.Vector({
+            	name: 'maxrange',
+               	type: 'overlay',
+               	title: 'MaxRange',
+                source: new ol.source.Vector({
+                        features: MaxRangeFeatures,
+                }),
+		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     	 	color : 'rgba(0,0,255, 0.07)'
+                	}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(0,0,255, 0.5)',
+                        	width: 0.2
+                	})
+		})
+           });
+	} else {
+		var maxRangeLayer = new ol.layer.Vector({});
+	};
 
         layers.push(new ol.layer.Group({
                 title: 'Overlays',
@@ -858,6 +883,7 @@ function initialize_map() {
                                 })
                         }),
 			rangeLayer,
+			maxRangeLayer,  // Ref: AK8D
                         iconsLayer
                 ]
         }));
@@ -1092,86 +1118,91 @@ function initialize_map() {
 	// // AKISSACK Ref: AK9U ---------------------------------------------------- END
 	//------------------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------------------
-	// AKISSACK - HOVER OVER LABELS ------------------------------------- ref: AK6D starts
-	//------------------------------------------------------------------------------------
-	if (ShowHoverOverLabels)  {
+        //------------------------------------------------------------------------------------
+        // AKISSACK - HOVER OVER LABELS ------------------------------------- ref: AK6D starts
+        //------------------------------------------------------------------------------------
+        if (ShowHoverOverLabels) {
             var overlay = new ol.Overlay({
-          	    element: document.getElementById('popinfo'),
-          	    positioning: 'bottom-left'
+                element: document.getElementById('popinfo'),
+                positioning: 'bottom-left'
             });
             overlay.setMap(OLMap);
 
             // trap mouse moving over
-	    var hitTolerance = 100;
+            //var hitTolerance = 100;
             OLMap.on('pointermove', function(evt) {
+            
                 var feature = OLMap.forEachFeatureAtPixel(evt.pixel, function(feature, layer)  {
                     overlay.setPosition(evt.coordinate);
                     var popname = feature.get('name');
-		    //console.log(popname);
+                    //console.log(popname);
 
-		    if (ShowMyFindsLayer && (typeof popname != 'undefined') && popname != '~') {
-			overlay.getElement().innerHTML = (popname  ?  popname   :'' );
-                    	return feature;  
-		    }		
+                    if (ShowMyFindsLayer && (typeof popname != 'undefined') && popname != '~') {
+                        overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                        return feature;  
+                    }       
                     if (popname === '~') {
-           	        var vsi = '' ;
-	                if (Planes[feature.hex].vert_rate >256) {
-                            vsi = 'climbing';
-                        } else {
-                            if (Planes[feature.hex].vert_rate < -256) {
-                    	        vsi = 'descending';
-                    	    } else vsi = 'level';
-	                };
-			if (ShowAdditionalData ) {
-                            popname = (Planes[feature.hex].ac_aircraft ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
-		            popname = popname + ' ['+ (Planes[feature.hex].category     ? Planes[feature.hex].category     : '?')+']';
+                        var vsi = '' ;
+			if (Planes[feature.hex].vert_rate !== 'undefined' ){  // Correct odd errors
+                        	if (Planes[feature.hex].vert_rate >256) {
+                        	    vsi = 'climbing';
+                        	} else {
+                        	    if (Planes[feature.hex].vert_rate < -256) {
+                        	        vsi = 'descending';
+                        	    } else vsi = 'level';
+                        	};
+			};
+                        if (ShowAdditionalData ) {
+                            popname = (Planes[feature.hex].ac_aircraft               ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
+                            popname = popname + ' ['+ (Planes[feature.hex].category  ? Planes[feature.hex].category     : '?')+']';
 
-                            popname = popname + '\n('+ (Planes[feature.hex].flight ? Planes[feature.hex].flight.trim() : 'No Call') +')';
+                            popname = popname + '\n('+ (Planes[feature.hex].flight   ? Planes[feature.hex].flight.trim() : 'No Call') +')';
                             popname = popname + ' #' +  feature.hex.toUpperCase();
 
                             popname = popname + '\n' + (Planes[feature.hex].altitude ? parseInt(Planes[feature.hex].altitude) : '?') ;
                             popname = popname + ' ft and ' +  vsi;
 
-                            popname = popname + '\n' + (Planes[feature.hex].country ? Planes[feature.hex].country : '') ;
+                            popname = popname + '\n' + (Planes[feature.hex].country  ? Planes[feature.hex].country : '') ;
                             popname = popname + ' ' +  (Planes[feature.hex].operator ? Planes[feature.hex].operator : '') ;
-                            popname = popname + ' ' +  (Planes[feature.hex].sitedist ? format_distance_long(Planes[feature.hex].sitedist, DisplayUnits) : '...') ;
-			} else {
-			    popname = 'ICAO: ' + Planes[feature.hex].icao;
-		            popname = popname + '\nFlt:  '+ (Planes[feature.hex].flight       ? Planes[feature.hex].flight             : '?');
-		            popname = popname + '\nType: '+ (Planes[feature.hex].icaotype     ? Planes[feature.hex].icaotype           : '?');
-		            popname = popname + '\nReg:  '+ (Planes[feature.hex].registration ? Planes[feature.hex].registration       : '?');
-			    popname = popname + '\nFt:   '+ (Planes[feature.hex].altitude     ? parseInt(Planes[feature.hex].altitude) : '?') ;
-			}
-			overlay.getElement().innerHTML = (popname  ?  popname   :'' );
-                    	return feature;  
-                    }
-		    else
-			//overlay.getElement().innerHTML = (popname  ?  popname   :'' );
-                    	//return feature;  
-			return null;
+                            popname = popname + ' ' +  (Planes[feature.hex].siteNm ? Planes[feature.hex].siteNm+"nm" : '');
+                            popname = popname + ' ' +  (Planes[feature.hex].siteBearing ? Planes[feature.hex].siteBearing+"\u00B0" : '') ;
 
+                        } else {
+                            popname = 'ICAO: ' + Planes[feature.hex].icao;
+                            popname = popname + '\nFlt:  '+ (Planes[feature.hex].flight       ? Planes[feature.hex].flight             : '?');
+                            popname = popname + '\nType: '+ (Planes[feature.hex].icaotype     ? Planes[feature.hex].icaotype           : '?');
+                            popname = popname + '\nReg:  '+ (Planes[feature.hex].registration ? Planes[feature.hex].registration       : '?');
+                            popname = popname + '\nFt:   '+ (Planes[feature.hex].altitude     ? parseInt(Planes[feature.hex].altitude) : '?') ;
+                        }
+                        overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                        return feature;  
+                    } else {
+                        //overlay.getElement().innerHTML = (popname  ?  popname   :'' );
+                        //return feature;  
+                        return null;
+                    }
                 }, null, function(layer) {
-			if (ShowMyFindsLayer) {
-	                    return (layer == iconsLayer, MyFeatures) ;
-			} else {
-			    return (layer == iconsLayer) ;
-           		}
-                } );
+                    if (ShowMyFindsLayer) {
+                        return (layer == iconsLayer, MyFeatures) ;
+                    } else {
+                        return (layer == iconsLayer) ;
+                    }
+                } 
+                ); //OLMap.forEachFeatureAtPixel
 
                 overlay.getElement().style.display = feature ? '' : 'none'; // EAK--> Needs GMAP/INDEX.HTML
                 document.body.style.cursor = feature ? 'pointer' : '';
             } );
-	} else {
+        } else {  // Labels are not required
             var overlay = new ol.Overlay({
-          	    element: document.getElementById('popinfo'),
-          	    positioning: 'bottom-left'
+                element: document.getElementById('popinfo'),
+                positioning: 'bottom-left'
             });
             overlay.setMap(OLMap);
-	}
-	//------------------------------------------------------------------------------------
-	// -------------------------------------------------------------------- ref: AK6D ends
-	//------------------------------------------------------------------------------------
+        }
+        //------------------------------------------------------------------------------------
+        // -------------------------------------------------------------------- ref: AK6D ends
+        //------------------------------------------------------------------------------------
 
 
 	// Add home marker if requested
@@ -1322,8 +1353,8 @@ function refreshPageTitle() {
 
         var subtitle = "";
 
-        if (PlaneCountInTitle) {  // AKISSACK add Max' Range
-                subtitle += format_distance_brief(MinRange, DisplayUnits)+'-'+format_distance_brief(MaxRange, DisplayUnits)+'>';
+        if (PlaneCountInTitle) {  // AKISSACK add Max' Range  AK9T
+                subtitle += format_distance_brief(CurMinRange, DisplayUnits)+'-'+format_distance_brief(CurMaxRange, DisplayUnits)+'>';
                 subtitle += TrackedAircraftPositions + '/' + TrackedAircraft;
         }
 
@@ -1360,6 +1391,7 @@ function refreshSelected() {
         $('#dump1090_version').text('');                 // AKISSACK Ref: AK9W
         $('#dump1090_total_ac').text(TrackedAircraft);
         $('#dump1090_total_ac_positions').text(TrackedAircraftPositions);
+        $('#dump1090_max_range').text(format_distance_brief(MaxRange, DisplayUnits)); // Ref: AK9T
         $('#dump1090_total_history').text(TrackedHistorySize);
 
         if (MessageRate !== null) {
@@ -1462,8 +1494,8 @@ function refreshTableInfo() {
         TrackedAircraft = 0
         TrackedAircraftPositions = 0
         TrackedHistorySize = 0
-	MaxRange = 0	// AKISSACK
-	MinRange = 999999  // AKISSACK
+	CurMaxRange = 0       // AKISSACK  Ref: AK9T
+	CurMinRange = 999999  // AKISSACK  Ref: AK9T
 
         $(".altitudeUnit").text(get_unit_label("altitude", DisplayUnits));
         $(".speedUnit").text(get_unit_label("speed", DisplayUnits));
@@ -1477,14 +1509,19 @@ function refreshTableInfo() {
                         tableplane.tr.className = "plane_table_row hidden";
                 } else {
                         TrackedAircraft++;
-	   		if (MaxRange < tableplane.sitedist ){   // AKISSACK
-				MaxRange = tableplane.sitedist;
-				//console.log("+"+MaxRange);
+			// AKISSACK Range display  Ref: AK9T
+	   		if (CurMaxRange < tableplane.sitedist ){   // AKISSACK
+				CurMaxRange = tableplane.sitedist;
+				if (CurMaxRange > MaxRange) {
+					MaxRange = CurMaxRange; 
+				}
+				//console.log("+"+CurMaxRange);
 	    		}
-	   		if (tableplane.sitedist  && MinRange > tableplane.sitedist ){   // AKISSACK
-				MinRange = tableplane.sitedist;
-				//console.log("-"+MinRange);
+	   		if (tableplane.sitedist  && CurMinRange > tableplane.sitedist ){   // AKISSACK
+				CurMinRange = tableplane.sitedist;
+				//console.log("-"+CurMinRange);
 	    		}
+
                         var classes = "plane_table_row";
 
 		        if (tableplane.position !== null && tableplane.seen_pos < 60) {
@@ -1527,7 +1564,7 @@ function refreshTableInfo() {
                         	tableplane.tr.cells[9].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
                         	tableplane.tr.cells[10].textContent = format_speed_brief(tableplane.speed, DisplayUnits);
                         	tableplane.tr.cells[11].textContent = format_vert_rate_brief(tableplane.vert_rate, DisplayUnits);
-                        	tableplane.tr.cells[12].textContent = format_distance_brief(tableplane.sitedist, DisplayUnits);  // Column index change needs to be reflected above in initialize_map()
+                        	tableplane.tr.cells[12].textContent = format_distance_brief(tableplane.sitedist, DisplayUnits); // Column index change needs to be reflected above in initialize_map()
                         	tableplane.tr.cells[13].textContent = format_track_brief(tableplane.track);
                         	tableplane.tr.cells[14].textContent = tableplane.messages;
                         	tableplane.tr.cells[15].textContent = tableplane.seen.toFixed(0);
@@ -1569,6 +1606,19 @@ function refreshTableInfo() {
         }
 
         resortTable();
+
+	// AKISSACK - Maximum Range Plot Ref: AK8E
+	MaxRangeFeatures.clear();
+
+	var polyCoords = [];
+	for (var i=0; i < 360; i++) {
+		polyCoords.push(ol.proj.transform([MaxRngLon[i], MaxRngLat[i]], 'EPSG:4326', 'EPSG:3857'));
+	}
+	var rangeFeature = new ol.Feature({
+	    geometry: new ol.geom.Polygon([polyCoords])
+
+	})
+	MaxRangeFeatures.push(rangeFeature );
 }
 
 //
