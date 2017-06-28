@@ -32,8 +32,8 @@ DefaultZoomLvl   = 7;
 // that location is used and these settings are ignored.
 
 SiteShow    = false;           // true to show a center marker
-SiteLat     = 45.0;            // position of the marker
-SiteLon     = 9.0;
+SiteLat     = 53;              // position of the marker
+SiteLon     = -0.4;
 SiteName    = "Rx"; 	       // tooltip of the marker
 
 // -- Marker settings -------------------------------------
@@ -138,6 +138,11 @@ ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
 ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
+ShowMaxRange         = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
+			       // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
+MinRangeHeight	     = 10000 ; // ft - inner range ring
+MidRangeHeight	     = 20000 ; // ft - mid range ring
+RangeLine	     = 1 ;     // Line width for range rings
 
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
@@ -156,11 +161,10 @@ ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 			       // ******************************************************************************
 ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-index.html file instead         ***
 			       // ******************************************************************************
-ShowMaxRange         = true ;  // EXPERIMENTAL  Ref AK8J
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PRIVATE OPTIONS
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyFindsLayer     = false;	// A more reasltic range layer for my antenna location --  AK9T
+ShowMyFindsLayer     = false;	// just for non-aircraft related plots
 ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W
 // ----------------------------------------------------------------------------------------------------------------------------
 

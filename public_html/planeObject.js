@@ -46,7 +46,7 @@ function PlaneObject(icao) {
         this.markerSvgKey = null;
         this.filter = {};
 
-	// Akissack - additional variables for various modifications - Ref: AK9Z Start
+	// Akissack - additional variables for various modifications - Ref: AK9Z Start incl.
 	this.is_vetted      = false ;
 	this.is_interesting = '' ;  // 'Y' or not
 	this.my_vet	    = '' ;  // 1 = Mil/noTrail 2 = Civ/noTrail 5 = Mil/Trail 6 = Civ/Trail 0 = ?/noTrail 3,4,7 = ERR
@@ -54,12 +54,12 @@ function PlaneObject(icao) {
 	this.ac_type        = '' ;  // icao type
 	this.ac_shortname   = '' ;  // Short a/c name
 	this.ac_aircraft    = '' ;  // Long a/c name
-    this.ac_category    = '' ;  // My category for images -  eg 2prop
+	this.ac_category    = '' ;  // My category for images -  eg 2prop
 	this.country	    = '' ;
 	this.operator       = '' ;
-    this.siteBearing    = 0;    // ref: AK8F
-	this.siteNm	        = 0;    // ref: AK8F
 	// Akissack - additional variables for various modifications - Ref: AK9Z Ends
+	this.siteBearing    = 0  ;  // ref: AK8F
+	this.siteNm	    = 0  ;  // ref: AK8F
 
         // start from a computed registration, let the DB override it
         // if it has something else.
@@ -497,26 +497,9 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
                 if (SitePosition !== null) {
                         var WGS84 = new ol.Sphere(6378137);
                         this.sitedist    = WGS84.haversineDistance(SitePosition, this.position);
-			//  AKISSACK - Store a bearing and nm distance for our range plot Ref AK8G
+			//  AKISSACK     - Store a bearing and nm distance for our range plot Ref AK8G
 			this.siteBearing = parseInt(getBearing(SitePosition[1],SitePosition[0],this.position[1],this.position[0]).toFixed(0));
 			this.siteNm      = parseInt((this.sitedist/1852).toFixed(0));
-
-			// AKISSACK - store bearing/distance from site for range plot
-			//this.siteBearing = Math.round(getBearing(SitePosition[1],SitePosition[0],this.position[1],this.position[0]));
-			//this.siteNm = (this.sitedist/1609).toFixed(0);
-
-			//var nmdistance = (this.sitedist/1609).toFixed(0);
-			////console.log(this.siteBearing+" "+nmdistance+" "+MaxRngRange[this.siteBearing]);
-                        //if (MaxRngRange[this.siteBearing] < nmdistance) {
- 		        //  var oldmr = MaxRngRange[this.siteBearing];
-			//  MaxRngRange[this.siteBearing] = nmdistance;
-                        //  if (this.siteBearing = 90) {
-			//    console.log(this.siteBearing+"\u00B0"+" was "+oldmr +">"+MaxRngRange[this.siteBearing]+">"+nmdistance);
-			//  }
-			//  MaxRngLat[this.siteBearing]   = this.position[1];
-			//  MaxRngLon[this.siteBearing]   = this.position[0];		
-			//  //updateMySql(this.siteBearing,nmdist,this.position[1],this.position[0]);
-			//}
                 }
 
                 this.position_from_mlat = false;
@@ -560,21 +543,28 @@ PlaneObject.prototype.updateTick = function(receiver_timestamp, last_timestamp) 
 
 				// AKISSACK store range plot details  Ref AK8H
                         	if (MaxRngRange[this.siteBearing] < this.siteNm) {
-					//if( this.siteBearing > 90 && this.siteBearing < 110){
-					//	if (MaxRngRange[this.siteBearing] > this.siteNm) {
-					//		console.log("Error "+this.siteBearing+" "+MaxRngRange[this.siteBearing]+">"+this.siteNm);
- 					//	} else {
-					//	console.log("Update "+this.siteBearing+" "+MaxRngRange[this.siteBearing]+">"+this.siteNm);
-					//	}
-					//}
 					MaxRngRange[this.siteBearing] = this.siteNm;
 					MaxRngLat[this.siteBearing]   = this.position[1];
 					MaxRngLon[this.siteBearing]   = this.position[0];
-					if (ShowSleafordRange) {
+					if (ShowSleafordRange && this.siteNm > 100) {  // will exceed 100, so ignore less
 					  // Store this in mySql so I will always have max ranges
 					  updateMySql(this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao);
-					}				};
-
+					}
+				};
+                        	if (this.altitude <= MidRangeHeight) {
+					if (MidRngRange[this.siteBearing] < this.siteNm) {
+						MidRngRange[this.siteBearing] = this.siteNm;
+						MidRngLat[this.siteBearing]   = this.position[1];
+						MidRngLon[this.siteBearing]   = this.position[0];
+					}
+				};
+                        	if (this.altitude <= MinRangeHeight) {
+					if (MinRngRange[this.siteBearing] < this.siteNm) {
+						MinRngRange[this.siteBearing] = this.siteNm;
+						MinRngLat[this.siteBearing]   = this.position[1];
+						MinRngLon[this.siteBearing]   = this.position[0];
+					}
+				};
                         } else { 
                                 this.updateMarker(false); // didn't move
                         }
@@ -683,7 +673,7 @@ PlaneObject.prototype.updateMarker = function(moved) {
                 // AKISSACK - HOVER OVER LABELS ------------------------------------ ref: AK6A starts
 		// ----------------------------------------------------------------------------------
 		if (ShowHoverOverLabels)  {
-            var myPopUpName = '~';  // Set a default name
+            	var myPopUpName = '~';  // Set a default name
    			this.marker = new ol.Feature({
                 		geometry: new ol.geom.Point(ol.proj.fromLonLat(this.position)) ,
                 		name : myPopUpName
@@ -815,10 +805,10 @@ function getBearing(startLat,startLong,endLat,endLong){
   return (degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
 }
 
-function xupdateMySql(bearing,dist,lat,lon){
-}
-
 function updateMySql(bearing,dist,lat,lon,icao){
+  icao = icao.toUpperCase();
+  //if (dist >200) console.log(bearing+" "+dist+" "+icao); // Debug purposes
+
   $(function () 
   {
     $.ajax({                                      
@@ -827,14 +817,9 @@ function updateMySql(bearing,dist,lat,lon,icao){
       data: "bearing="+ bearing +"&range="+ dist+ "&lat="+ lat+ "&lon="+ lon+ "&icao="+ icao,
       dataType: 'json',  
       success: function(retData)  
-      {
-        //for (var i in retData)
-        //{
-	//  //console.log(retData[i]);
-        //  //$('#output').append(retData[i])
-        //  //            .append("<br />");
-        //} 
-      } 
+        {
+          //console.log(retData); // true or false (success/failure)
+        }
     });
   }); 
 

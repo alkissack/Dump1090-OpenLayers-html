@@ -8,7 +8,7 @@ var SiteCircleFeatures = new ol.Collection();
 var PlaneIconFeatures  = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
 var MyFeatures         = new ol.Collection();		// AKISSACK Ref: AK9U
-var MaxRangeFeatures   = new ol.Collection();       // AKISSACK Ref: AK8A
+var MaxRangeFeatures   = new ol.Collection();           // AKISSACK Ref: AK8A
 var Planes             = {};
 var PlanesOrdered      = [];
 var PlaneFilter        = {};
@@ -45,6 +45,12 @@ var CurMinRange = 999;   // AKISSACK Range display Ref: AK9T
 var MaxRngRange = [];    // AKISSACK Range plot Ref: AK8B
 var MaxRngLat   = [];    // AKISSACK Range plot Ref: AK8B
 var MaxRngLon   = [];    // AKISSACK Range plot Ref: AK8B
+var MidRngRange = [];    // AKISSACK Range plot Ref: AK8B
+var MidRngLat   = [];    // AKISSACK Range plot Ref: AK8B
+var MidRngLon   = [];    // AKISSACK Range plot Ref: AK8B
+var MinRngRange = [];    // AKISSACK Range plot Ref: AK8B
+var MinRngLat   = [];    // AKISSACK Range plot Ref: AK8B
+var MinRngLon   = [];    // AKISSACK Range plot Ref: AK8B
 
 var SitePosition = null;
 
@@ -194,12 +200,8 @@ var PositionHistorySize = 0;
 function initialize() {
         // Set page basics
         document.title = PageName;
-	MaxRange = 0 ; //AKISSACK  Display range  Ref: AK8C
-        for (var j=0; j <= 360; j++) { //AKISSACK Range plot
-	  MaxRngRange[j] = 0;
-	  MaxRngLat[j]   = 53;  //  Need to set these from site position, not my lat/long
-	  MaxRngLon[j]   = -0.4;
-	}
+	MaxRange = 0 ;                 // AKISSACK  Display range  Ref: AK9T
+
         // $("#infoblock_name").text(PageName); AKISSACK - Ref: AK9W
 	$("#infoblock_name").text('');
 
@@ -309,6 +311,21 @@ function initialize() {
                         initialize_map();
                         start_load_history();
                 });
+
+
+        for (var j=0; j <= 360; j++) { // AKISSACK Range plot      Ref: AK8C
+	  MaxRngRange[j] = 0;
+	  MaxRngLat[j]   = SiteLat ;   
+	  MaxRngLon[j]   = SiteLon ;
+	  MidRngRange[j] = MaxRngRange[j]
+	  MidRngLat[j]   = MaxRngLat[j]
+	  MidRngLon[j]   = MaxRngLon[j]
+	  MinRngRange[j] = MaxRngRange[j]
+	  MinRngLat[j]   = MaxRngLat[j]
+	  MinRngLon[j]   = MaxRngLon[j]
+
+	}
+
 }
 
 var CurrentHistoryFetch = null;
@@ -842,20 +859,11 @@ function initialize_map() {
 
 	if (ShowMaxRange) {    // AKISSACK Maximum Range Plot Ref: AK8D 
  	    var maxRangeLayer = new ol.layer.Vector({
-            	name: 'maxrange',
+            	name: 'ranges',
                	type: 'overlay',
-               	title: 'MaxRange',
+               	title: 'Range Plot',
                 source: new ol.source.Vector({
                         features: MaxRangeFeatures,
-                }),
-		style: new ol.style.Style({
-                	fill: new ol.style.Fill({
-                     	 	color : 'rgba(0,0,255, 0.07)'
-                	}),
-                	stroke: new ol.style.Stroke({
-                        	color: 'rgba(0,0,255, 0.5)',
-                        	width: 0.2
-                	})
 		})
            });
 	} else {
@@ -1607,8 +1615,19 @@ function refreshTableInfo() {
 
         resortTable();
 
-	// AKISSACK - Maximum Range Plot Ref: AK8E
+	// AKISSACK - Range Plot Ref: AK8E
 	MaxRangeFeatures.clear();
+
+	// MAXIMUM ------------------------------------
+	var style = new ol.style.Style({
+	    stroke: new ol.style.Stroke({
+	        color: 'rgba(0,0,128, 1)',
+	        width: RangeLine
+	    }),
+	    fill: new ol.style.Fill({
+	        color: 'rgba(0,0,255, 0.01)'
+	    })
+	});
 
 	var polyCoords = [];
 	for (var i=0; i < 360; i++) {
@@ -1618,7 +1637,49 @@ function refreshTableInfo() {
 	    geometry: new ol.geom.Polygon([polyCoords])
 
 	})
-	MaxRangeFeatures.push(rangeFeature );
+	rangeFeature.setStyle(style)
+	MaxRangeFeatures.push(rangeFeature);
+	// MEDIUM ------------------------------------
+	var style = new ol.style.Style({
+	    stroke: new ol.style.Stroke({
+	        color: 'rgba(0,128,0, 1)',
+	        width: RangeLine
+	    }),
+	    fill: new ol.style.Fill({
+	        color: 'rgba(0,255,0, 0.01)'
+	    })
+	});
+	var polyCoords = [];
+	for (var i=0; i < 360; i++) {
+		polyCoords.push(ol.proj.transform([MidRngLon[i], MidRngLat[i]], 'EPSG:4326', 'EPSG:3857'));
+	}
+	var rangeFeature = new ol.Feature({
+	    geometry: new ol.geom.Polygon([polyCoords])
+
+	})
+	rangeFeature.setStyle(style)
+	MaxRangeFeatures.push(rangeFeature);
+
+	// MINIMUM ------------------------------------
+	var style = new ol.style.Style({
+	    stroke: new ol.style.Stroke({
+	        color: 'rgba(128,0,0, 1)',
+	        width: RangeLine
+	    }),
+	    fill: new ol.style.Fill({
+	        color: 'rgba(255,0,0, 0.01)'
+	    })
+	});
+	var polyCoords = [];
+	for (var i=0; i < 360; i++) {
+		polyCoords.push(ol.proj.transform([MinRngLon[i], MinRngLat[i]], 'EPSG:4326', 'EPSG:3857'));
+	}
+	var rangeFeature = new ol.Feature({
+	    geometry: new ol.geom.Polygon([polyCoords])
+
+	})
+	rangeFeature.setStyle(style)
+	MaxRangeFeatures.push(rangeFeature);
 }
 
 //

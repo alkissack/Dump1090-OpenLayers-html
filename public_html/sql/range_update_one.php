@@ -11,9 +11,13 @@
   $lt = $_GET["lat"];
   $ln = $_GET["lon"];
   $ic = $_GET["icao"];
+  
 
-  $qry = "UPDATE $tableName SET `range` = $rg, `lat` = $lt, `long` = $ln, `icao` = $ic WHERE `bearing` = $bg AND `range` < $rg";
+  $qry = "UPDATE $tableName SET `range` = $rg, `lat` = $lt, `long` = $ln, `icao` = '$ic' WHERE `bearing` = $bg AND `range` < $rg";
+  //$qry = "UPDATE $tableName SET `range` = $rg, `lat` = $lt, `long` = $ln WHERE `bearing` = $bg AND `range` < $rg";
+
 
   $result = mysql_query($qry); 
-  //$array  = mysql_fetch_row($result);  
+ 
+  //echo json_encode($result);  //usefull as it returns true or false depending on query success
 ?>
