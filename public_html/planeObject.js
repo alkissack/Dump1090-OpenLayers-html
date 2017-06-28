@@ -546,7 +546,7 @@ PlaneObject.prototype.updateTick = function(receiver_timestamp, last_timestamp) 
 					MaxRngRange[this.siteBearing] = this.siteNm;
 					MaxRngLat[this.siteBearing]   = this.position[1];
 					MaxRngLon[this.siteBearing]   = this.position[0];
-					if (ShowSleafordRange && this.siteNm > 100) {  // will exceed 100, so ignore less
+					if (SleafordMySql && this.siteNm > 100) {  // will exceed 100, so ignore less
 					  // Store this in mySql so I will always have max ranges
 					  updateMySql(this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao);
 					}

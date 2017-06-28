@@ -1030,7 +1030,7 @@ function initialize_map() {
 	//------------------------------------------------------------------------------------
 	// This section can be ignored.  It is just a test to show my metal detecting finds
 	//------------------------------------------------------------------------------------
-	if (ShowMyFindsLayer) {    // AKISSACK Ref: AK9U
+	if (ShowMyFindsLayer && SleafordMySql) {    // AKISSACK Ref: AK9U
 
             var fCoin = new ol.style.Style({
                 image: new ol.style.Icon({
