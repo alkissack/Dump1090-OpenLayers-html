@@ -60,6 +60,8 @@ function PlaneObject(icao) {
 	// Akissack - additional variables for various modifications - Ref: AK9Z Ends
 	this.siteBearing    = 0  ;  // ref: AK8F
 	this.siteNm	    = 0  ;  // ref: AK8F
+	this.fl  	    = 0  ;  // ref: AK8F
+
 
         // start from a computed registration, let the DB override it
         // if it has something else.
@@ -484,6 +486,7 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
 
         if (typeof data.altitude !== "undefined")
 		this.altitude	= data.altitude;
+	        this.fl         = parseInt(this.altitude/100);
         if (typeof data.vert_rate !== "undefined")
 		this.vert_rate	= data.vert_rate;
         if (typeof data.speed !== "undefined")
@@ -497,7 +500,7 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
                 if (SitePosition !== null) {
                         var WGS84 = new ol.Sphere(6378137);
                         this.sitedist    = WGS84.haversineDistance(SitePosition, this.position);
-			//  AKISSACK     - Store a bearing and nm distance for our range plot Ref AK8G
+			//  AKISSACK     - Store a bearing and nm distance for our range plot            Ref AK8G
 			this.siteBearing = parseInt(getBearing(SitePosition[1],SitePosition[0],this.position[1],this.position[0]).toFixed(0));
 			this.siteNm      = parseInt((this.sitedist/1852).toFixed(0));
                 }
@@ -546,9 +549,12 @@ PlaneObject.prototype.updateTick = function(receiver_timestamp, last_timestamp) 
 					MaxRngRange[this.siteBearing] = this.siteNm;
 					MaxRngLat[this.siteBearing]   = this.position[1];
 					MaxRngLon[this.siteBearing]   = this.position[0];
-					if (SleafordMySql && this.siteNm > 100) {  // will exceed 100, so ignore less
+					localStorage.setItem("MaxRngRange", JSON.stringify(MaxRngRange));
+					localStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
+					localStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));
+					if (SleafordMySql && this.siteNm > 120 && this.siteNm < 300) {  
 					  // Store this in mySql so I will always have max ranges
-					  updateMySql(this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao);
+					  updateMySql("max",this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao,this.fl);
 					}
 				};
                         	if (this.altitude <= MidRangeHeight) {
@@ -556,6 +562,12 @@ PlaneObject.prototype.updateTick = function(receiver_timestamp, last_timestamp) 
 						MidRngRange[this.siteBearing] = this.siteNm;
 						MidRngLat[this.siteBearing]   = this.position[1];
 						MidRngLon[this.siteBearing]   = this.position[0];
+						localStorage.setItem("MidRngRange", JSON.stringify(MidRngRange));
+						localStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
+						localStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));
+						if (SleafordMySql && this.siteNm < 200) {  
+					  		updateMySql("mid",this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao,this.fl);
+						}
 					}
 				};
                         	if (this.altitude <= MinRangeHeight) {
@@ -563,6 +575,12 @@ PlaneObject.prototype.updateTick = function(receiver_timestamp, last_timestamp) 
 						MinRngRange[this.siteBearing] = this.siteNm;
 						MinRngLat[this.siteBearing]   = this.position[1];
 						MinRngLon[this.siteBearing]   = this.position[0];
+						localStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
+						localStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
+						localStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
+						if (SleafordMySql && this.siteNm < 150) { 
+					  		updateMySql("min",this.siteBearing,this.siteNm,this.position[1],this.position[0],this.icao,this.fl);
+						}
 					}
 				};
                         } else { 
@@ -611,7 +629,8 @@ PlaneObject.prototype.updateMarker = function(moved) {
                   		}
 	                };
 			labelText = (this.flight ? this.flight : '-');
-			labelText = labelText +' ['+(this.altitude ? parseInt(this.altitude/100) : '?')+v+']';
+			//labelText = labelText +' ['+(this.altitude ? parseInt(this.altitude/100) : '?')+v+']';
+			labelText = labelText +' ['+(this.fl ? this.fl : '?')+v+']';
 			labelText = labelText + '\n'+ (this.registration ? this.registration  : '');
 
 
@@ -805,20 +824,25 @@ function getBearing(startLat,startLong,endLat,endLong){
   return (degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
 }
 
-function updateMySql(bearing,dist,lat,lon,icao){
+function updateMySql(ring,bearing,dist,lat,lon,icao,fl){
   icao = icao.toUpperCase();
-  //if (dist >200) console.log(bearing+" "+dist+" "+icao); // Debug purposes
+  ring = ring.toUpperCase();
+  var date = new Date();
+
+  //if (dist >100) console.log(bearing+" "+dist+" "+icao+" "+fl); // Debug purposes
+  if (bearing === 360) bearing = 0;
 
   $(function () 
   {
     $.ajax({                                      
       url: 'sql/range_update_one.php',     
       async: true , 
-      data: "bearing="+ bearing +"&range="+ dist+ "&lat="+ lat+ "&lon="+ lon+ "&icao="+ icao,
+      data: "ring="+ ring +"&bearing="+ bearing +"&range="+ dist+ "&lat="+ lat+ "&lon="+ lon+ "&icao="+ icao +"&fltlvl=" + fl ,
       dataType: 'json',  
       success: function(retData)  
         {
-          //console.log(retData); // true or false (success/failure)
+          //console.log(ring+" "+retData); // true or false (success/failure)
+	  //console.log( retData); // true or false (success/failure)
         }
     });
   }); 
