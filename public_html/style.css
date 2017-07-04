@@ -128,7 +128,7 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 
 #sudo_buttons {
     display: flex;
-    padding: 15px 40px 15px 40px;
+    padding: 15px 20px 15px 20px;
     justify-content: space-between;
 }
 
@@ -207,8 +207,8 @@ select.error, textarea.error, input.error {
 }
 
 /* AKISSACK - ref: AK1B Starts ---------------------------------------------------------------------------- */
-div#mouseposition  { position: absolute; top: 0px; left: 10px; opacity: 1; text-align: left; color: black;  }
-div.mp { width: 130px; }
+div#mouseposition  { position: absolute; top: 0px; left: 20px; opacity: 1; text-align: left; color: blue;  }
+div.mp { width: 210px; }
 /* ----------------------------------------------------------------------------------------- ref: AK1B Ends */
 
 /* AKISSACK -  HOVER OVER LABELS (also in script.js/PlaneObject.js/index.html) ----------- ref: AK6C starts */
