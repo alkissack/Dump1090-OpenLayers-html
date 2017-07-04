@@ -51,29 +51,21 @@
 			<div id="selected_infoblock" class="hidden">
 				<table style="width: 100%">
 					<tr class="infoblock_heading">
-						<td colspan="2">
-							<b>
-								<span id="selected_callsign" onclick="toggleFollowSelected();" class="pointer">n/a</span>
-							</b>
-							<span id="selected_follow" onclick="toggleFollowSelected();" class="pointer">&#x21D2;</span>
-
-							<span id="selected_flag">
-								<img style="width: 20px; height=12px" src="about:blank" alt="Flag">
-							</span>
-
-							<a href="http://www.airframes.org/" onclick="document.getElementById('horrible_hack').submit.call(document.getElementById('airframes_post')); return false;">
-								<span id="selected_icao"></span>
-							</a>
-							<span id="selected_registration"></span>
-							<span id="selected_icaotype"></span>
-							<span id="selected_emergency"></span>
-							<span id="selected_flightaware_link"></span>
-						</td>
+					  <td colspan="2">
+						<b><span id="selected_callsign" onclick="toggleFollowSelected();" class="pointer">n/a</span></b>
+						<span id="selected_follow" onclick="toggleFollowSelected();" class="pointer">&#x21D2;</span>
+						<span id="selected_flag"><img style="width: 20px; height=12px" src="about:blank" alt="Flag"></span>
+						<a href="http://www.airframes.org/" onclick="document.getElementById('horrible_hack').submit.call(document.getElementById('airframes_post')); return false;">
+					 		<span id="selected_icao"></span>
+						</a>
+						<span id="selected_registration"></span>
+						<span id="selected_icaotype"></span>
+						<span id="selected_emergency"></span>
+						<span id="selected_flightaware_link"></span>
+					  </td>
 					</tr>
 
-					<tr id="infoblock_country" class="infoblock_body">
-						<td colspan="2">Country of registration: <span id="selected_country">n/a</span></td>
-					</tr>
+					<tr id="infoblock_country" class="infoblock_body"><td colspan="2">Country of registration: <span id="selected_country">n/a</span></td></tr>
 
 					<tr class="infoblock_body">
 						<td style="width: 55%">Altitude: <span id="selected_altitude"></span></td>
@@ -94,17 +86,9 @@
 						<td>Track: <span id="selected_track">n/a</span></td>
 						<td>Last seen: <span id="selected_seen">n/a</span></td>
 					</tr>
-
-					<tr class="infoblock_body">
-						<td colspan="2">Position: <span id="selected_position">n/a</span></td>
-					</tr>
-
-					<tr class="infoblock_body">
-						<td colspan="2">Distance from Site: <span id="selected_sitedist">n/a</span></td>
-					</tr>
-					<tr class="infoblock_body">
-						<td colspan="2"><span id="selected_photo_link"></span></td>
-					</tr>
+					<tr class="infoblock_body"><td colspan="2">Position: <span id="selected_position">n/a</span></td></tr>
+					<tr class="infoblock_body"><td colspan="2">Distance from Site: <span id="selected_sitedist">n/a</span></td></tr>
+					<tr class="infoblock_body"><td colspan="2"><span id="selected_photo_link"></span></td></tr>
 				</table>
 			</div> <!-- selected_infoblock -->
 			<div id="map_container">
@@ -143,6 +127,8 @@
 										<span class="sidebarButton pointer" onclick="selectAllPlanes();">Select All</span>
 										<span class="sidebarButton pointer" onclick="selectMilPlanes();">Select Mil</span> <!-- AKISSACK Ref: AK9G -->
 										<span class="sidebarButton pointer" onclick="deselectAllPlanes();">Select None</span>
+										<span class="sidebarButton pointer" onclick="resetRangePlot();">Reset Range</span> <!-- AKISSACK Ref: ref: AK8K -->
+
 									</div>
 								</td>
 							</tr>
