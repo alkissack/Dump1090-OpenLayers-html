@@ -2,23 +2,24 @@
 "use strict";
 
 // Define our global variables
-var OLMap              = null;
-var StaticFeatures     = new ol.Collection();
-var SiteCircleFeatures = new ol.Collection();
-var PlaneIconFeatures  = new ol.Collection();
-var PlaneTrailFeatures = new ol.Collection();
-var MyFeatures         = new ol.Collection();		// AKISSACK Ref: AK9U
-var MaxRangeFeatures   = new ol.Collection();           // AKISSACK Ref: AK8A
-var Planes             = {};
-var PlanesOrdered      = [];
-var PlaneFilter        = {};
-var SelectedPlane      = null;
-var SelectedAllPlanes  = false;
-var FollowSelected     = false;
+var OLMap                 = null;
+var StaticFeatures        = new ol.Collection();
+var SiteCircleFeatures    = new ol.Collection();
+var PlaneIconFeatures     = new ol.Collection();
+var PlaneTrailFeatures    = new ol.Collection();
+var MyFeatures            = new ol.Collection();	// AKISSACK Ref: AK9U
+var MaxRangeFeatures      = new ol.Collection();	// AKISSACK Ref: AK8A
+var SleafordRangeFeatures = new ol.Collection();	// AKISSACK Ref: AK8Z
+var Planes                = {};
+var PlanesOrdered         = [];
+var PlaneFilter           = {};
+var SelectedPlane         = null;
+var SelectedAllPlanes     = false;
+var FollowSelected        = false;
 // --------------------------------------------------------------------------------------
 // AKISSACK - Variables -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-var acsntext = ' ';                // Default label for label data - ref: AK7C 
+var acsntext = ' ';                // Default label for label data -            Ref: AK7C 
 var SelectedMilPlanes  = false;    // Allow selection of all planes of interest Ref: AK9G
 // --------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------- AKISSACK
@@ -42,26 +43,25 @@ var TrackedHistorySize = 0;
 var MaxRange    = 0;     // AKISSACK Range display Ref: AK9T
 var CurMaxRange = 0;     // AKISSACK Range display Ref: AK9T
 var CurMinRange = 999;   // AKISSACK Range display Ref: AK9T
-var MaxRngRange = [];    // AKISSACK Range plot Ref: AK8B
-var MaxRngLat   = [];    // AKISSACK Range plot Ref: AK8B
-var MaxRngLon   = [];    // AKISSACK Range plot Ref: AK8B
-var MidRngRange = [];    // AKISSACK Range plot Ref: AK8B
-var MidRngLat   = [];    // AKISSACK Range plot Ref: AK8B
-var MidRngLon   = [];    // AKISSACK Range plot Ref: AK8B
-var MinRngRange = [];    // AKISSACK Range plot Ref: AK8B
-var MinRngLat   = [];    // AKISSACK Range plot Ref: AK8B
-var MinRngLon   = [];    // AKISSACK Range plot Ref: AK8B
+var MaxRngRange = [];    // AKISSACK Range plot    Ref: AK8B
+var MaxRngLat   = [];    // AKISSACK Range plot    Ref: AK8B
+var MaxRngLon   = [];    // AKISSACK Range plot    Ref: AK8B
+var MidRngRange = [];    // AKISSACK Range plot    Ref: AK8B
+var MidRngLat   = [];    // AKISSACK Range plot    Ref: AK8B
+var MidRngLon   = [];    // AKISSACK Range plot    Ref: AK8B
+var MinRngRange = [];    // AKISSACK Range plot    Ref: AK8B
+var MinRngLat   = [];    // AKISSACK Range plot    Ref: AK8B
+var MinRngLon   = [];    // AKISSACK Range plot    Ref: AK8B
 
-var SitePosition = null;
-
-var ReceiverClock = null;
+var SitePosition          = null;
+var ReceiverClock         = null;
 
 var LastReceiverTimestamp = 0;
-var StaleReceiverCount = 0;
-var FetchPending = null;
+var StaleReceiverCount    = 0;
+var FetchPending          = null;
 
-var MessageCountHistory = [];
-var MessageRate = 0;
+var MessageCountHistory   = [];
+var MessageRate           = 0;
 
 var NBSP='\u00a0';
 
@@ -313,19 +313,57 @@ function initialize() {
                 });
 
 
-        for (var j=0; j <= 360; j++) { // AKISSACK Range plot      Ref: AK8C
-	  MaxRngRange[j] = 0;
-	  MaxRngLat[j]   = SiteLat ;   
-	  MaxRngLon[j]   = SiteLon ;
-	  MidRngRange[j] = MaxRngRange[j]
-	  MidRngLat[j]   = MaxRngLat[j]
-	  MidRngLon[j]   = MaxRngLon[j]
-	  MinRngRange[j] = MaxRngRange[j]
-	  MinRngLat[j]   = MaxRngLat[j]
-	  MinRngLon[j]   = MaxRngLon[j]
+		// AKISSACK Range plot - Now able to read from local storage if available Ref: AK8C
 
-	}
+		if(localStorage.getItem('MaxRngLon') && localStorage.getItem('MaxRngLat')&& localStorage.getItem('MaxRngRange')){
+			console.log("Loading max range");
+			MaxRngLat   = JSON.parse(localStorage.getItem('MaxRngLat'));
+			MaxRngLon   = JSON.parse(localStorage.getItem('MaxRngLon'));
+			MaxRngRange = JSON.parse(localStorage.getItem('MaxRngRange'));
+		} else {
+        		for (var j=0; j <= 360; j++) {  
+	 			MaxRngRange[j] = 0;
+	  			MaxRngLat[j]   = SiteLat ;   
+	  			MaxRngLon[j]   = SiteLon ;
+			}
+		}
+		if(localStorage.getItem('MidRngLon') && localStorage.getItem('MidRngLat')&& localStorage.getItem('MidRngRange')){
+			console.log("Loading mid range");
+			MidRngLat   = JSON.parse(localStorage.getItem('MidRngLat'));
+			MidRngLon   = JSON.parse(localStorage.getItem('MidRngLon'));
+			MidRngRange = JSON.parse(localStorage.getItem('MidRngRange'));
+		} else {
+        		for (var j=0; j <= 360; j++) {  
+	 			MidRngRange[j] = 0;
+	  			MidRngLat[j]   = SiteLat ;   
+	  			MidRngLon[j]   = SiteLon ;
+			}
+		}
+		if(localStorage.getItem('MinRngLon') && localStorage.getItem('MinRngLat')&& localStorage.getItem('MinRngRange')){
+			console.log("Loading min range");
+			MinRngLat   = JSON.parse(localStorage.getItem('MinRngLat'));
+			MinRngLon   = JSON.parse(localStorage.getItem('MinRngLon'));
+			MinRngRange = JSON.parse(localStorage.getItem('MinRngRange'));
+		} else {
+        		for (var j=0; j <= 360; j++) {  
+	 			MinRngRange[j] = 0;
+	  			MinRngLat[j]   = SiteLat ;   
+	  			MinRngLon[j]   = SiteLon ;
+			}
+		}
 
+
+        //for (var j=0; j <= 360; j++) { // AKISSACK Range plot - reset each time      Ref: AK8C
+	//  MaxRngRange[j] = 0;
+	//  MaxRngLat[j]   = SiteLat ;   
+	//  MaxRngLon[j]   = SiteLon ;
+	//  MidRngRange[j] = MaxRngRange[j]
+	//  MidRngLat[j]   = MaxRngLat[j]
+	//  MidRngLon[j]   = MaxRngLon[j]
+	//  MinRngRange[j] = MaxRngRange[j]
+	//  MinRngLat[j]   = MaxRngLat[j]
+	//  MinRngLon[j]   = MaxRngLon[j]
+	//}
 }
 
 var CurrentHistoryFetch = null;
@@ -802,7 +840,7 @@ function initialize_map() {
 
 	}
 
-	if (ShowMyFindsLayer) {                       // AKISSACK Ref: AK9U
+	if (ShowMyFindsLayer && SleafordMySql ) {                       // AKISSACK Ref: AK9U
             var myLayer = new ol.layer.Vector({
                 name: 'my_layer',
                 type: 'overlay',
@@ -832,26 +870,52 @@ function initialize_map() {
                 })
         });
 
+	if (ShowSleafordRange) {    			// AKISSACK  Ref: AK8Y
+	    // This is just to show a range ring (based on actual experience)
+	    // for my home QTH. Not usefull for anyone else other than as a technique
+	    // These points are stored in mySql as seen, and retrieved to draw this 
+
+ 	    var SleafordRangeLayer = new ol.layer.Vector({
+            	name: 'mrange',
+               	type: 'overlay',
+               	title: 'Max Seen',
+                source: new ol.source.Vector({
+                        features: SleafordRangeFeatures,
+		//}),
+	    	//style: new ol.style.Style({
+               	//	stroke: new ol.style.Stroke({
+                //       		color: 'rgba(0,64,0, 1)',
+                //       		width: 0.5
+               	//	})
+	    	})
+           });
+	} else {
+		var SleafordRangeLayer = new ol.layer.Vector({});
+	};
+
 	if (ShowSleafordRange) {                       // AKISSACK Ref: AK9T
+
 	    // This is just to show a range rings (based on actual experience)
 	    // for my home QTH. Not usefull for anyone else other than as a technique 
+	    // This is pre-drawn geojson file.
+
  	    var rangeLayer = new ol.layer.Vector({
             	name: 'range',
                	type: 'overlay',
                	title: 'Range',
-	   	source: new ol.source.Vector({
-	  		url: 'layers/AK_range.geojson',
-	  		format: new ol.format.GeoJSON({
+	    	source: new ol.source.Vector({
+	    		url: 'layers/AK_range.geojson',
+	    		format: new ol.format.GeoJSON({
 	       			defaultDataProjection :'EPSG:4326', 
               			projection: 'EPSG:3857'
-          		})
-          	}),
-		style: new ol.style.Style({
+            		})
+            	}),
+	    	style: new ol.style.Style({
                		stroke: new ol.style.Stroke({
                        		color: 'rgba(0, 0, 255, 1)',
                        		width: 0.25
                		})
-		})
+	    	})
             });
 	} else {
 		var rangeLayer = new ol.layer.Vector({});
@@ -891,7 +955,8 @@ function initialize_map() {
                                 })
                         }),
 			rangeLayer,
-			maxRangeLayer,  // Ref: AK8D
+			maxRangeLayer,  	// Ref: AK8D
+			SleafordRangeLayer,	// Ref: AK8Y
                         iconsLayer
                 ]
         }));
@@ -946,11 +1011,13 @@ function initialize_map() {
                 layers: layers,
                 view: new ol.View({
                         center: ol.proj.fromLonLat([CenterLon, CenterLat]),
+			//zoomFactor: 2,
                         zoom: ZoomLvl
                 }),
                 controls: [new ol.control.Zoom(),
+			   //new ol.control.ZoomSlider(),
                            new ol.control.Rotate(),
-                           new ol.control.Attribution({collapsed: false}),
+                           new ol.control.Attribution({collapsed: true}),
                            new ol.control.ScaleLine({units: DisplayUnits}),
                            new ol.control.LayerSwitcher()
                           ],
@@ -1005,25 +1072,122 @@ function initialize_map() {
 	//------------------------------------------------------------------------------------
     	// AKISSACK - MOUSE POSITION ----------------------------------- ---- Ref: AK1C starts
 	//------------------------------------------------------------------------------------
-	var llFormat = function(dgts)
-	{
+	var llFormat = function(dgts) {
   		return (
     			function(coord1) {
         			var coord2 = [coord1[1], coord1[0]]; 
-      				return ol.coordinate.toStringXY(coord2,dgts);
+				// AKISSACK - also add range and bearing if site is known --  Ref: AK1D
+				var akret = ol.coordinate.toStringXY(coord2,dgts); 
+				if (SitePosition !== null) {
+				   var akbrn = (parseInt(getBearing(SitePosition[1],SitePosition[0],coord1[1],coord1[0]))).toString();
+				   var akWGS84 = new ol.Sphere(6378137);
+				   var akrng = akWGS84.haversineDistance(SitePosition, coord1);
+				   akrng = parseInt((akrng/1852).toFixed(0));
+				   return akret +" "+ akbrn+"\u00B0 "+akrng+"nm";
+				} else { // no range or bearing required, just return akret
+				   return akret;
+				}
   			});        
 	}
+
+
 	var mousePosition = new ol.control.MousePosition({ 
-              coordinateFormat: llFormat(4),  // ol.coordinate.createStringXY(4),
-              projection: 'EPSG:4326',
-              target: document.getElementById('mouseposition'),
-              undefinedHTML: '&nbsp;'
+              	coordinateFormat: llFormat(3),  // ol.coordinate.createStringXY(4),
+              	projection: 'EPSG:4326',
+              	//target: document.getElementById('mouseposition').innerHTML = "X "+ akLat,
+	      	target: document.getElementById('mouseposition'),
+              	undefinedHTML: '&nbsp;'
         });
  
         if (ShowMouseLatLong) OLMap.addControl(mousePosition);
 	//------------------------------------------------------------------------------------
 	// Ref: AK1C Ends ----------------------------------------------------------- AKISSACK
 	//------------------------------------------------------------------------------------
+
+	//------------------------------------------------------------------------------------
+	// // AKISSACK Ref: AK8X -------------------------------------------------------------
+	//------------------------------------------------------------------------------------
+	// Read the stored maximum range (lat/long) from my mySql database and then plot these
+	// as a polygon.  This will be update as positions are logged and will therefore become more 
+	// accurate, although rouge spikes will need to be manually removed from the database
+	// Expanded to include the 2 other rings too, if required
+
+	var polyCoordsMax = [];
+	var polyCoordsMid = [];
+	var polyCoordsMin = [];
+
+
+	$(function ()
+  	{
+    	   $.ajax({
+      	       url: 'sql/sql-best-ranges.php',
+    	       data: "",
+   	       dataType: 'json',
+    	       success: function(data)  {processMrData(data)}
+       	    });
+	});
+
+	function processMrData(allRData) {
+
+	    for ( var i in allRData ) {
+	        var oneRPoint = allRData[i] ;
+		polyCoordsMax.push(ol.proj.transform([parseFloat(oneRPoint[9]), parseFloat(oneRPoint[8])],  'EPSG:4326', 'EPSG:3857'));
+		polyCoordsMid.push(ol.proj.transform([parseFloat(oneRPoint[6]), parseFloat(oneRPoint[5])], 'EPSG:4326', 'EPSG:3857'));
+		polyCoordsMin.push(ol.proj.transform([parseFloat(oneRPoint[3]), parseFloat(oneRPoint[2])],  'EPSG:4326', 'EPSG:3857'));
+	    };
+
+	    var styleMax = new ol.style.Style({
+            	stroke: new ol.style.Stroke({
+               		color: 'rgba(0,0,64, 1)',
+               		width: 0.5
+            	}),
+	    	fill: new ol.style.Fill({
+	        	color: 'rgba(0,0,255, 0.1)'
+	    	})
+	    })
+	    var styleMid = new ol.style.Style({
+            	stroke: new ol.style.Stroke({
+               		color: 'rgba(0,64,0, 1)',
+               		width: 0.5
+            	}),
+	    	fill: new ol.style.Fill({
+	        	color: 'rgba(0,255,0, 0.1)'
+	    	})
+	    })
+
+	    var styleMin = new ol.style.Style({
+            	stroke: new ol.style.Stroke({
+               		color: 'rgba(64,0,0, 1)',
+               		width: 0.5
+            	}),
+	    	fill: new ol.style.Fill({
+	        	color: 'rgba(255,0,0, 0.1)'
+	    	})
+	    })
+
+
+	    var rfeatureMax = new ol.Feature({
+    		geometry: new ol.geom.Polygon([polyCoordsMax])
+	    });
+	    rfeatureMax.setStyle(styleMax)
+	    SleafordRangeFeatures.push(rfeatureMax);
+
+	    var rfeatureMid = new ol.Feature({
+    		geometry: new ol.geom.Polygon([polyCoordsMid])
+	    });
+	    rfeatureMid.setStyle(styleMid)
+	    SleafordRangeFeatures.push(rfeatureMid);
+
+	    var rfeatureMin = new ol.Feature({
+    		geometry: new ol.geom.Polygon([polyCoordsMin])
+	    });
+	    rfeatureMin.setStyle(styleMin)
+	    SleafordRangeFeatures.push(rfeatureMin);
+	}
+	//------------------------------------------------------------------------------------
+	// Ref: AK8X Ends ----------------------------------------------------------- AKISSACK
+	//------------------------------------------------------------------------------------
+
 
 	//------------------------------------------------------------------------------------
 	// // AKISSACK Ref: AK9U -------------------------------------------------------------
@@ -1625,7 +1789,7 @@ function refreshTableInfo() {
 	        width: RangeLine
 	    }),
 	    fill: new ol.style.Fill({
-	        color: 'rgba(0,0,255, 0.01)'
+	        color: 'rgba(0,0,255, 0.1)'
 	    })
 	});
 
@@ -1639,6 +1803,7 @@ function refreshTableInfo() {
 	})
 	rangeFeature.setStyle(style)
 	MaxRangeFeatures.push(rangeFeature);
+
 	// MEDIUM ------------------------------------
 	var style = new ol.style.Style({
 	    stroke: new ol.style.Stroke({
@@ -1646,7 +1811,7 @@ function refreshTableInfo() {
 	        width: RangeLine
 	    }),
 	    fill: new ol.style.Fill({
-	        color: 'rgba(0,255,0, 0.01)'
+	        color: 'rgba(0,255,0, 0.1)'
 	    })
 	});
 	var polyCoords = [];
@@ -1667,7 +1832,7 @@ function refreshTableInfo() {
 	        width: RangeLine
 	    }),
 	    fill: new ol.style.Fill({
-	        color: 'rgba(255,0,0, 0.01)'
+	        color: 'rgba(255,0,0, 0.1)'
 	    })
 	});
 	var polyCoords = [];
@@ -1945,6 +2110,20 @@ function resetMap() {
 	OLMap.getView().setCenter(ol.proj.fromLonLat([CenterLon, CenterLat]));
 	
 	selectPlaneByHex(null,false);
+}
+
+function resetRangePlot() {
+    for (var j = 0; j < 360; j++) {
+	MaxRngRange[j] = 0;
+	MaxRngLat[j]   = SiteLat ;   
+	MaxRngLon[j]   = SiteLon ;
+	MidRngRange[j] = MaxRngRange[j]
+	MidRngLat[j]   = MaxRngLat[j]
+	MidRngLon[j]   = MaxRngLon[j]
+	MinRngRange[j] = MaxRngRange[j]
+	MinRngLat[j]   = MaxRngLat[j]
+	MinRngLon[j]   = MaxRngLon[j]
+    }
 }
 
 function updateMapSize() {
