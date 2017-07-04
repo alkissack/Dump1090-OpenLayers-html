@@ -96,7 +96,7 @@ OutlineMlatColor = '#4040FF';
 
 SiteCircles = true; // true to show circles (only shown if the center marker is shown)
 // In miles, nautical miles, or km (depending settings value 'DisplayUnits')
-SiteCirclesDistances = new Array(100,150,200);
+SiteCirclesDistances = new Array(100,150,200,250);
 
 // Show the clocks at the top of the righthand pane? You can disable the clocks if you want here
 ShowClocks = false;
@@ -143,7 +143,6 @@ ShowMaxRange         = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 MinRangeHeight	     = 10000 ; // ft - inner range ring
 MidRangeHeight	     = 20000 ; // ft - mid range ring
 RangeLine	     = 1 ;     // Line width for range rings
-
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
 // ----------------------------------------------------------------------------------------------------------------------------
