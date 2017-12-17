@@ -111,7 +111,7 @@ html, body {
     overflow: scroll;
 }
 
-div#SpecialSquawkWarning { position: absolute; bottom: 25px; right: 430px; border: 2px solid red;
+div#SpecialSquawkWarning { position: absolute; bottom: 25px; left: 100px; border: 2px solid red;
     background-color: #FFFFA3; opacity: 0.75; filter:alpha(opacity=75); padding: 5px;
     text-align: center; }
 
