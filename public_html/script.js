@@ -1325,15 +1325,18 @@ function initialize_map() {
                         	};
 			};
                         if (ShowAdditionalData ) {
+			    //LINE ONE
                             popname = (Planes[feature.hex].ac_aircraft               ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
                             popname = popname + ' ['+ (Planes[feature.hex].category  ? Planes[feature.hex].category     : '?')+']';
-
+			    //LINE TWO
                             popname = popname + '\n('+ (Planes[feature.hex].flight   ? Planes[feature.hex].flight.trim() : 'No Call') +')';
                             popname = popname + ' #' +  feature.hex.toUpperCase();
+                            popname = popname + ' [' +  Planes[feature.hex].registration + ']';
 
+			    //LINE THREE
                             popname = popname + '\n' + (Planes[feature.hex].altitude ? parseInt(Planes[feature.hex].altitude) : '?') ;
                             popname = popname + ' ft and ' +  vsi;
-
+			    //LINE FOUR
                             popname = popname + '\n' + (Planes[feature.hex].country  ? Planes[feature.hex].country : '') ;
                             popname = popname + ' ' +  (Planes[feature.hex].operator ? Planes[feature.hex].operator : '') ;
                             popname = popname + ' ' +  (Planes[feature.hex].siteNm ? Planes[feature.hex].siteNm+"nm" : '');
