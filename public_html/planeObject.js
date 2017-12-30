@@ -621,6 +621,7 @@ PlaneObject.prototype.updateMarker = function(moved) {
                         // Update label as as well as moving we may have gone up or down
                 	var v = '-';  // An indication of level, climbing or decending
                 	var labelText = '';
+			this.labelColour = '#ffffff'
 
 			if (ZoomLvl > 8) {
            			if (this.vert_rate >256) {
@@ -656,14 +657,11 @@ PlaneObject.prototype.updateMarker = function(moved) {
 
 				//LINE THREE
 				labelText = labelText + '\n' + this.icao.toUpperCase() + ' ['+(this.fl ? this.fl : '?')+v+']';
-
-			} else {
-                        	labelText = '';
 			}
 
 			var hexColour      = this.labelColour;  // New section for semi transparency
 			var myStrokeColour = ol.color.asArray(hexColour);
-			myStrokeColour     = myStrokeColour .slice();
+			myStrokeColour     = myStrokeColour.slice();
 			myStrokeColour[3]  = (this.selected ? 0.5:0.25);  // change the alpha of the colour
 			if (ShowAdditionalData) {
 			    hexColour = (this.is_interesting ? '#ff0000' : '#0000ff');
