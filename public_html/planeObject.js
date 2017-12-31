@@ -633,9 +633,9 @@ PlaneObject.prototype.updateMarker = function(moved) {
 	                	};
 
 				// LINE ONE
-				labelText = (this.flight ? this.flight : 'No Ident');
+				labelText = (this.flight ? this.flight : 'No Ident ');
 				if (this.registration) {
-				       labelText = labelText + ' ' +this.registration;
+				       labelText = labelText + this.registration;
 				}
 				labelText = labelText + (this.squawk ? ' ['+ this.squawk+']' : '');
 
