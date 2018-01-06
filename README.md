@@ -1,5 +1,5 @@
 # Dump1090-OpenLayers3-html
-Modifications to the OL3 html files (part of the dump1090-fa branch).  The contents of public_html are a complete replacement to the webserver root directory on your dump1090 or dump1090-fa installation.  Better to rename your existing html/public-html folder, and copy this one in (calling it as per the orignal).  Set your options at the bottom of config.js, clear your browser cache and re-load your dump1090 page.
+Modifications to the OL3 html files (part of the dump1090-fa branch).  The contents of public_html are a complete replacement to the webserver root directory on your dump1090 or dump1090-fa installation.  Better to rename your existing html/public-html folder, and copy this one in (calling it as per the orignal).  Set your options at the bottom of config.js (you must also updte your site lat/long (2 places) in this file), clear your browser cache and re-load your dump1090 page.
 
 Originaly amended for my own purposes, but having had several requests to share these changes I have decided to place them in this forum. The new layers are only really useful if you have aircraft in UK airspace.  Other modifications can provide value in other regions.
 
