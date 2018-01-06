@@ -42,8 +42,8 @@ then
 			echo "| Remove live database from dump1090-mutability"
 			rm /usr/share/dump1090-mutability/html/db/*.json
 		fi
-		echo "| Copy new database to live"
-		cp $dump1090location/db/*.json  /usr/share/dump1090-mutability/html/db
+		echo "| Move new database to live"
+		mv $dump1090location/db/*.json  /usr/share/dump1090-mutability/html/db
 
 	else
 		if [ -d "/usr/share/dump1090-fa/html/db" ]; then
@@ -51,12 +51,14 @@ then
 				echo "| Remove live database from dump1090-fa"
 				rm /usr/share/dump1090-fa/html/db/*.json
 			fi
-			echo "| Copy new database to live"
-			cp $dump1090location/db/*.json  /usr/share/dump1090-fa/html/db
+			echo "| Move  new database to live"
+			mv $dump1090location/db/*.json  /usr/share/dump1090-fa/html/db
 		else
 			echo "| **** ERROR - Cant find live database"
 		fi
 	fi
+	
+
 
 else
 	echo " **** ERROR - No new data1.csv - aborting" 
