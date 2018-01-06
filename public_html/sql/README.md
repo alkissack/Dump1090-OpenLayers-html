@@ -3,7 +3,7 @@ These files demonstrate how to query a remote mySql server to return details of 
 
 I used this before adapting a modified /db/ struture, but they are retained for interest.
 
-THe obviously wont wokr unless the apropriate server, database and table/s are available!
+They obviously wont work unless the apropriate server, database and table/s are available!
 
 ## The following files exist:
 
