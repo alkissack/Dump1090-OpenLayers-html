@@ -316,7 +316,7 @@ function initialize() {
 		// AKISSACK Range plot - Now able to read from local storage if available Ref: AK8C
 
 		if(localStorage.getItem('MaxRngLon') && localStorage.getItem('MaxRngLat')&& localStorage.getItem('MaxRngRange')){
-			console.log("Loading max range");
+			//console.log("Loading max range");
 			MaxRngLat   = JSON.parse(localStorage.getItem('MaxRngLat'));
 			MaxRngLon   = JSON.parse(localStorage.getItem('MaxRngLon'));
 			MaxRngRange = JSON.parse(localStorage.getItem('MaxRngRange'));
@@ -328,7 +328,7 @@ function initialize() {
 			}
 		}
 		if(localStorage.getItem('MidRngLon') && localStorage.getItem('MidRngLat')&& localStorage.getItem('MidRngRange')){
-			console.log("Loading mid range");
+			//console.log("Loading mid range");
 			MidRngLat   = JSON.parse(localStorage.getItem('MidRngLat'));
 			MidRngLon   = JSON.parse(localStorage.getItem('MidRngLon'));
 			MidRngRange = JSON.parse(localStorage.getItem('MidRngRange'));
@@ -340,7 +340,7 @@ function initialize() {
 			}
 		}
 		if(localStorage.getItem('MinRngLon') && localStorage.getItem('MinRngLat')&& localStorage.getItem('MinRngRange')){
-			console.log("Loading min range");
+			//console.log("Loading min range");
 			MinRngLat   = JSON.parse(localStorage.getItem('MinRngLat'));
 			MinRngLon   = JSON.parse(localStorage.getItem('MinRngLon'));
 			MinRngRange = JSON.parse(localStorage.getItem('MinRngRange'));
@@ -351,19 +351,6 @@ function initialize() {
 	  			MinRngLon[j]   = SiteLon ;
 			}
 		}
-
-
-        //for (var j=0; j <= 360; j++) { // AKISSACK Range plot - reset each time      Ref: AK8C
-	//  MaxRngRange[j] = 0;
-	//  MaxRngLat[j]   = SiteLat ;   
-	//  MaxRngLon[j]   = SiteLon ;
-	//  MidRngRange[j] = MaxRngRange[j]
-	//  MidRngLat[j]   = MaxRngLat[j]
-	//  MidRngLon[j]   = MaxRngLon[j]
-	//  MinRngRange[j] = MaxRngRange[j]
-	//  MinRngLat[j]   = MaxRngLat[j]
-	//  MinRngLon[j]   = MaxRngLon[j]
-	//}
 }
 
 var CurrentHistoryFetch = null;
@@ -555,6 +542,7 @@ function initialize_map() {
     		};
   		})()
             });
+	    vordmeLayer.setVisible(false);
 
 	    //UK_NavigationPoints.geojson
             var navPointsLayer = new ol.layer.Vector({
@@ -580,7 +568,7 @@ function initialize_map() {
 					offsetX: -1,
            				offsetY: 10,
         				fill: new ol.style.Fill({
-          					color: '#000033'
+          					color: '#003300'
         				}),
       				})
     			});
@@ -615,6 +603,31 @@ function initialize_map() {
                 	})
 		})
             });
+	    airwaysLayer.setVisible(false);
+
+            var airwaysMRCLayer = new ol.layer.Vector({
+                name: 'airwaysMRC',
+                type: 'overlay',
+                title: 'Radar Corridors',
+	   	source: new ol.source.Vector({
+	      		url: 'layers/UK_Mil_RC.geojson',
+	      		format: new ol.format.GeoJSON({
+	        		defaultDataProjection :'EPSG:4326', 
+                		projection: 'EPSG:3857'
+          		})
+          	}),
+		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     	 color : 'rgba(102, 0,0, 0.07)'
+                	}),
+                	stroke: new ol.style.Stroke({
+                        	color: 'rgba(255, 0,0, 0.5)',
+                        	width: 0.2
+                	})
+		})
+            });
+	    airwaysMRCLayer.setVisible(false);
+
             var ukCTALayer = new ol.layer.Vector({
                 name: 'ukcta',
                 type: 'overlay',
@@ -627,9 +640,9 @@ function initialize_map() {
           		})
           	}),
 		style: new ol.style.Style({
-                	//fill: new ol.style.Fill({
-                     	// color : 'rgba(0, 102,0, 0.1)'
-                	//}),
+                	fill: new ol.style.Fill({
+                     	 	color : 'rgba(0, 127,0, 0.03)'
+                	}),
                 	stroke: new ol.style.Stroke({
                         	color: 'rgba(0,64,0, 0.2)',
                         	width: 1
@@ -637,6 +650,7 @@ function initialize_map() {
 		})
 
             });
+	    ukCTALayer.setVisible(false); 
 
             var atzLayer = new ol.layer.Vector({
                 name: 'atz',
@@ -650,6 +664,9 @@ function initialize_map() {
           		})
           	}),
 		style: new ol.style.Style({
+                	fill: new ol.style.Fill({
+                     		color : 'rgba(0,255,0, 0.03)'
+                	}),
                 	stroke: new ol.style.Stroke({
                         	color: 'rgba(0, 80, 0, 0.5)',
                         	width: 1
@@ -695,17 +712,19 @@ function initialize_map() {
                 	})
 		})
             });
+	    ukairspaceLayer.setVisible(false)
 
             layers.push(new ol.layer.Group({
                 title: 'UK',
                 layers: [
-			airwaysLayer,
 			ukairspaceLayer,
+			airwaysLayer,
+			airwaysMRCLayer,
 			airportLayer,
 			atzLayer,
 			ukCTALayer, 
-			navPointsLayer,
-			vordmeLayer
+			vordmeLayer,
+			navPointsLayer
                 ]
             }));	
 	}
@@ -884,7 +903,7 @@ function initialize_map() {
 		//}),
 	    	//style: new ol.style.Style({
                	//	stroke: new ol.style.Stroke({
-                //       		color: 'rgba(0,64,0, 1)',
+                //       		color: 'rgba(64,0,0, 1)',
                 //       		width: 0.5
                	//	})
 	    	})
@@ -895,7 +914,7 @@ function initialize_map() {
 
 	if (ShowSleafordRange) {                       // AKISSACK Ref: AK9T
 
-	    // This is just to show a range rings (based on actual experience)
+	    // This is just to show a range ring (based on actual experience)
 	    // for my home QTH. Not usefull for anyone else other than as a technique 
 	    // This is pre-drawn geojson file.
 
@@ -912,7 +931,7 @@ function initialize_map() {
             	}),
 	    	style: new ol.style.Style({
                		stroke: new ol.style.Stroke({
-                       		color: 'rgba(0, 0, 255, 1)',
+                       		color: 'rgba(255, 0, 0, 1)',
                        		width: 0.25
                		})
 	    	})
@@ -1135,54 +1154,57 @@ function initialize_map() {
 		polyCoordsMid.push(ol.proj.transform([parseFloat(oneRPoint[6]), parseFloat(oneRPoint[5])], 'EPSG:4326', 'EPSG:3857'));
 		polyCoordsMin.push(ol.proj.transform([parseFloat(oneRPoint[3]), parseFloat(oneRPoint[2])],  'EPSG:4326', 'EPSG:3857'));
 	    };
-
+		
 	    var styleMax = new ol.style.Style({
             	stroke: new ol.style.Stroke({
-               		color: 'rgba(0,0,64, 1)',
+               		color: 'rgba(0,0,255, 1)',
                		width: 0.5
             	}),
 	    	fill: new ol.style.Fill({
-	        	color: 'rgba(0,0,255, 0.1)'
+	        	color: 'rgba(0,0,255, 0.01)'
 	    	})
 	    })
-	    var styleMid = new ol.style.Style({
-            	stroke: new ol.style.Stroke({
-               		color: 'rgba(0,64,0, 1)',
-               		width: 0.5
-            	}),
-	    	fill: new ol.style.Fill({
-	        	color: 'rgba(0,255,0, 0.1)'
-	    	})
-	    })
-
-	    var styleMin = new ol.style.Style({
-            	stroke: new ol.style.Stroke({
-               		color: 'rgba(64,0,0, 1)',
-               		width: 0.5
-            	}),
-	    	fill: new ol.style.Fill({
-	        	color: 'rgba(255,0,0, 0.1)'
-	    	})
-	    })
-
-
 	    var rfeatureMax = new ol.Feature({
     		geometry: new ol.geom.Polygon([polyCoordsMax])
 	    });
 	    rfeatureMax.setStyle(styleMax)
 	    SleafordRangeFeatures.push(rfeatureMax);
 
-	    var rfeatureMid = new ol.Feature({
-    		geometry: new ol.geom.Polygon([polyCoordsMid])
-	    });
-	    rfeatureMid.setStyle(styleMid)
-	    SleafordRangeFeatures.push(rfeatureMid);
+	    if (MidRangeHeight > 0) {
+	    	var styleMid = new ol.style.Style({
+            		stroke: new ol.style.Stroke({
+            	   		color: 'rgba(0,64,0, 1)',
+            	   		width: 0.5
+            		}),
+	    		fill: new ol.style.Fill({
+	    	    	color: 'rgba(0,255,0, 0.01)'
+	    		})
+	    	})
 
-	    var rfeatureMin = new ol.Feature({
-    		geometry: new ol.geom.Polygon([polyCoordsMin])
-	    });
-	    rfeatureMin.setStyle(styleMin)
-	    SleafordRangeFeatures.push(rfeatureMin);
+	    	var rfeatureMid = new ol.Feature({
+    			geometry: new ol.geom.Polygon([polyCoordsMid])
+	    	});
+	    	rfeatureMid.setStyle(styleMid)
+	   	SleafordRangeFeatures.push(rfeatureMid);
+	    }
+
+	    if (MinRangeHeight > 0) {
+	    	var styleMin = new ol.style.Style({
+            		stroke: new ol.style.Stroke({
+            	   		color: 'rgba(64,0,0, 1)',
+            	   		width: 0.5
+            		}),
+	    		fill: new ol.style.Fill({
+	    	    	color: 'rgba(255,0,0, 0.01)'
+	    		})
+	    	})
+
+	    	var rfeatureMin = new ol.Feature({
+    			geometry: new ol.geom.Polygon([polyCoordsMin])
+	    	});
+	    	rfeatureMin.setStyle(styleMin)
+	    	SleafordRangeFeatures.push(rfeatureMin);
+	    }
 	}
 	//------------------------------------------------------------------------------------
 	// Ref: AK8X Ends ----------------------------------------------------------- AKISSACK
@@ -1792,7 +1814,7 @@ function refreshTableInfo() {
 	        width: RangeLine
 	    }),
 	    fill: new ol.style.Fill({
-	        color: 'rgba(0,0,255, 0.1)'
+	        color: 'rgba(0,0,255, 0.05)'
 	    })
 	});
 
@@ -1805,16 +1827,16 @@ function refreshTableInfo() {
 
 	})
 	rangeFeature.setStyle(style)
-	MaxRangeFeatures.push(rangeFeature);
+	if(ShowMaxRange) {MaxRangeFeatures.push(rangeFeature)};
 
 	// MEDIUM ------------------------------------
 	var style = new ol.style.Style({
 	    stroke: new ol.style.Stroke({
-	        color: 'rgba(0,128,0, 1)',
+	        color: 'rgba(0,128,0, 0.5)',
 	        width: RangeLine
 	    }),
 	    fill: new ol.style.Fill({
-	        color: 'rgba(0,255,0, 0.1)'
+	        color: 'rgba(0,255,0, 0.05)'
 	    })
 	});
 	var polyCoords = [];
@@ -1826,16 +1848,16 @@ function refreshTableInfo() {
 
 	})
 	rangeFeature.setStyle(style)
-	MaxRangeFeatures.push(rangeFeature);
+	if (MidRangeHeight > 0) {MaxRangeFeatures.push(rangeFeature)}; // Medium range
 
 	// MINIMUM ------------------------------------
 	var style = new ol.style.Style({
 	    stroke: new ol.style.Stroke({
-	        color: 'rgba(128,0,0, 1)',
+	        color: 'rgba(128,0,0, 0.5)',
 	        width: RangeLine
 	    }),
 	    fill: new ol.style.Fill({
-	        color: 'rgba(255,0,0, 0.1)'
+	        color: 'rgba(255,0,0, 0.05)'
 	    })
 	});
 	var polyCoords = [];
@@ -1847,7 +1869,7 @@ function refreshTableInfo() {
 
 	})
 	rangeFeature.setStyle(style)
-	MaxRangeFeatures.push(rangeFeature);
+	if (MinRangeHeight>0) {MaxRangeFeatures.push(rangeFeature);} // Minimum range
 }
 
 //
@@ -1956,12 +1978,19 @@ function selectPlaneByHex(hex,autofollow) {
 		deselectAllPlanes();
 	}
 
-	if (SelectedPlane != null) {
-		Planes[SelectedPlane].selected = false;
-		Planes[SelectedPlane].clearLines();
-		Planes[SelectedPlane].updateMarker();
-                $(Planes[SelectedPlane].tr).removeClass("selected");
-	}
+	// -------------------------------------------------------------------
+	// AKISSACK - Allow multiple selections                         [MLTI]
+	// -------------------------------------------------------------------
+	//if (SelectedPlane != null) {
+	//	Planes[SelectedPlane].selected = false;
+	//	Planes[SelectedPlane].clearLines();
+	//	Planes[SelectedPlane].updateMarker();
+        //        $(Planes[SelectedPlane].tr).removeClass("selected");
+	//}
+	// -------------------------------------------------------------------
+	// ------------------------------------------------------- AKISSACK
+	// -------------------------------------------------------------------
+
 
 	// If we are clicking the same plane, we are deselecting it.
 	// (unless it was a doubleclick..)

@@ -22,19 +22,20 @@ DisplayUnits = "nautical";
 // provided by dump1090 itself. All positions are in decimal
 // degrees.
 
-// Default center of the map.
-DefaultCenterLat = 51.0;
-DefaultCenterLon = 0.0;
 // The google maps zoom level, 0 - 16, lower is further out
 DefaultZoomLvl   = 7;
 
 // Center marker. If dump1090 provides a receiver location,
 // that location is used and these settings are ignored.
 
-SiteShow    = false;           // true to show a center marker
-SiteLat     = 53;              // position of the marker
-SiteLon     = -0.4;
-SiteName    = "Rx"; 	       // tooltip of the marker
+SiteShow    = true;		// true to show a center marker
+SiteLat     = 53;		// position of the marker
+SiteLon     = -0.4;		// *****  CHANGE THE LAT/LONG to match your location *****
+SiteName    = "Rx";		// tooltip of the marker
+
+// Default center of the map.
+DefaultCenterLat = SiteLat;
+DefaultCenterLon = SiteLon;
 
 // -- Marker settings -------------------------------------
 
@@ -140,9 +141,12 @@ ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
 ShowMaxRange         = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 			       // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
-MinRangeHeight	     = 10000 ; // ft - inner range ring
-MidRangeHeight	     = 20000 ; // ft - mid range ring
-RangeLine	     = 1 ;     // Line width for range rings
+MinRangeHeight	     =  5000 ; // ft - inner range ring - Set -1 to disable
+MinRangeLikely 	     =   170 ; // nm - practical max (to supress spikes from bad data)
+MidRangeHeight	     = 20000 ; // ft - mid range ring - Set -1 to disable
+MidRangeLikely 	     =   220 ; // nm - practical max
+MaxRangeLikely 	     =   300 ; // nm - practical max
+RangeLine	     =     1 ; // Line width for range rings
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
 // ----------------------------------------------------------------------------------------------------------------------------
@@ -165,5 +169,5 @@ ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-ind
 // ----------------------------------------------------------------------------------------------------------------------------
 ShowMyFindsLayer     = false ;	// Private plot (non-aircraft related)
 ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
-SleafordMySql        = false ;  // DOn't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
+SleafordMySql        = false ;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------
