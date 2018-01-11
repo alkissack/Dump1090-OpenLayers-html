@@ -103,17 +103,34 @@ function PlaneObject(icao) {
 		// -------------------------------------------------------
 		// -------------------------------------- Ref: AK9E ends
 		// -------------------------------------------------------
+
                 if (this.selected) {refreshSelected();}
         }.bind(this));
 }
 
 PlaneObject.prototype.isFiltered = function() {
-    if (this.filter.minAltitude !== undefined && this.filter.maxAltitude !== undefined) {
-        if (this.altitude === null || this.altitude === undefined) {
-            return true;
-        }
-        var planeAltitude = this.altitude === "ground" ? 0 : convert_altitude(this.altitude, this.filter.altitudeUnits);
-        return planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude;
+    // ------------------------------------------------------------------
+    // Allow filtering by special aircraft       AKISSACK Ref: AK11B -->
+    // ------------------------------------------------------------------
+    //console.log(this.filter.specials);
+
+    if (this.filter.specials == true) { 
+    	if (this.is_interesting != 'Y') {
+		return true;
+	}
+    } else {
+    // ------------------------------------------------------------------
+    // Allow filtering by special aircraft       AKISSACK Ref: AK11B ends
+    // ------------------------------------------------------------------
+
+	if (this.filter.minAltitude !== undefined && this.filter.maxAltitude !== undefined) {	// we've set both heights
+         	if (this.altitude === null || this.altitude === undefined) {	// if we cant get the height, let's exlcude (true)
+            		return true;
+        	}
+        	var planeAltitude = this.altitude === "ground" ? 0 : convert_altitude(this.altitude, this.filter.altitudeUnits);
+        	return planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude;  //if low or high, exclude (true)
+
+    	}
     }
 
     return false;

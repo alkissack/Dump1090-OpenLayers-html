@@ -2361,6 +2361,7 @@ function onDisplayUnitsChanged(e) {
 function onFilterByAltitude(e) {
     e.preventDefault();
     updatePlaneFilter();
+    //console.log( PlaneFilter.specials);   //AKISSACK
     refreshTableInfo();
 
     var selectedPlane = Planes[SelectedPlane];
@@ -2376,6 +2377,11 @@ function onFilterByAltitude(e) {
 function onResetAltitudeFilter(e) {
     $("#altitude_filter_min").val("");
     $("#altitude_filter_max").val("");
+    // ------------------------------------------------------------------
+    // Allow filtering by special aircraft       AKISSACK Ref: AK11C -->
+    // ------------------------------------------------------------------
+    $("#specials_filter").prop('checked', false);  //AKISSACK      // <--- ENDS
+
 
     updatePlaneFilter();
     refreshTableInfo();
@@ -2384,6 +2390,8 @@ function onResetAltitudeFilter(e) {
 function updatePlaneFilter() {
     var minAltitude = parseFloat($("#altitude_filter_min").val().trim());
     var maxAltitude = parseFloat($("#altitude_filter_max").val().trim());
+    var specialsOnly =$("#specials_filter").is(":checked");  // Allow filtering by special aircraft       AKISSACK Ref: AK11D 
+    // console.log(specialsOnly );
 
     if (minAltitude === NaN) {
         minAltitude = -Infinity;
@@ -2393,6 +2401,7 @@ function updatePlaneFilter() {
         maxAltitude = Infinity;
     }
 
+    PlaneFilter.specials = specialsOnly;   // Allow filtering by special aircraft       AKISSACK Ref: AK11D 
     PlaneFilter.minAltitude = minAltitude;
     PlaneFilter.maxAltitude = maxAltitude;
     PlaneFilter.altitudeUnits = DisplayUnits;

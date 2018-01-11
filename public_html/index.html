@@ -158,15 +158,21 @@
 				</div>
 
 					<form id="altitude_filter_form">
-						<label>Filter by altitude:</label>
-						<input id="altitude_filter_min" name="minAltitude" type="text" class="altitudeFilterInput" maxlength="5">
+<!-- AKISSACK Ref: AK11A -->
+ 						<label> Filter by height:</label>
+ 						<input id="altitude_filter_min" name="minAltitude" type="text" class="altitudeFilterInput" maxlength="5">
 						<label for="minAltitude" class="altitudeUnit"></label>
 						<span> to </span>
 						<input id="altitude_filter_max" name="maxAltitude" type="text" class="altitudeFilterInput" maxlength="5">
 						<label for="maxAltitude" class="altitudeUnit"></label>
-						<button type="submit">Filter</button>
-						<button id="altitude_filter_reset_button">Reset</button>
+ 						<button type="submit" style="float: right;">Filter</button>
+						</br>
+						<label> or Specials only:</label>
+						<input id="specials_filter" type="checkbox" name="specials" >
+						<button id="altitude_filter_reset_button"style="float: right;">Reset</button>
+<!-- AKISSACK Ref: AK11A  Ends -->
 					</form>
+
 
 					<div id="planes_table">
 						<table id="tableinfo" style="width: 100%">
@@ -176,7 +182,7 @@
 									<td id="flag" onclick="sortByCountry()"><!-- column for flag image --></td>
 									<td id="flight" onclick="sortByFlight();">Ident</td>
 									<td id="registration" onclick="sortByRegistration();">Registration</td>
-									<td id="aircraft_type" onclick="sortByAircraftType();"> Aircraft type</td>
+									<td id="aircraft_type" onclick="sortByAircraftType();"> Air craft type</td>
 									<td id="myAc" onclick="sortByICAO();">Aircraft</td>  		<!-- AKISSACK [MYTB] -->
 									<td id="myAcAc" onclick="sortByICAO();">Name</td>      		<!-- AKISSACK [MYTB] -->
 									<td id="myAcCat" onclick="sortByICAO();">Icon</td>    		<!-- AKISSACK [MYTB] -->
