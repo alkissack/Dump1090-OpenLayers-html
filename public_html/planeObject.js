@@ -109,31 +109,51 @@ function PlaneObject(icao) {
 }
 
 PlaneObject.prototype.isFiltered = function() {
-    // ------------------------------------------------------------------
-    // Allow filtering by special aircraft       AKISSACK Ref: AK11B -->
-    // ------------------------------------------------------------------
-    //console.log(this.filter.specials);
 
-    if (this.filter.specials == true) { 
-    	if (this.is_interesting != 'Y') {
-		return true;
+	var AcVisibile  = true;
+	var AcInBracket = true;
+
+	if (this.filter.specials == true) {
+		if (this.is_interesting != 'Y') {
+			AcVisibile = false ;
+		}
 	}
-    } else {
-    // ------------------------------------------------------------------
-    // Allow filtering by special aircraft       AKISSACK Ref: AK11B ends
-    // ------------------------------------------------------------------
 
 	if (this.filter.minAltitude !== undefined && this.filter.maxAltitude !== undefined) {	// we've set both heights
-         	if (this.altitude === null || this.altitude === undefined) {	// if we cant get the height, let's exlcude (true)
-            		return true;
-        	}
-        	var planeAltitude = this.altitude === "ground" ? 0 : convert_altitude(this.altitude, this.filter.altitudeUnits);
-        	return planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude;  //if low or high, exclude (true)
+		if (this.altitude === null || this.altitude === undefined){			// if we cant get the height, let's exlcude (true)
+			AcInBracket = false;
+		} else {
+ 			var planeAltitude = this.altitude === "ground" ? 0 : convert_altitude(this.altitude, this.filter.altitudeUnits);
+			if (planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude) {
+				AcInBracket = false;
+			}	
+		}
+		//return planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude;  //if low or high, exclude (true)
+	}
 
-    	}
-    }
+	if (AcVisibile === true  && AcInBracket === true) {
+		return false;
+	} else {
+		return true;
+	}
 
-    return false;
+
+
+    //if (this.filter.specials == true) { 
+    //	if (this.is_interesting != 'Y') {
+    //		return true;
+    //	}
+    //} else {
+    //	if (this.filter.minAltitude !== undefined && this.filter.maxAltitude !== undefined) {	// we've set both heights
+    //     	if (this.altitude === null || this.altitude === undefined) {	// if we cant get the height, let's exlcude (true)
+    //        		return true;
+    //    	}
+    //    	var planeAltitude = this.altitude === "ground" ? 0 : convert_altitude(this.altitude, this.filter.altitudeUnits);
+    //    	return planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude;  //if low or high, exclude (true)
+    //	}
+    //}
+
+    //return false;
 }
 
 // Appends data to the running track so we can get a visual tail on the plane
