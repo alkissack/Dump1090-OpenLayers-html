@@ -109,6 +109,9 @@ function PlaneObject(icao) {
 }
 
 PlaneObject.prototype.isFiltered = function() {
+	// -------------------------------------------------------------
+	// AKISSACK - Load my details from json ------Ref: AK11B starts
+	// -------------------------------------------------------------
 
 	var AcVisibile  = true;
 	var AcInBracket = true;
@@ -136,24 +139,10 @@ PlaneObject.prototype.isFiltered = function() {
 	} else {
 		return true;
 	}
+	// -------------------------------------------------------
+	// -------------------------------------- Ref: AK11B ends
+	// -------------------------------------------------------
 
-
-
-    //if (this.filter.specials == true) { 
-    //	if (this.is_interesting != 'Y') {
-    //		return true;
-    //	}
-    //} else {
-    //	if (this.filter.minAltitude !== undefined && this.filter.maxAltitude !== undefined) {	// we've set both heights
-    //     	if (this.altitude === null || this.altitude === undefined) {	// if we cant get the height, let's exlcude (true)
-    //        		return true;
-    //    	}
-    //    	var planeAltitude = this.altitude === "ground" ? 0 : convert_altitude(this.altitude, this.filter.altitudeUnits);
-    //    	return planeAltitude < this.filter.minAltitude || planeAltitude > this.filter.maxAltitude;  //if low or high, exclude (true)
-    //	}
-    //}
-
-    //return false;
 }
 
 // Appends data to the running track so we can get a visual tail on the plane
