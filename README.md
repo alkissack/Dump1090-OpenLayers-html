@@ -27,7 +27,7 @@ Originaly amended for my own purposes, but having had several requests to share 
 
 10. Personalised icons - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/A.-Aircraft-icon-changes
 
-11. Ability to filter special aircraft - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/B.-Filter aircraft of interest
+11. Ability to filter special aircraft - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/B.-Filter-aircraft-of-interest
 
 
 # Credits:
