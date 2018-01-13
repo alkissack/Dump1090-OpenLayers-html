@@ -172,3 +172,4 @@ ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W A
 SleafordMySql        = false ;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------------------------------------------------------
+// 
