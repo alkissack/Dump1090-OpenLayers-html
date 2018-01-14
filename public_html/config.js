@@ -141,9 +141,9 @@ ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
 ShowMaxRange         = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 			       // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
-MinRangeHeight	     =  5000 ; // ft - inner range ring - Set -1 to disable
+MinRangeHeight	     =    -1 ; // ft - inner range ring - Set -1 to disable
 MinRangeLikely 	     =   170 ; // nm - practical max (to supress spikes from bad data)
-MidRangeHeight	     = 20000 ; // ft - mid range ring - Set -1 to disable
+MidRangeHeight	     =    -1 ; // ft - mid range ring - Set -1 to disable
 MidRangeLikely 	     =   220 ; // nm - practical max
 MaxRangeLikely 	     =   300 ; // nm - practical max
 RangeLine	     =     1 ; // Line width for range rings
@@ -171,5 +171,3 @@ ShowMyFindsLayer     = false ;	// Private plot (non-aircraft related)
 ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
 SleafordMySql        = false ;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------
-// ----------------------------------------------------------------------------------------------------------------------------
-// 
