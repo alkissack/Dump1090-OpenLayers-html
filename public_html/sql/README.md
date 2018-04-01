@@ -30,3 +30,9 @@ They obviously wont work unless the apropriate server, database and table/s are 
 11. sql_table_seen.php - seen table details
 
 12. \tools\
+
+REQUIRED:
+apt-get install mysql-server
+apt-get install mysql-server
+apt-get install php5-common php5-cgi php5 php5-mysql
+sudo lighty-enable-mod fastcgi-php

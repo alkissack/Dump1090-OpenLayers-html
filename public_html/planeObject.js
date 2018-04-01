@@ -61,6 +61,7 @@ function PlaneObject(icao) {
 	this.siteBearing    = 0  ;  // ref: AK8F
 	this.siteNm	    = 0  ;  // ref: AK8F
 	this.fl  	    = 0  ;  // ref: AK8F
+        this.times_seen     = 1  ;
 
 
         // start from a computed registration, let the DB override it
@@ -69,6 +70,38 @@ function PlaneObject(icao) {
         this.icaotype = null;
         this.typeDescription = null;
         this.wtc = null;
+
+        if (SleafordMySql && false) {
+		// GET NUMBER OF TIMES WE HAVE SEEN THIS AIRCRAFT
+		// REmoved with && false as this is slow and a better
+		// implementation is needed
+		// https://stackoverflow.com/questions/22090764/alternative-to-async-false-ajax
+
+		var hexicao = this.icao ; //data.hex.substr(0,6) ;
+		var icao = "icao=" + hexicao.toLowerCase() ;
+
+		function lookup_aicraft_seen() {
+    			var result;
+
+    			$.ajax({
+              			async: false ,
+	      			url: 'sql/aircraft_seen.php',         
+	      			data: icao,  
+	      			dataType: 'json',  
+				cache: false,
+				timeout: 300,
+        			success: function(response) {
+            				result = response;
+        			}
+    			});
+
+    			return result;
+		}
+
+		var result = lookup_aicraft_seen(); 
+		this.times_seen = result[0] ;
+                //console.log("*" + this.icao + " " + this.times_seen);
+        }
 
         // request metadata
         getAircraftData(this.icao).done(function(data) {
