@@ -508,7 +508,7 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
 	        this.fl         = parseInt(this.altitude/100);
         }else {
         	if (typeof data.alt_baro !== "undefined") { // AKISSACK Later version of dump1090-fa use alt_baro not altitiude
-			this.altitude	= data.alt_baro;
+			this.altitude	= data.alt_baro;    // AKISSACK Possibly more changes to be identified?
 	        	this.fl         = parseInt(this.altitude/100);
 		}
 	}
