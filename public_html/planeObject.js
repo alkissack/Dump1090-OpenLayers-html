@@ -61,7 +61,6 @@ function PlaneObject(icao) {
 	this.siteBearing    = 0  ;  // ref: AK8F
 	this.siteNm	    = 0  ;  // ref: AK8F
 	this.fl  	    = 0  ;  // ref: AK8F
-        this.times_seen     = 1  ;
 
 
         // start from a computed registration, let the DB override it
@@ -70,38 +69,6 @@ function PlaneObject(icao) {
         this.icaotype = null;
         this.typeDescription = null;
         this.wtc = null;
-
-        if (SleafordMySql && false) {
-		// GET NUMBER OF TIMES WE HAVE SEEN THIS AIRCRAFT
-		// REmoved with && false as this is slow and a better
-		// implementation is needed
-		// https://stackoverflow.com/questions/22090764/alternative-to-async-false-ajax
-
-		var hexicao = this.icao ; //data.hex.substr(0,6) ;
-		var icao = "icao=" + hexicao.toLowerCase() ;
-
-		function lookup_aicraft_seen() {
-    			var result;
-
-    			$.ajax({
-              			async: false ,
-	      			url: 'sql/aircraft_seen.php',         
-	      			data: icao,  
-	      			dataType: 'json',  
-				cache: false,
-				timeout: 300,
-        			success: function(response) {
-            				result = response;
-        			}
-    			});
-
-    			return result;
-		}
-
-		var result = lookup_aicraft_seen(); 
-		this.times_seen = result[0] ;
-                //console.log("*" + this.icao + " " + this.times_seen);
-        }
 
         // request metadata
         getAircraftData(this.icao).done(function(data) {
@@ -536,15 +503,34 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
         else
                 this.addrtype   = 'adsb_icao';
 
-        if (typeof data.altitude !== "undefined")
+        if (typeof data.altitude !== "undefined") {
 		this.altitude	= data.altitude;
 	        this.fl         = parseInt(this.altitude/100);
+        }else {
+        	if (typeof data.alt_baro !== "undefined") { // AKISSACK Later version of dump1090-fa use alt_baro not altitiude
+			this.altitude	= data.alt_baro;
+	        	this.fl         = parseInt(this.altitude/100);
+		}
+	}
+
         if (typeof data.vert_rate !== "undefined")
 		this.vert_rate	= data.vert_rate;
+        else {
+        	if (typeof data.geom_rate !== "undefined")   // AKISSACK Later version of dump1090-fa use geom_rate not vert_rate
+			this.vert_rate	= data.geom_rate;
+ 	}
+
+
         if (typeof data.speed !== "undefined")
 		this.speed	= data.speed;
+	else {
+        	if (typeof data.gs !== "undefined")  // AKISSACK Later version of dump1090-fa use gs not speed
+			this.speed	= data.gs;
+	}
+
         if (typeof data.track !== "undefined")
                 this.track	= data.track;
+
         if (typeof data.lat !== "undefined") {
                 this.position   = [data.lon, data.lat];
                 this.last_position_time = receiver_timestamp - data.seen_pos;
