@@ -509,7 +509,7 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
 		this.altitude	= data.altitude;
         } else if (typeof data.alt_baro !== "undefined") { 
 		this.altitude	= data.alt_baro;
-	} else if ('alt_geom' in data) {
+	} else if (typeof data.alt_geom !== "undefined") {
                 this.altitude = data.alt_geom;
 	}
         if (typeof this.altitude !== "undefined") {
@@ -522,7 +522,7 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
 		this.vert_rate	= data.vert_rate;
         } else if (typeof data.geom_rate !== "undefined") {  
 	        this.vert_rate	= data.geom_rate;
-        } else if ('baro_rate' in data) {
+        } else if (typeof data.baro_rate !== "undefined") {
                 this.vert_rate = data.baro_rate;
 	}
 
@@ -532,9 +532,9 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
 		this.speed	= data.speed;
 	} else if (typeof data.gs !== "undefined") {  
 		this.speed	= data.gs;
-        } else if ('tas' in data) {
+        } else if (typeof data.tas !== "undefined") {
                 this.speed = data.tas;
-        } else if ('ias' in data) {
+        } else if (typeof data.ias !== "undefined") {
                 this.speed = data.ias;
 	}
 
