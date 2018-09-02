@@ -72,7 +72,7 @@ function PlaneObject(icao) {
 
         // request metadata
         getAircraftData(this.icao).done(function(data) {
-		//console.log(data);
+		console.log(data);
                 if ("r" in data)    {this.registration = data.r;}
                 if ("t" in data)    {this.icaotype = data.t;}
                 if ("desc" in data) {this.typeDescription = data.desc;}
@@ -503,30 +503,41 @@ PlaneObject.prototype.updateData = function(receiver_timestamp, data) {
         else
                 this.addrtype   = 'adsb_icao';
 
+		
+	// AKISSACK - Altitude taking into account differering data structures (changed in FA 3.6.2?)
         if (typeof data.altitude !== "undefined") {
 		this.altitude	= data.altitude;
-	        this.fl         = parseInt(this.altitude/100);
-        }else {
-        	if (typeof data.alt_baro !== "undefined") { // AKISSACK Later version of dump1090-fa use alt_baro not altitiude
-			this.altitude	= data.alt_baro;    // AKISSACK Possibly more changes to be identified?
-	        	this.fl         = parseInt(this.altitude/100);
-		}
+        } else if (typeof data.alt_baro !== "undefined") { 
+		this.altitude	= data.alt_baro;
+	} else if ('alt_geom' in data) {
+                this.altitude = data.alt_geom;
+	}
+        if (typeof this.altitude !== "undefined") {
+	        this.fl = parseInt(this.altitude/100);
 	}
 
-        if (typeof data.vert_rate !== "undefined")
+
+	// AKISSACK - Rate of climb/descent taking into account differering data structures (changed in FA 3.6.2?)
+        if (typeof data.vert_rate !== "undefined") {
 		this.vert_rate	= data.vert_rate;
-        else {
-        	if (typeof data.geom_rate !== "undefined")   // AKISSACK Later version of dump1090-fa use geom_rate not vert_rate
-			this.vert_rate	= data.geom_rate;
- 	}
-
-
-        if (typeof data.speed !== "undefined")
-		this.speed	= data.speed;
-	else {
-        	if (typeof data.gs !== "undefined")  // AKISSACK Later version of dump1090-fa use gs not speed
-			this.speed	= data.gs;
+        } else if (typeof data.geom_rate !== "undefined") {  
+	        this.vert_rate	= data.geom_rate;
+        } else if ('baro_rate' in data) {
+                this.vert_rate = data.baro_rate;
 	}
+
+
+	// AKISSACK - Speed taking into account differering data structures (changed in FA 3.6.2?)	
+        if (typeof data.speed !== "undefined") {
+		this.speed	= data.speed;
+	} else if (typeof data.gs !== "undefined") {  
+		this.speed	= data.gs;
+        } else if ('tas' in data) {
+                this.speed = data.tas;
+        } else if ('ias' in data) {
+                this.speed = data.ias;
+	}
+
 
         if (typeof data.track !== "undefined")
                 this.track	= data.track;
