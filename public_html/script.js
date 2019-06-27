@@ -1101,8 +1101,7 @@ function initialize_map() {
 				   var akbrn = (parseInt(getBearing(SitePosition[1],SitePosition[0],coord1[1],coord1[0]))).toString();
 				   var akWGS84 = new ol.Sphere(6378137);
 				   var akrng = akWGS84.haversineDistance(SitePosition, coord1);
-				   akrng = parseInt((akrng/1852).toFixed(0));
-				   return akret +" "+ akbrn+"\u00B0 "+akrng+"nm";
+				   return akret +" "+ akbrn+"\u00B0 "+ format_distance_long(akrng, DisplayUnits);
 				} else { // no range or bearing required, just return akret
 				   return akret;
 				}
@@ -1451,13 +1450,29 @@ function initialize_map() {
                                cache: true,
                                dataType: 'json' });
         request.done(function(data) {
-                var ringStyle = new ol.style.Style({
-                        fill: null,
-                        stroke: new ol.style.Stroke({
-                                color: '#000000',
-                                width: 1
-                        })
-                });
+                var ringStyle = [new ol.style.Style({
+                    fill: null,
+                    stroke: new ol.style.Stroke({
+                            color: '#13EC5B',
+			lineDash:[4,4],
+                            width: 1
+                    })
+            }),new ol.style.Style({
+                    fill: null,
+                    stroke: new ol.style.Stroke({
+                            color: '#EC13EC',  //'#ff00ff',
+			lineDash:[4,4],
+                            width: 1
+                    })
+            }),new ol.style.Style({
+                    fill: null,
+                    stroke: new ol.style.Stroke({
+                            color: '#00ffff',
+			lineDash:[4,4],
+                            width: 1
+                    })
+            })
+	];
 
                 for (var i = 0; i < data.rings.length; ++i) {
                         var geom = new ol.geom.LineString();
@@ -1470,7 +1485,7 @@ function initialize_map() {
                                 geom.transform('EPSG:4326', 'EPSG:3857');
 
                                 var feature = new ol.Feature(geom);
-                                feature.setStyle(ringStyle);
+                                feature.setStyle(ringStyle[i]);
                                 StaticFeatures.push(feature);
                         }
                 }
@@ -1492,14 +1507,24 @@ function createSiteCircleFeatures() {
     } else {
 	var rangeWid = 1 ;
     }
-    var circleStyle = new ol.style.Style({
+    var circleStyle = function(distance) { 
+        return new ol.style.Style({
             fill: null,
             stroke: new ol.style.Stroke({
                     color: '#000000',
                     width: rangeWid //
-            })
-    });
+            }),
+	text: new ol.style.Text({
+        	font: 'bold 10px Helvetica Neue, sans-serif',
+        	fill: new ol.style.Fill({ color: '#000000' }),
+			offsetY: -8,
+			offsetX: 1,
+			text: format_distance_long(distance, DisplayUnits, 0)
 
+		})
+	});
+    };
+ 
     var conversionFactor = 1000.0;
     if (DisplayUnits === "nautical") {
         conversionFactor = 1852.0;
@@ -1512,7 +1537,7 @@ function createSiteCircleFeatures() {
             var circle = make_geodesic_circle(SitePosition, distance, 360);
             circle.transform('EPSG:4326', 'EPSG:3857');
             var feature = new ol.Feature(circle);
-            feature.setStyle(circleStyle);
+            feature.setStyle(circleStyle(distance));
             StaticFeatures.push(feature);
             SiteCircleFeatures.push(feature);
     }
@@ -2320,8 +2345,8 @@ function isPointInsideExtent(x, y, extent) {
 
 function initializeUnitsSelector() {
     // Get display unit preferences from local storage
-    if (!localStorage.getItem('displayUnits')) {
-        localStorage['displayUnits'] = "nautical";
+    if (!localStorage.getItem('displayUnits') || localStorage.getItem('displayUnits') != DisplayUnits) {
+        localStorage['displayUnits'] = DisplayUnits;
     }
     var displayUnits = localStorage['displayUnits'];
     DisplayUnits = displayUnits;
