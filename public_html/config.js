@@ -172,11 +172,11 @@ ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W A
 SleafordMySql        = false ;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------
 
-UseDefaultTerrianRings = true; // default Terrian rings color, otherwise colored by altitude (color defined in TerrianColorByAlt)
-UseTerrianLineDash = false;      // true: dashed or false: solid terrian rings
-TerrianLineWidth = 1;           // line width of terrian rings
-TerrianAltitudes = [9842,39370];// altitudes in ft as in alt parameter TerrianColorByAlt, replace XXXXXXX with your code: sudo wget -O /usr/share/dump1090-fa/html/upintheair.json "www.heywhatsthat.com/api/upintheair.json?id=XXXXXXX&refraction=0.25&alts=3000,12000" 
-TerrianColorByAlt = {           // colours depending on altitude (UseDefaultTerrianRings must be false and TerrianAltitudes must be set), default same as colours of planes in air, alt in ft
+UseDefaultTerrianRings  = true;         // default Terrian rings color, otherwise colored by altitude (color defined in TerrianColorByAlt)
+UseTerrianLineDash      = false;        // true: dashed or false: solid terrian rings
+TerrianLineWidth        = 1;            // line width of terrian rings
+TerrianAltitudes        = [9842,39370]; // altitudes in ft as in alt parameter TerrianColorByAlt, replace XXXXXXX with your code: sudo wget -O /usr/share/dump1090-fa/html/upintheair.json "www.heywhatsthat.com/api/upintheair.json?id=XXXXXXX&refraction=0.25&alts=3000,12000" 
+TerrianColorByAlt       = {             // colours depending on altitude (UseDefaultTerrianRings must be false and TerrianAltitudes must be set), default same as colours of planes in air, alt in ft
         h: [ { alt: 2000,  val: 20 },    // orange
              { alt: 10000, val: 140 },   // light green
              { alt: 40000, val: 300 } ], // magenta
@@ -184,7 +184,7 @@ TerrianColorByAlt = {           // colours depending on altitude (UseDefaultTerr
         l: 50,
 };
 
-ShowSiteRingDistanceText = true; // show the distance text in site rings
+ShowSiteRingDistanceText = false;       // show the distance text in site rings
 
 // for this you have to change /etc/lighttpd/conf-enabled/89-dump1090-fa.conf : commenting out the filter $HTTP["url"] =~ "^/dump1090-fa/data/.*\.json$"  and always send the response header
 // maybe filter is not correct --- Help wanted
