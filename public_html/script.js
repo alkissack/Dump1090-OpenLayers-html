@@ -289,7 +289,6 @@ function initialize() {
         // Get receiver metadata, reconfigure using it, then continue
         // with initialization
         $.ajax({ url: EndpointDump1090 + 'data/receiver.json',
-                crossDomain: true,
                 timeout: 5000,
                  cache: false,
                  dataType: 'json' })
@@ -376,7 +375,6 @@ function load_history_item(i) {
         $("#loader_progress").attr('value',i);
 
         $.ajax({ url: EndpointDump1090 + 'data/history_' + i + '.json',
-                crossDomain: true,
                 timeout: 5000,
                  cache: false,
                  dataType: 'json' })
@@ -1467,11 +1465,11 @@ function initialize_map() {
             else {
                 ringStyle = [];
                 
-                for(var i = 0; i< TerrianAltidutes.length; ++i) {
+                for(var i = 0; i< TerrianAltitudes.length; ++i) {
                     ringStyle.push(new ol.style.Style({
                         fill: null,
                         stroke: new ol.style.Stroke({
-                            color: getTerrianColorByAlti(TerrianAltidutes[i]),
+                            color: getTerrianColorByAlti(TerrianAltitudes[i]),
                             lineDash: UseTerrianLineDash ? [4,4] : null,
                             width: TerrianLineWidth
                         })
