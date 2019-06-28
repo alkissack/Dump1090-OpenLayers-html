@@ -1101,7 +1101,7 @@ function initialize_map() {
 				   var akbrn = (parseInt(getBearing(SitePosition[1],SitePosition[0],coord1[1],coord1[0]))).toString();
 				   var akWGS84 = new ol.Sphere(6378137);
 				   var akrng = akWGS84.haversineDistance(SitePosition, coord1);
-				   return akret +" "+ akbrn+"\u00B0 "+ format_distance_long(akrng, DisplayUnits);
+				   return akret +" "+ akbrn+"\u00B0 "+ format_distance_long(akrng, DisplayUnits, 0);
 				} else { // no range or bearing required, just return akret
 				   return akret;
 				}
@@ -1450,29 +1450,32 @@ function initialize_map() {
                                cache: true,
                                dataType: 'json' });
         request.done(function(data) {
-                var ringStyle = [new ol.style.Style({
+            var ringStyle;
+
+            if(UseDefaultTerrianRings) {
+                ringStyle = new ol.style.Style({
                     fill: null,
                     stroke: new ol.style.Stroke({
-                            color: '#13EC5B',
-			lineDash:[4,4],
-                            width: 1
+                        color: '#000000',
+                        lineDash: UseTerrianLineDash ? [4,4] : null,
+                        width: TerrianLineWidth
                     })
-            }),new ol.style.Style({
-                    fill: null,
-                    stroke: new ol.style.Stroke({
-                            color: '#EC13EC',  //'#ff00ff',
-			lineDash:[4,4],
-                            width: 1
-                    })
-            }),new ol.style.Style({
-                    fill: null,
-                    stroke: new ol.style.Stroke({
-                            color: '#00ffff',
-			lineDash:[4,4],
-                            width: 1
-                    })
-            })
-	];
+                });
+            }
+            else {
+                ringStyle = [];
+                
+                for(var i = 0; i< TerrianAltidutes.length; ++i) {
+                    ringStyle.push(new ol.style.Style({
+                        fill: null,
+                        stroke: new ol.style.Stroke({
+                            color: getTerrianColorByAlti(TerrianAltidutes[i]),
+                            lineDash: UseTerrianLineDash ? [4,4] : null,
+                            width: TerrianLineWidth
+                        })
+                }));
+                }
+            }
 
                 for (var i = 0; i < data.rings.length; ++i) {
                         var geom = new ol.geom.LineString();
@@ -1485,7 +1488,12 @@ function initialize_map() {
                                 geom.transform('EPSG:4326', 'EPSG:3857');
 
                                 var feature = new ol.Feature(geom);
-                                feature.setStyle(ringStyle[i]);
+                                if (UseDefaultTerrianRings) {
+                                    feature.setStyle(ringStyle);
+                                }
+                                else {
+                                    feature.setStyle(ringStyle[i]);
+                                }
                                 StaticFeatures.push(feature);
                         }
                 }
@@ -1519,7 +1527,7 @@ function createSiteCircleFeatures() {
         	fill: new ol.style.Fill({ color: '#000000' }),
 			offsetY: -8,
 			offsetX: 1,
-			text: format_distance_long(distance, DisplayUnits, 0)
+			text: ShowSiteRingDistanceText ? format_distance_long(distance, DisplayUnits, 0) : ''
 
 		})
 	});
@@ -2481,4 +2489,38 @@ function getAirframesModeSLinkIcao(code) {  // AKISSACK  Ref: AK9F
         return "<a href=\"http://www.airframes.org/\" onclick=\"$('#airframes_post_icao').attr('value','" + code + "'); document.getElementById('horrible_hack').submit.call(document.getElementById('airframes_post')); return false;\">" + code.toUpperCase() + "</a>";
     }
     return "";   
+}
+
+function getTerrianColorByAlti(alti) {
+    var s = TerrianColorByAlt.s;
+    var l = TerrianColorByAlt.l;
+
+    // find the pair of points the current altitude lies between,
+    // and interpolate the hue between those points
+    var hpoints = TerrianColorByAlt.h;
+    var h = hpoints[0].val;
+    for (var i = hpoints.length-1; i >= 0; --i) {
+        if (alti > hpoints[i].alt) {
+            if (i == hpoints.length-1) {
+                h = hpoints[i].val;
+            } else {
+                h = hpoints[i].val + (hpoints[i+1].val - hpoints[i].val) * (alti - hpoints[i].alt) / (hpoints[i+1].alt - hpoints[i].alt)
+            }
+            break;
+        }
+    }
+
+    if (h < 0) {
+        h = (h % 360) + 360;
+    } else if (h >= 360) {
+        h = h % 360;
+    }
+
+    if (s < 5) s = 5;
+    else if (s > 95) s = 95;
+
+    if (l < 5) l = 5;
+    else if (l > 95) l = 95;
+
+    return 'hsl(' + (h/5).toFixed(0)*5 + ',' + (s/5).toFixed(0)*5 + '%,' + (l/5).toFixed(0)*5 + '%)'
 }

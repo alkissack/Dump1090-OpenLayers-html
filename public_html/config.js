@@ -171,3 +171,17 @@ ShowMyFindsLayer     = false ;	// Private plot (non-aircraft related)
 ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
 SleafordMySql        = false ;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------
+
+UseDefaultTerrianRings = false; // default Terrian rings color, otherwise colored by altidute (color defined in TerrianColorByAlt)
+UseTerrianLineDash = true;      // true: dashed or false: solid terrian rings
+TerrianLineWidth = 1;           // line width of terrian rings
+TerrianAltidutes = [9842,39370];// altidutes in ft as in alt parameter TerrianColorByAlt, replace XXXXXXX with your code: sudo wget -O /usr/share/dump1090-fa/html/upintheair.json "www.heywhatsthat.com/api/upintheair.json?id=XXXXXXX&refraction=0.25&alts=3000,12000" 
+TerrianColorByAlt = {           // colours depending on altidute (UseDefaultTerrianRings must be false and TerrianAltidutes must be set), default same as colours of planes in air, alt in ft
+        h: [ { alt: 2000,  val: 20 },    // orange
+             { alt: 10000, val: 140 },   // light green
+             { alt: 40000, val: 300 } ], // magenta
+        s: 85,
+        l: 50,
+};
+
+ShowSiteRingDistanceText = true; // show the distance text in site rings
