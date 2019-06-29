@@ -152,7 +152,7 @@ function fetchData() {
                 return;
         }
 
-	FetchPending = $.ajax({ url: 'data/aircraft.json',
+    FetchPending = $.ajax({ url: EndpointDump1090 + 'data/aircraft.json',
                                 timeout: 5000,
                                 cache: false,
                                 dataType: 'json' });
@@ -288,8 +288,8 @@ function initialize() {
 
         // Get receiver metadata, reconfigure using it, then continue
         // with initialization
-        $.ajax({ url: 'data/receiver.json',
-                 timeout: 5000,
+        $.ajax({ url: EndpointDump1090 + 'data/receiver.json',
+                timeout: 5000,
                  cache: false,
                  dataType: 'json' })
 
@@ -374,8 +374,8 @@ function load_history_item(i) {
         // Ref: AK9Y  --  console.log("Loading history #" + i);
         $("#loader_progress").attr('value',i);
 
-        $.ajax({ url: 'data/history_' + i + '.json',
-                 timeout: 5000,
+        $.ajax({ url: EndpointDump1090 + 'data/history_' + i + '.json',
+                timeout: 5000,
                  cache: false,
                  dataType: 'json' })
 
@@ -1101,8 +1101,7 @@ function initialize_map() {
 				   var akbrn = (parseInt(getBearing(SitePosition[1],SitePosition[0],coord1[1],coord1[0]))).toString();
 				   var akWGS84 = new ol.Sphere(6378137);
 				   var akrng = akWGS84.haversineDistance(SitePosition, coord1);
-				   akrng = parseInt((akrng/1852).toFixed(0));
-				   return akret +" "+ akbrn+"\u00B0 "+akrng+"nm";
+				   return akret +" "+ akbrn+"\u00B0 "+ format_distance_long(akrng, DisplayUnits, 0);
 				} else { // no range or bearing required, just return akret
 				   return akret;
 				}
@@ -1451,13 +1450,32 @@ function initialize_map() {
                                cache: true,
                                dataType: 'json' });
         request.done(function(data) {
-                var ringStyle = new ol.style.Style({
+            var ringStyle;
+
+            if(UseDefaultTerrianRings) {
+                ringStyle = new ol.style.Style({
+                    fill: null,
+                    stroke: new ol.style.Stroke({
+                        color: '#000000',
+                        lineDash: UseTerrianLineDash ? [4,4] : null,
+                        width: TerrianLineWidth
+                    })
+                });
+            }
+            else {
+                ringStyle = [];
+                
+                for(var i = 0; i< TerrianAltitudes.length; ++i) {
+                    ringStyle.push(new ol.style.Style({
                         fill: null,
                         stroke: new ol.style.Stroke({
-                                color: '#000000',
-                                width: 1
+                            color: getTerrianColorByAlti(TerrianAltitudes[i]),
+                            lineDash: UseTerrianLineDash ? [4,4] : null,
+                            width: TerrianLineWidth
                         })
-                });
+                }));
+                }
+            }
 
                 for (var i = 0; i < data.rings.length; ++i) {
                         var geom = new ol.geom.LineString();
@@ -1470,7 +1488,12 @@ function initialize_map() {
                                 geom.transform('EPSG:4326', 'EPSG:3857');
 
                                 var feature = new ol.Feature(geom);
-                                feature.setStyle(ringStyle);
+                                if (UseDefaultTerrianRings) {
+                                    feature.setStyle(ringStyle);
+                                }
+                                else {
+                                    feature.setStyle(ringStyle[i]);
+                                }
                                 StaticFeatures.push(feature);
                         }
                 }
@@ -1492,14 +1515,24 @@ function createSiteCircleFeatures() {
     } else {
 	var rangeWid = 1 ;
     }
-    var circleStyle = new ol.style.Style({
+    var circleStyle = function(distance) { 
+        return new ol.style.Style({
             fill: null,
             stroke: new ol.style.Stroke({
                     color: '#000000',
                     width: rangeWid //
-            })
-    });
+            }),
+	text: new ol.style.Text({
+        	font: 'bold 10px Helvetica Neue, sans-serif',
+        	fill: new ol.style.Fill({ color: '#000000' }),
+			offsetY: -8,
+			offsetX: 1,
+			text: ShowSiteRingDistanceText ? format_distance_long(distance, DisplayUnits, 0) : ''
 
+		})
+	});
+    };
+ 
     var conversionFactor = 1000.0;
     if (DisplayUnits === "nautical") {
         conversionFactor = 1852.0;
@@ -1512,7 +1545,7 @@ function createSiteCircleFeatures() {
             var circle = make_geodesic_circle(SitePosition, distance, 360);
             circle.transform('EPSG:4326', 'EPSG:3857');
             var feature = new ol.Feature(circle);
-            feature.setStyle(circleStyle);
+            feature.setStyle(circleStyle(distance));
             StaticFeatures.push(feature);
             SiteCircleFeatures.push(feature);
     }
@@ -2320,8 +2353,8 @@ function isPointInsideExtent(x, y, extent) {
 
 function initializeUnitsSelector() {
     // Get display unit preferences from local storage
-    if (!localStorage.getItem('displayUnits')) {
-        localStorage['displayUnits'] = "nautical";
+    if (!localStorage.getItem('displayUnits') || localStorage.getItem('displayUnits') != DisplayUnits) {
+        localStorage['displayUnits'] = DisplayUnits;
     }
     var displayUnits = localStorage['displayUnits'];
     DisplayUnits = displayUnits;
@@ -2456,4 +2489,38 @@ function getAirframesModeSLinkIcao(code) {  // AKISSACK  Ref: AK9F
         return "<a href=\"http://www.airframes.org/\" onclick=\"$('#airframes_post_icao').attr('value','" + code + "'); document.getElementById('horrible_hack').submit.call(document.getElementById('airframes_post')); return false;\">" + code.toUpperCase() + "</a>";
     }
     return "";   
+}
+
+function getTerrianColorByAlti(alti) {
+    var s = TerrianColorByAlt.s;
+    var l = TerrianColorByAlt.l;
+
+    // find the pair of points the current altitude lies between,
+    // and interpolate the hue between those points
+    var hpoints = TerrianColorByAlt.h;
+    var h = hpoints[0].val;
+    for (var i = hpoints.length-1; i >= 0; --i) {
+        if (alti > hpoints[i].alt) {
+            if (i == hpoints.length-1) {
+                h = hpoints[i].val;
+            } else {
+                h = hpoints[i].val + (hpoints[i+1].val - hpoints[i].val) * (alti - hpoints[i].alt) / (hpoints[i+1].alt - hpoints[i].alt)
+            }
+            break;
+        }
+    }
+
+    if (h < 0) {
+        h = (h % 360) + 360;
+    } else if (h >= 360) {
+        h = h % 360;
+    }
+
+    if (s < 5) s = 5;
+    else if (s > 95) s = 95;
+
+    if (l < 5) l = 5;
+    else if (l > 95) l = 95;
+
+    return 'hsl(' + (h/5).toFixed(0)*5 + ',' + (s/5).toFixed(0)*5 + '%,' + (l/5).toFixed(0)*5 + '%)'
 }
