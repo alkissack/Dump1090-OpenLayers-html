@@ -1347,7 +1347,11 @@ function initialize_map() {
 			};
                         if (ShowAdditionalData ) {
 			    //LINE ONE
-                            popname = (Planes[feature.hex].ac_aircraft               ? Planes[feature.hex].ac_aircraft : 'Unknown aircraft type' );
+                            popname = (Planes[feature.hex].ac_aircraft ? Planes[feature.hex].ac_aircraft : '-' );
+                            if (popname === '-') {
+                                   //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
+                                   popname = (Planes[feature.hex].icaotype ? Planes[feature.hex].icaotype : 'Unknown aircraft type' );
+                            }
                             popname = popname + ' ['+ (Planes[feature.hex].category  ? Planes[feature.hex].category     : '?')+']';
 			    //LINE TWO
                             popname = popname + '\n('+ (Planes[feature.hex].flight   ? Planes[feature.hex].flight.trim() : 'No Call') +')';
