@@ -696,10 +696,12 @@ PlaneObject.prototype.updateMarker = function(moved) {
 
 				//LINE TWO  
 				if (ShowAdditionalData) {
-					labelText = labelText + '\n'+ this.ac_aircraft;
-					//if ((this.my_vet != 5 && this.my_vet != 6 && !this.selected)  || SelectedAllPlanes ){
-                        		//    
-                        		//}
+                                        //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
+                                        var tmpText = this.ac_aircraft ? this.ac_aircraft : '-';
+                                        if (tmpText === '-') {
+                                               tmpText = this.icaotype ? this.icaotype : 'Unknown Type';
+                                        }
+					labelText = labelText + '\n'+ tmpText ;
 				} else {
 					labelText = labelText + '\n['+(this.fl ? this.fl : '?')+v+']';
 				}

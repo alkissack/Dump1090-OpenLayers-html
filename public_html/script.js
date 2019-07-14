@@ -1791,8 +1791,24 @@ function refreshTableInfo() {
 			if (ShowMyPreferences && ShowHTMLColumns) { // ------------ Ref: AK9F
                         	tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
                         	tableplane.tr.cells[4].textContent = (tableplane.icaotype !== null ? tableplane.icaotype : "");
-                        	tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "");
-                         	tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "");
+                                var tmpTxt1 = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "-");
+                                if (tmpTxt1 === "-" || tmpTxt1 === "") {
+                                   //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
+                                   tmpTxt1 = (tableplane.icaotype ? tableplane.icaotype : 'Unknown aircraft');
+                                   //console.log("-"+tmpTxt1 );
+                                }
+                        	//tableplane.tr.cells[5].textContent = (tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "");
+                                tableplane.tr.cells[5].textContent = tmpTxt1;
+
+                                tmpTxt1 = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "-");
+                                if (tmpTxt1 === "-" || tmpTxt1 === "") {
+                                   //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
+                                   tmpTxt1 = (tableplane.icaotype ? tableplane.icaotype : 'Unknown');
+                                   //console.log("-"+tmpTxt1 );
+                                }
+                         	//tableplane.tr.cells[6].textContent = (tableplane.ac_shortname !== null ? tableplane.ac_shortname : "");
+                                tableplane.tr.cells[6].textContent = tmpTxt1;
+
                         	tableplane.tr.cells[7].textContent = (tableplane.ac_category !== null ? tableplane.ac_category : "");
                         	tableplane.tr.cells[8].textContent = (tableplane.squawk !== null ? tableplane.squawk : "");
                         	tableplane.tr.cells[9].innerHTML = format_altitude_brief(tableplane.altitude, tableplane.vert_rate, DisplayUnits);
