@@ -1718,7 +1718,11 @@ function refreshSelected() {
         $('#selected_sitedist').text(format_distance_long(selected.sitedist, DisplayUnits));
         $('#selected_rssi').text(selected.rssi.toFixed(1) + ' dBFS');
         $('#selected_message_count').text(selected.messages);
-        $('#selected_photo_link').html(getFlightAwarePhotoLink(selected.registration));
+        if(UseJetPhotosPhotoLink) {
+                $('#selected_photo_link').html(getJetPhotosPhotoLink(selected.registration));
+        } else {
+                $('#selected_photo_link').html(getFlightAwarePhotoLink(selected.registration));
+        }
 }
 
 // Refreshes the larger table of all the planes
@@ -1823,8 +1827,12 @@ function refreshTableInfo() {
                         	tableplane.tr.cells[18].textContent = (tableplane.position !== null ? tableplane.position[0].toFixed(4) : "");
                         	tableplane.tr.cells[19].textContent = format_data_source(tableplane.getDataSource());
                         	tableplane.tr.cells[20].innerHTML = getAirframesModeSLink(tableplane.icao);
-                        	tableplane.tr.cells[21].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight);
-                        	tableplane.tr.cells[22].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
+                                tableplane.tr.cells[21].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight);
+                                if(UseJetPhotosPhotoLink) {
+                                        tableplane.tr.cells[22].innerHTML = getJetPhotosPhotoLink(tableplane.registration);
+                                } else {
+                                        tableplane.tr.cells[22].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
+                                }
                         	tableplane.tr.className = classes;
 			} else {
                         	tableplane.tr.cells[3].textContent = (tableplane.registration !== null ? tableplane.registration : "");
@@ -1843,7 +1851,11 @@ function refreshTableInfo() {
                         	tableplane.tr.cells[16].textContent = format_data_source(tableplane.getDataSource());
                         	tableplane.tr.cells[17].innerHTML = getAirframesModeSLink(tableplane.icao);
                         	tableplane.tr.cells[18].innerHTML = getFlightAwareModeSLink(tableplane.icao, tableplane.flight);
-                        	tableplane.tr.cells[19].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
+                                if(UseJetPhotosPhotoLink) {
+                                        tableplane.tr.cells[19].innerHTML = getJetPhotosPhotoLink(tableplane.registration);
+                                } else {
+                                        tableplane.tr.cells[19].innerHTML = getFlightAwarePhotoLink(tableplane.registration);
+                                }
                         	tableplane.tr.className = classes;
 			}
 		}
@@ -2494,6 +2506,14 @@ function getFlightAwarePhotoLink(registration) {
     }
 
     return "";   
+}
+
+function getJetPhotosPhotoLink(registration) {
+     if (registration !== null && registration !== "") {
+        return "<a target=\"_blank\" href=\"https://www.jetphotos.com/registration/" + registration.trim() + "\">See Photos</a>";
+     }
+
+     return "";   
 }
 
 function getAirframesModeSLink(code) {

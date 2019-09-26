@@ -147,6 +147,8 @@ TerrianColorByAlt       = {             // colours depending on altitude (UseDef
 
 ShowSiteRingDistanceText = false;       // show the distance text in site rings
 
+UseJetPhotosPhotoLink    = false;       // Use jetphotos.com instead of FlightAware for photo links
+
 // for this you have to change /etc/lighttpd/conf-enabled/89-dump1090-fa.conf : commenting out the filter $HTTP["url"] =~ "^/dump1090-fa/data/.*\.json$"  and always send the response header
 // maybe filter is not correct --- Help wanted
 // the last 3 lines should look like this without the //
