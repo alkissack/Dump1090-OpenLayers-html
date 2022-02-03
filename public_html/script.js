@@ -1261,55 +1261,61 @@ function initialize_map() {
         	//-----------------------------------------------------------------------
   		{
     		   $.ajax({
-      		       url: 'sql/sql-finds-layer.php',
+      		       url: 'sql/new-sql-finds-layer.php',
     		       data: "",
-   		       dataType: 'json',
+   		           dataType: 'json',
     		       success: function(data)  {processMdData(data)}
-       	            });
+       	       });
 		});
 
 		function processMdData(allFindData) {
-		    for ( var i in allFindData ) {
-		        var oneFind = allFindData[i] ;
-        	        var fLonLat = [oneFind[3], oneFind[2]] ;
-			//var fid     = oneFind[0];  
-			//console.log("Finds (" + fLonLat  + ")");
-                        var f = new ol.Feature({
-                            	geometry: new ol.geom.Point(ol.proj.transform([ +oneFind[3], +oneFind[2] ], 'EPSG:4326', 'EPSG:3857')),
-                            	name: oneFind[0] + '<br>' + oneFind[1]
-                        });
-			if (oneFind[4] === 'coin') {
-				f.setStyle(fCoin);
-			} else {
-				if (oneFind[4] === 'coins') {
-					f.setStyle(fCoins);
-				} else {
-					if  (oneFind[4] === 'coinr') {
+			// New SQL Database etc Feb 2022
+			//console.log(allFindData);
+			for (var i in allFindData  ) {
+		        var oneFind = allFindData[i];
+				for(var y in oneFind ) { // Get elements of JSON array
+					if(y == "Lat") {
+						var findlat = oneFind[y];
+					} else if (y == "Long") {
+						var findlon = oneFind[y];
+					} else if (y == "Name") {
+						var findname = oneFind[y];
+					} else if (y == "Number") {
+						var findnumber = oneFind[y];
+					} else if (y == "icon") {
+						var findicon = oneFind[y];
+					} else if (y == "desc") {
+						var finddesc = oneFind[y];
+					} else if (y == "Score") {
+						var findscore = oneFind[y];
+					}
+					var f = new ol.Feature({
+                      	geometry: new ol.geom.Point(ol.proj.transform([ + findlon, + findlat ], 'EPSG:4326', 'EPSG:3857')),
+                       	name: findname + '<br>' + findnumber
+					});
+					if (findicon === 'coin') {
+						f.setStyle(fCoin);
+					} else if (findicon === 'coins') {
+						f.setStyle(fCoins);
+					} else if  (findicon === 'coinr') {
 						f.setStyle(fCoinr);
+					} else if  (findicon === 'mil') {
+						f.setStyle(fMil);
+					} else if  (findicon === 'spec') {
+						f.setStyle(fSpec);
+					} else if  (findicon === 'spader') {
+						f.setStyle(fSpader);
 					} else {
-						if  (oneFind[4] === 'mil') {
-							f.setStyle(fMil);
-						} else {
-							if  (oneFind[4] === 'spec') {
-								f.setStyle(fSpec);
-							} else {
-								if  (oneFind[4] === 'spader') {
-									f.setStyle(fSpader);
-								} else {
-									f.setStyle(fSpade);
-								}
-							}
-						}
+						f.setStyle(fSpade);
 					}
 				}
-			}
-			MyFeatures.push(f);
-                    }
-	        }
-	}
-	//------------------------------------------------------------------------------------
-	// // AKISSACK Ref: AK9U ---------------------------------------------------- END
-	//------------------------------------------------------------------------------------
+				MyFeatures.push(f);
+			} // end of i in all find data
+        }
+		//------------------------------------------------------------------------------------
+		// // AKISSACK Ref: AK9U ---------------------------------------------------- END
+		//------------------------------------------------------------------------------------
+    }
 
         //------------------------------------------------------------------------------------
         // AKISSACK - HOVER OVER LABELS ------------------------------------- ref: AK6D starts
