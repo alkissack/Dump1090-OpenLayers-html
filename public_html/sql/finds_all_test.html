@@ -16,22 +16,27 @@
   $(function () 
   {
     $.ajax({                                      
-      url: 'finds_all_test.php',     
+      url: 'sql-finds-layer.php',     
       async: false ,    
-      data: "icao=43C041",  
+      data: "",  
       dataType: 'json',  
       success: function(retData)  
       {
         for (var i in retData)
         {
+          var oneFind = retData[i];  
         
-          var row = retData[i];          
+          for(var y in oneFind ) {  
+	     if(y == "Lat") {
+		var lat = oneFind[y];
+	     } else if (y == "Long") {
+		var lon = oneFind[y];
+	     } else if (y == "Name") {
+		var name = oneFind[y];
+	     }
+	 }
 
-          var name  = row[0];
-          var lat   = row[2];
-	  var lon   = row[3];
-          $('#output').append(name+" lat:"+lat+" lon:"+lon)
-                      .append("<br />");
+         $('#output').append(name+" lat:"+lat+" lon:"+lon).append("<br />");
         } 
       } 
 

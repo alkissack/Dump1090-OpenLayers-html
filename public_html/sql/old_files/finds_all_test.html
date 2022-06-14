@@ -7,30 +7,34 @@
   <!-------------------------------------------------------------------------
   1) Create some html content that can be accessed by jquery
   -------------------------------------------------------------------------->
-  <h2> Max Ranges </h2>
-  <h3> Get all data via: range_read.php</h3>
-  <div id="output">Results:<br><br></div>
+  <h2> Metal Detecting Finds </h2>
+  <h3> Get all data via: finds_all_test.php</h3>
+  <div id="output">Results (be patient, it's a big table):<br><br></div>
 
   <script id="source" language="javascript" type="text/javascript">
 
   $(function () 
   {
     $.ajax({                                      
-
-      url: 'range_read.php',     
+      url: 'finds_all_test.php',     
       async: false ,    
+      data: "icao=43C041",  
       dataType: 'json',  
-      success: function(returnedData) {
-        for (var i in returnedData) {
-          var oneBearing = returnedData[i];
-          for(var y in oneBearing) {  
-	     if(y == "bearing") {        var bearing = oneBearing[y];
-	     } else if (y == "maxrng") { var range   = oneBearing[y];
-	     }
-          }
-          $('#output').append(" Bearing: "+bearing+" Range: "+range).append("<br />");
-        }
-      }
+      success: function(retData)  
+      {
+        for (var i in retData)
+        {
+        
+          var row = retData[i];          
+
+          var name  = row[0];
+          var lat   = row[2];
+	  var lon   = row[3];
+          $('#output').append(name+" lat:"+lat+" lon:"+lon)
+                      .append("<br />");
+        } 
+      } 
+
     });
   }); 
 

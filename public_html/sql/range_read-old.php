@@ -1,18 +1,11 @@
 <?php 
-
   //----------------------------------------------------------
   // 1) Connect to mysql database
   //----------------------------------------------------------
-
   include 'sql_server.php';
-  //include 'sql_table_range.php';
-  $databaseName = "AllanK";
-  $tableName    = "ADSBRange";
-
-
+  include 'sql_table_range.php';
   $myCon = new mysqli($host,$user,$pass,$databaseName);
-
-  $i = $_GET["r"];
+  //$i = $_GET["r"];
   //----------------------------------------------------------
   // 2) Query database for data
   //----------------------------------------------------------

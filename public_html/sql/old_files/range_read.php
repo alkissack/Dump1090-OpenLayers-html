@@ -5,19 +5,20 @@
   //----------------------------------------------------------
 
   include 'sql_server.php';
-  //include 'sql_table_range.php';
-  $databaseName = "AllanK";
-  $tableName    = "ADSBRange";
+  include 'sql_table_range.php';
 
+  $con = mysql_connect($host,$user,$pass);
+  $dbs = mysql_select_db($databaseName, $con);
 
-  $myCon = new mysqli($host,$user,$pass,$databaseName);
-
-  $i = $_GET["r"];
+ 
   //----------------------------------------------------------
   // 2) Query database for data
   //----------------------------------------------------------
-  $myquery = "SELECT * FROM $tableName";
-  $result = $myCon->query($myquery);  
+  $qry = "SELECT `bearing`, `range` FROM $tableName WHERE 1 ORDER BY `range` DESC" ;
+
+  $result = mysql_query($qry); 
+  $array  = mysql_fetch_row($result);  
+
   //----------------------------------------------------------
   // 3) echo result as json 
   //----------------------------------------------------------
@@ -25,10 +26,10 @@
   //----------------------------------------------------------
   // or 4) Multiple rows
   //----------------------------------------------------------
-  for ($row_no = 0; $row_no < $result->num_rows ; $row_no++) {
-    $result->data_seek($row_no);
-    $row = $result->fetch_assoc();
-    $myData [] = $row;
+  while ( $row = mysql_fetch_row($result) )
+  {
+    $rngData[] = $row; 
   }
-  echo json_encode($myData);
+  echo json_encode( $rngData );
+
 ?>

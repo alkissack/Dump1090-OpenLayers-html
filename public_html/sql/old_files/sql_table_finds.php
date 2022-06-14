@@ -1,6 +1,6 @@
 <?php 
 
-  $databaseName = "AllanK";
+  $databaseName = "finds";
   $tableName    = "finds";
 
 ?>
