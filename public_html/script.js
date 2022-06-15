@@ -7,8 +7,8 @@ var StaticFeatures = new ol.Collection();
 var SiteCircleFeatures = new ol.Collection();
 var PlaneIconFeatures = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
-var MyFeatures = new ol.Collection(); // AKISSACK Ref: AK9U
-var MaxRangeFeatures = new ol.Collection(); // AKISSACK Ref: AK8A
+var MyFeatures = new ol.Collection();            // AKISSACK Ref: AK9U
+var MaxRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
 var SleafordRangeFeatures = new ol.Collection(); // AKISSACK Ref: AK8Z
 var Planes = {};
 var PlanesOrdered = [];
@@ -106,9 +106,7 @@ function processReceiverUpdate(data) {
     var squawk = ac.squawk;
     var plane = null;
 
-    // Do we already have this plane object in Planes?
-    // If not make it.
-
+    // Do we already have this plane object in Planes? If not make it.
     if (Planes[hex]) {
       plane = Planes[hex];
     } else {
@@ -116,8 +114,7 @@ function processReceiverUpdate(data) {
       plane.filter = PlaneFilter;
       plane.tr = PlaneRowTemplate.cloneNode(true);
 
-      if (hex[0] === "~") {
-        // Non-ICAO address
+      if (hex[0] === "~") { // Non-ICAO address
         plane.tr.cells[0].textContent = hex.substring(1);
         $(plane.tr).css("font-style", "italic");
       } else {
@@ -185,6 +182,7 @@ function fetchData() {
     cache: false,
     dataType: "json",
   });
+  
   FetchPending.done(function (data) {
     var now = data.now;
 
@@ -326,8 +324,7 @@ function initialize() {
     mapResizeTimeout = setTimeout(updateMapSize, 10);
   });
 
-  // Get receiver metadata, reconfigure using it, then continue
-  // with initialization
+  // Get receiver metadata, reconfigure using it, then continue with initialization
   $.ajax({
     url: EndpointDump1090 + "data/receiver.json",
     timeout: 5000,
@@ -355,7 +352,6 @@ function initialize() {
     });
 
   // AKISSACK Range plot - Now able to read from local (or session) storage if available Ref: AK8C
-
   if (
     sessionStorage.getItem("MaxRngLon") &&
     sessionStorage.getItem("MaxRngLat") &&
@@ -980,7 +976,7 @@ function initialize_map() {
     var rangeLayer = new ol.layer.Vector({
       name: "range",
       type: "overlay",
-      title: "Range",
+      title: "Max Range Likely",
       source: new ol.source.Vector({
         url: "layers/AK_range.geojson",
         format: new ol.format.GeoJSON({
@@ -999,12 +995,12 @@ function initialize_map() {
     var rangeLayer = new ol.layer.Vector({});
   }
 
-  if (ShowMaxRange) {
+  if (ShowRanges) {
     // AKISSACK Maximum Range Plot Ref: AK8D
     var maxRangeLayer = new ol.layer.Vector({
       name: "ranges",
       type: "overlay",
-      title: "Range Plot",
+      title: "Current Range Plot",
       source: new ol.source.Vector({
         features: MaxRangeFeatures,
       }),
@@ -1279,12 +1275,13 @@ function initialize_map() {
     // Max range we'll always show
     var styleMax = new ol.style.Style({
       stroke: new ol.style.Stroke({
-        color: "rgba(0,64,0, 1)",
+		lineDash: [2,4],
+        color: "rgba(0,0,64, 2)",
         width: 0.5,
       }),
-      fill: new ol.style.Fill({
-        color: "rgba(0,255,0, 0.02)",
-      }),
+      //fill: new ol.style.Fill({
+      //  color: "rgba(0,0,255, 0.07)",
+      //}),
     });
 
     var rfeatureMax = new ol.Feature({
@@ -1298,11 +1295,12 @@ function initialize_map() {
     if (MidRangeHeight > 0) {
       var styleMid = new ol.style.Style({
         stroke: new ol.style.Stroke({
-          color: "rgba(0,64,0, 1)",
+          lineDash: [2,4],
+          color: "rgba(0,64,0, 2)",
           width: 0.5,
         }),
         fill: new ol.style.Fill({
-          color: "rgba(0,255,0, 0.01)",
+          color: "rgba(0,255,0, 0.07)",
         }),
       });
 
@@ -1317,11 +1315,12 @@ function initialize_map() {
     if (MinRangeHeight > 0) {
       var styleMin = new ol.style.Style({
         stroke: new ol.style.Stroke({
-          color: "rgba(64,0,0, 1)",
+          lineDash: [2,4],
+          color: "rgba(64,0,0, 2)",
           width: 0.5,
         }),
         fill: new ol.style.Fill({
-          color: "rgba(255,0,0, 0.01)",
+          color: "rgba(255,0,0, 0.07)",
         }),
       });
 
@@ -1382,7 +1381,8 @@ function initialize_map() {
     });
 
     $(
-      function () //-----------------------------------------------------------------------
+      function () 
+	  //-----------------------------------------------------------------------
       // Send a http request with AJAX http://api.jquery.com/jQuery.ajax/
       // install: apt-get install mysql-client php5-mysql
       //-----------------------------------------------------------------------
@@ -2216,7 +2216,7 @@ function refreshTableInfo() {
     geometry: new ol.geom.Polygon([polyCoords]),
   });
   rangeFeature.setStyle(style);
-  if (ShowMaxRange) {
+  if (MaxRangeShow) {
     MaxRangeFeatures.push(rangeFeature);
   }
 
@@ -2240,7 +2240,7 @@ function refreshTableInfo() {
     geometry: new ol.geom.Polygon([polyCoords]),
   });
   rangeFeature.setStyle(style);
-  if (MidRangeHeight > 0) {
+  if (MidRangeShow) {
     MaxRangeFeatures.push(rangeFeature);
   } // Medium range
 
@@ -2264,7 +2264,8 @@ function refreshTableInfo() {
     geometry: new ol.geom.Polygon([polyCoords]),
   });
   rangeFeature.setStyle(style);
-  if (MinRangeHeight > 0) {
+  //if (MinRangeHeight > 0) {
+  if (MinRangeShow) {
     MaxRangeFeatures.push(rangeFeature);
   } // Minimum range
 }

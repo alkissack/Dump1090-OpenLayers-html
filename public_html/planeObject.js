@@ -702,12 +702,12 @@ PlaneObject.prototype.updateTick = function (
         // AKISSACK store range plot details  Ref AK8H
         // ------------------------------------------------
 		
-		// MINUMUM RANGE RINGS
+		// MINUMUM RANGE RINGS - MinRangeHeight is set in config.js as the upper bound for this ring
+		//                     - MinRangeLikely is set in config.js and is maximum likely distance for MinRangeHeight    
         if (this.altitude <= MinRangeHeight) {
           if (
-            MinRngRange[this.siteBearing] < this.siteNm &&
-            this.siteNm < MinRangeLikely
-          ) {
+            MinRngRange[this.siteBearing] < this.siteNm && this.siteNm < MinRangeLikely
+          ) {  // Update sessionStorage and also update MariaDb if in use
             MinRngRange[this.siteBearing] = this.siteNm;
             MinRngLat[this.siteBearing] = this.position[1];
             MinRngLon[this.siteBearing] = this.position[0];
@@ -715,7 +715,7 @@ PlaneObject.prototype.updateTick = function (
             sessionStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
             sessionStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
 			//console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MIN");
-            if (SleafordMySql && this.siteNm < MinRangeLikely) {
+            if (SleafordMySql) {
 			  //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.fl);
               updateMySqlRange(
                 "min",
@@ -730,11 +730,11 @@ PlaneObject.prototype.updateTick = function (
           }
         }
 		
-        // MIDDLE RANGE RINGS
+		// MIDDLE RANGE RINGS  - MidRangeHeight is set in config.js as the upper bound for this ring
+		//                     - MidRangeLikely is set in config.js and is maximum likely distance for MidRangeHeight    
         if (this.altitude <= MidRangeHeight) {
           if (
-            MidRngRange[this.siteBearing] < this.siteNm &&
-            this.siteNm < MidRangeLikely
+            MidRngRange[this.siteBearing] < this.siteNm && this.siteNm < MidRangeLikely
           ) {
             MidRngRange[this.siteBearing] = this.siteNm;
             MidRngLat[this.siteBearing] = this.position[1];
@@ -743,7 +743,7 @@ PlaneObject.prototype.updateTick = function (
             sessionStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
             sessionStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));
 			//console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID");
-            if (SleafordMySql && this.siteNm < MidRangeLikely) {
+            if (SleafordMySql ) {
 			  //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.altitude);
               updateMySqlRange(
                 "mid",
@@ -758,11 +758,12 @@ PlaneObject.prototype.updateTick = function (
           }
         }
 		
-        // MAXIMUM RANGE RINGS
+		// MAXIMUM RANGE RINGS - MaxRangeHeight is set in config.js as the upper bound for this ring. 
+		//                     - MaxRangeLikely is set in config.js and is maximum likely distance for MaxRangeHeight   
+        //                     - These are theoretical absolute maximums to weed out bad plots		
         if (this.altitude <= MaxRangeHeight) {
           if (
-            MaxRngRange[this.siteBearing] < this.siteNm &&
-            this.siteNm < MaxRangeLikely
+            MaxRngRange[this.siteBearing] < this.siteNm && this.siteNm < MaxRangeLikely
           ) {
             MaxRngRange[this.siteBearing] = this.siteNm;
             MaxRngLat[this.siteBearing] = this.position[1];
@@ -771,7 +772,7 @@ PlaneObject.prototype.updateTick = function (
             sessionStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
             sessionStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));
 			console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX");
-            if (SleafordMySql && this.siteNm < MaxRangeLikely) {
+            if (SleafordMySql) {
 			  console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX "+this.altitude);
               updateMySqlRange(
                 "max",

@@ -164,17 +164,20 @@ ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
 ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
-ShowMaxRange         = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
+ShowRanges           = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 
 			       // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
-MinRangeHeight	     = 10000 ; // ft - inner range ring - Set -1 to disable
-MinRangeLikely 	     =   170 ; // nm - practical max (to supress spikes from bad data)
+MinRangeHeight	     =  2000 ; // ft - inner range ring - Set -1 to disable collection
+MinRangeLikely 	     =    75 ; // nm - practical max (to supress spikes from bad data)
+MinRangeShow         = true ; // set to show min range currently captured (assuming MinRangeHeight is set too)
 
-MidRangeHeight	     = 20000 ; // ft - mid range ring - Set -1 to disable
-MidRangeLikely 	     =   220 ; // nm - practical max
+MidRangeHeight	     = 10000 ; // ft - mid range ring - Set -1 to disable collection
+MidRangeLikely 	     =   125 ; // nm - practical max
+MidRangeShow         = true ; // set to show mid range currently captured (assuming MidRangeHeight is set too)
 
-MaxRangeHeight       = 60000 ; 
-MaxRangeLikely 	     =   400 ; // nm - practical max 300
+MaxRangeHeight       = 50000 ; 
+MaxRangeLikely 	     =   300 ; // nm - practical max 300
+MaxRangeShow         =  true ; // set to show max range currently captured 
 
 RangeLine	     =     1 ; // Line width for range plot
 
