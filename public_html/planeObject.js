@@ -705,15 +705,19 @@ PlaneObject.prototype.updateTick = function (
 		// MINUMUM RANGE RINGS - MinRangeHeight is set in config.js as the upper bound for this ring
 		//                     - MinRangeLikely is set in config.js and is maximum likely distance for MinRangeHeight    
         if (this.altitude <= MinRangeHeight) {
-          if (
-            MinRngRange[this.siteBearing] < this.siteNm && this.siteNm < MinRangeLikely
-          ) {  // Update sessionStorage and also update MariaDb if in use
+          if ( MinRngRange[this.siteBearing] < this.siteNm && this.siteNm < MinRangeLikely ) {  // Update sessionStorage and also update MariaDb if in use
             MinRngRange[this.siteBearing] = this.siteNm;
             MinRngLat[this.siteBearing] = this.position[1];
             MinRngLon[this.siteBearing] = this.position[0];
-            sessionStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
-            sessionStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
-            sessionStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
+			if (TypeOfStorageSession == 'Session') {
+                sessionStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
+                sessionStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
+                sessionStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
+			} else {
+                localStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
+                localStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
+                localStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));				
+			}
 			//console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MIN");
             if (SleafordMySql) {
 			  //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.fl);
@@ -733,15 +737,19 @@ PlaneObject.prototype.updateTick = function (
 		// MIDDLE RANGE RINGS  - MidRangeHeight is set in config.js as the upper bound for this ring
 		//                     - MidRangeLikely is set in config.js and is maximum likely distance for MidRangeHeight    
         if (this.altitude <= MidRangeHeight) {
-          if (
-            MidRngRange[this.siteBearing] < this.siteNm && this.siteNm < MidRangeLikely
-          ) {
+          if (MidRngRange[this.siteBearing] < this.siteNm && this.siteNm < MidRangeLikely) {
             MidRngRange[this.siteBearing] = this.siteNm;
             MidRngLat[this.siteBearing] = this.position[1];
             MidRngLon[this.siteBearing] = this.position[0];
-            sessionStorage.setItem("MidRngRange", JSON.stringify(MidRngRange));
-            sessionStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
-            sessionStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));
+			if (TypeOfStorageSession == 'Session') {
+				sessionStorage.setItem("MidRngRange", JSON.stringify(MidRngRange));
+				sessionStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
+				sessionStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));
+			} else {
+				localStorage.setItem("MidRngRange", JSON.stringify(MidRngRange));
+				localStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
+				localStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));				
+			}
 			//console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID");
             if (SleafordMySql ) {
 			  //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.altitude);
@@ -762,15 +770,19 @@ PlaneObject.prototype.updateTick = function (
 		//                     - MaxRangeLikely is set in config.js and is maximum likely distance for MaxRangeHeight   
         //                     - These are theoretical absolute maximums to weed out bad plots		
         if (this.altitude <= MaxRangeHeight) {
-          if (
-            MaxRngRange[this.siteBearing] < this.siteNm && this.siteNm < MaxRangeLikely
-          ) {
+          if ( MaxRngRange[this.siteBearing] < this.siteNm && this.siteNm < MaxRangeLikely) {
             MaxRngRange[this.siteBearing] = this.siteNm;
             MaxRngLat[this.siteBearing] = this.position[1];
             MaxRngLon[this.siteBearing] = this.position[0];
-            sessionStorage.setItem("MaxRngRange", JSON.stringify(MaxRngRange));
-            sessionStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
-            sessionStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));
+			if (TypeOfStorageSession == 'Session') {
+				sessionStorage.setItem("MaxRngRange", JSON.stringify(MaxRngRange));
+				sessionStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
+				sessionStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));
+			} else {
+				localStorage.setItem("MaxRngRange", JSON.stringify(MaxRngRange));
+				localStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
+				localStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));				
+			}
 			console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX");
             if (SleafordMySql) {
 			  console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX "+this.altitude);

@@ -351,56 +351,89 @@ function initialize() {
       start_load_history();
     });
 
-  // AKISSACK Range plot - Now able to read from local (or session) storage if available Ref: AK8C
-  if (
-    sessionStorage.getItem("MaxRngLon") &&
-    sessionStorage.getItem("MaxRngLat") &&
-    sessionStorage.getItem("MaxRngRange")
-  ) {
-    console.log("Loading max range");
-    MaxRngLat = JSON.parse(sessionStorage.getItem("MaxRngLat"));
-    MaxRngLon = JSON.parse(sessionStorage.getItem("MaxRngLon"));
-    MaxRngRange = JSON.parse(sessionStorage.getItem("MaxRngRange"));
-  } else {
-	console.log("Setting up max range");
-    for (var j = 0; j < 360; j++) {
-      MaxRngRange[j] = 0;
-      MaxRngLat[j] = SiteLat;
-      MaxRngLon[j] = SiteLon;
-    }
-  }
-  if (
-    sessionStorage.getItem("MidRngLon") &&
-    sessionStorage.getItem("MidRngLat") &&
-    sessionStorage.getItem("MidRngRange")
-  ) {
-    //console.log("Loading mid range");
-    MidRngLat = JSON.parse(sessionStorage.getItem("MidRngLat"));
-    MidRngLon = JSON.parse(sessionStorage.getItem("MidRngLon"));
-    MidRngRange = JSON.parse(sessionStorage.getItem("MidRngRange"));
-  } else {
-    for (var j = 0; j < 360; j++) {
-      MidRngRange[j] = 0;
-      MidRngLat[j] = SiteLat;
-      MidRngLon[j] = SiteLon;
-    }
-  }
-  if (
-    sessionStorage.getItem("MinRngLon") &&
-    sessionStorage.getItem("MinRngLat") &&
-    sessionStorage.getItem("MinRngRange")
-  ) {
-    //console.log("Loading min range");
-    MinRngLat = JSON.parse(sessionStorage.getItem("MinRngLat"));
-    MinRngLon = JSON.parse(sessionStorage.getItem("MinRngLon"));
-    MinRngRange = JSON.parse(sessionStorage.getItem("MinRngRange"));
-  } else {
-    for (var j = 0; j < 360; j++) {
-      MinRngRange[j] = 0;
-      MinRngLat[j] = SiteLat;
-      MinRngLon[j] = SiteLon;
-    }
-  }
+// AKISSACK Range plot - Now able to read from local (or session) storage if available Ref: AK8C
+    if (TypeOfStorageSession == 'Session') {
+	    if (sessionStorage.getItem("MaxRngLon") && sessionStorage.getItem("MaxRngLat") && sessionStorage.getItem("MaxRngRange")) {
+			console.log("Loading max range");
+			MaxRngLat = JSON.parse(sessionStorage.getItem("MaxRngLat"));
+			MaxRngLon = JSON.parse(sessionStorage.getItem("MaxRngLon"));
+			MaxRngRange = JSON.parse(sessionStorage.getItem("MaxRngRange"));
+		} else {
+			//console.log("Setting up max range");
+			for (var j = 0; j < 360; j++) {
+				MaxRngRange[j] = 0;
+				MaxRngLat[j] = SiteLat;
+				MaxRngLon[j] = SiteLon;
+			}
+		}
+		
+		if (sessionStorage.getItem("MidRngLon") && sessionStorage.getItem("MidRngLat") && sessionStorage.getItem("MidRngRange") ) {
+			//console.log("Loading mid range");
+			MidRngLat = JSON.parse(sessionStorage.getItem("MidRngLat"));
+			MidRngLon = JSON.parse(sessionStorage.getItem("MidRngLon"));
+			MidRngRange = JSON.parse(sessionStorage.getItem("MidRngRange"));
+		} else {
+			for (var j = 0; j < 360; j++) {
+				MidRngRange[j] = 0;
+				MidRngLat[j] = SiteLat;
+				MidRngLon[j] = SiteLon;
+			}
+		}
+		
+		if (sessionStorage.getItem("MinRngLon") && sessionStorage.getItem("MinRngLat") && sessionStorage.getItem("MinRngRange") ) {
+			//console.log("Loading min range");
+			MinRngLat = JSON.parse(sessionStorage.getItem("MinRngLat"));
+			MinRngLon = JSON.parse(sessionStorage.getItem("MinRngLon"));
+			MinRngRange = JSON.parse(sessionStorage.getItem("MinRngRange"));
+		} else {
+			for (var j = 0; j < 360; j++) {
+				MinRngRange[j] = 0;
+				MinRngLat[j] = SiteLat;
+				MinRngLon[j] = SiteLon;
+			}
+		}
+	} else {
+	    if (localStorage.getItem("MaxRngLon") && localStorage.getItem("MaxRngLat") && localStorage.getItem("MaxRngRange")) {
+			console.log("Loading max range");
+			MaxRngLat = JSON.parse(localStorage.getItem("MaxRngLat"));
+			MaxRngLon = JSON.parse(localStorage.getItem("MaxRngLon"));
+			MaxRngRange = JSON.parse(localStorage.getItem("MaxRngRange"));
+		} else {
+			//console.log("Setting up max range");
+			for (var j = 0; j < 360; j++) {
+				MaxRngRange[j] = 0;
+				MaxRngLat[j] = SiteLat;
+				MaxRngLon[j] = SiteLon;
+			}
+		}
+		
+		if (localStorage.getItem("MidRngLon") && localStorage.getItem("MidRngLat") && localStorage.getItem("MidRngRange") ) {
+			//console.log("Loading mid range");
+			MidRngLat = JSON.parse(localStorage.getItem("MidRngLat"));
+			MidRngLon = JSON.parse(localStorage.getItem("MidRngLon"));
+			MidRngRange = JSON.parse(localStorage.getItem("MidRngRange"));
+		} else {
+			for (var j = 0; j < 360; j++) {
+				MidRngRange[j] = 0;
+				MidRngLat[j] = SiteLat;
+				MidRngLon[j] = SiteLon;
+			}
+		}
+		
+		if (localStorage.getItem("MinRngLon") && localStorage.getItem("MinRngLat") && localStorage.getItem("MinRngRange") ) {
+			//console.log("Loading min range");
+			MinRngLat = JSON.parse(localStorage.getItem("MinRngLat"));
+			MinRngLon = JSON.parse(localStorage.getItem("MinRngLon"));
+			MinRngRange = JSON.parse(localStorage.getItem("MinRngRange"));
+		} else {
+			for (var j = 0; j < 360; j++) {
+				MinRngRange[j] = 0;
+				MinRngLat[j] = SiteLat;
+				MinRngLon[j] = SiteLon;
+			}
+		}
+	}
+
 }
 
 var CurrentHistoryFetch = null;

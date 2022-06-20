@@ -121,7 +121,7 @@ ChartBundleLayers = true;
 // Be sure to quote your key:
 //   BingMapsAPIKey = "your key here";
 //
-BingMapsAPIKey = "";
+BingMapsAPIKey = null;
 
 // Provide a Mapzen API key here to enable the Mapzen vector tile layer.
 // You can obtain a free key at https://mapzen.com/developers/
@@ -131,7 +131,6 @@ BingMapsAPIKey = "";
 //   MapzenAPIKey = "your key here";
 //
 MapzenAPIKey = null;
-
 
 UseDefaultTerrianRings  = true;         // default Terrian rings color, otherwise colored by altitude (color defined in TerrianColorByAlt)
 UseTerrianLineDash      = false;        // true: dashed or false: solid terrian rings
@@ -166,7 +165,7 @@ ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLaye
 ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
 ShowRanges           = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 
-			       // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
+			         // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
 MinRangeHeight	     =  2000 ; // ft - inner range ring - Set -1 to disable collection
 MinRangeLikely 	     =    75 ; // nm - practical max (to supress spikes from bad data)
 MinRangeShow         = true ; // set to show min range currently captured (assuming MinRangeHeight is set too)
@@ -180,6 +179,8 @@ MaxRangeLikely 	     =   300 ; // nm - practical max 300
 MaxRangeShow         =  true ; // set to show max range currently captured 
 
 RangeLine	     =     1 ; // Line width for range plot
+
+TypeOfStorageSession = 'Local' ;  // Local or Session - Session applies per browser session, Local persists for the browser if closed and reopened.
 
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
@@ -202,6 +203,6 @@ ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-ind
 //           PRIVATE OPTIONS
 // ----------------------------------------------------------------------------------------------------------------------------
 ShowMyFindsLayer     = false;	// Private plot (non-aircraft related)
-ShowSleafordRange    = false;	// This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
-SleafordMySql        = false;	// Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
+ShowSleafordRange    = false;   // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
+SleafordMySql        = false;   // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------
