@@ -9,6 +9,8 @@ var PlaneIconFeatures = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
 var MyFeatures = new ol.Collection();            // AKISSACK Ref: AK9U
 var MaxRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
+var MidRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
+var MinRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
 var SleafordRangeFeatures = new ol.Collection(); // AKISSACK Ref: AK8Z
 var Planes = {};
 var PlanesOrdered = [];
@@ -83,10 +85,7 @@ function processReceiverUpdate(data) {
   var acs = data.aircraft;
 
   // Detect stats reset
-  if (
-    MessageCountHistory.length > 0 &&
-    MessageCountHistory[MessageCountHistory.length - 1].messages > data.messages
-  ) {
+  if (MessageCountHistory.length > 0 && MessageCountHistory[MessageCountHistory.length - 1].messages > data.messages) {
     MessageCountHistory = [
       {
         time: MessageCountHistory[MessageCountHistory.length - 1].time,
@@ -438,6 +437,7 @@ function initialize() {
 
 var CurrentHistoryFetch = null;
 var PositionHistoryBuffer = [];
+
 function start_load_history() {
   if (PositionHistorySize > 0 && window.location.hash != "#nohistory") {
     $("#loader_progress").attr("max", PositionHistorySize);
@@ -502,7 +502,6 @@ function end_load_history() {
         var plane = PlanesOrdered[i];
         plane.updateTrack(now - last + 1);
       }
-
       last = now;
     }
 
@@ -512,7 +511,6 @@ function end_load_history() {
       var plane = PlanesOrdered[i];
       plane.updateTick(now);
     }
-
     LastReceiverTimestamp = last;
   }
 
@@ -593,7 +591,6 @@ function initialize_map() {
   }
 
   // Initialize OL3
-
   var layers = createBaseLayers();
 
   // --------------------------------------------------------------
@@ -949,25 +946,6 @@ function initialize_map() {
     );
   }
 
-  if (ShowMyFindsLayer && SleafordMySql) {
-    // AKISSACK Ref: AK9U
-    var myLayer = new ol.layer.Vector({
-      name: "my_layer",
-      type: "overlay",
-      title: "My Layer",
-      source: new ol.source.Vector({
-        features: MyFeatures,
-      }),
-    });
-
-    layers.push(
-      new ol.layer.Group({
-        title: "Private",
-        layers: [myLayer],
-      })
-    );
-  }
-
   // --------------------------------------------------------------
   // AKISSACK - ADD LAYERS ----------------------  ref: AK5A ends
   // --------------------------------------------------------------
@@ -1029,48 +1007,94 @@ function initialize_map() {
   }
 
   if (ShowRanges) {
-    // AKISSACK Maximum Range Plot Ref: AK8D
+    // AKISSACK Maximum, mid and min Range Plots Ref: AK8D
     var maxRangeLayer = new ol.layer.Vector({
       name: "ranges",
       type: "overlay",
-      title: "Current Range Plot",
+      title: "Current Max Range Plot",
       source: new ol.source.Vector({
         features: MaxRangeFeatures,
       }),
     });
+	
+    if (MidRangeShow && MidRangeHeight > 0) {
+		var midRangeLayer = new ol.layer.Vector({
+			name: "ranges2",
+			type: "overlay",
+			title: "Current Mid Range Plot",
+			source: new ol.source.Vector({
+				features: MidRangeFeatures,
+			}),
+		});
+	} else var midRangeLayer = new ol.layer.Vector({});
+	
+	if (MinRangeShow && MinRangeHeight > 0) {
+		var minRangeLayer = new ol.layer.Vector({
+			name: "ranges3",
+			type: "overlay",
+			title: "Current Min Range Plot",
+			source: new ol.source.Vector({
+				features: MinRangeFeatures,
+			}),
+		});
+	} else var minRangeLayer = new ol.layer.Vector({});
+	
   } else {
     var maxRangeLayer = new ol.layer.Vector({});
+    var midRangeLayer = new ol.layer.Vector({});
+    var minRangeLayer = new ol.layer.Vector({});
   }
 
   layers.push(
-    new ol.layer.Group({
-      title: "Overlays",
-      layers: [
-        new ol.layer.Vector({
-          name: "site_pos",
-          type: "overlay",
-          title: "Site position and range rings",
-          source: new ol.source.Vector({
-            features: StaticFeatures,
-          }),
-        }),
-
-        new ol.layer.Vector({
-          name: "ac_trail",
-          type: "overlay",
-          title: "Selected aircraft trail",
-          source: new ol.source.Vector({
-            features: PlaneTrailFeatures,
-          }),
-        }),
-        rangeLayer,
-        maxRangeLayer,      // Ref: AK8D
-        SleafordRangeLayer, // Ref: AK8Y
-        iconsLayer,
-      ],
-    })
+	new ol.layer.Group({
+	title: "Overlays",
+	layers: [
+		new ol.layer.Vector({
+			name: "site_pos",
+			type: "overlay",
+			title: "Site position and range rings",
+			source: new ol.source.Vector({
+				features: StaticFeatures,
+			}),
+		}),
+		new ol.layer.Vector({
+			name: "ac_trail",
+			type: "overlay",
+			title: "Selected aircraft trail",
+			source: new ol.source.Vector({
+				features: PlaneTrailFeatures,
+			}),
+		}),
+		rangeLayer,
+		maxRangeLayer,      // Ref: AK8D
+		midRangeLayer,      // Ref: AK8D
+		minRangeLayer,      // Ref: AK8D
+		SleafordRangeLayer, // Ref: AK8Y
+		iconsLayer,
+	],
+	})
   );
 
+
+  if (ShowMyFindsLayer && SleafordMySql) {
+    // AKISSACK Ref: AK9U
+    var myLayer = new ol.layer.Vector({
+      name: "my_layer",
+      type: "overlay",
+      title: "My Layer",
+      source: new ol.source.Vector({
+        features: MyFeatures,
+      }),
+    });
+
+    layers.push(
+      new ol.layer.Group({
+        title: "Private",
+        layers: [myLayer],
+      })
+    );
+  }
+  
   var foundType = false;
 
   ol.control.LayerSwitcher.forEachRecursive(layers, function (lyr) {
@@ -1325,7 +1349,7 @@ function initialize_map() {
     SleafordRangeFeatures.push(rfeatureMax);
 
     // mid range only if user has set height constant
-    if (MidRangeHeight > 0) {
+    if (MidRangeShow && MidRangeHeight > 0) {
       var styleMid = new ol.style.Style({
         stroke: new ol.style.Stroke({
           lineDash: [2,4],
@@ -1345,7 +1369,7 @@ function initialize_map() {
     }
 
     // minimum range only if user has set height constant
-    if (MinRangeHeight > 0) {
+    if (MinRangeShow && MinRangeHeight > 0) {
       var styleMin = new ol.style.Style({
         stroke: new ol.style.Stroke({
           lineDash: [2,4],
@@ -2225,8 +2249,10 @@ function refreshTableInfo() {
 
   resortTable();
 
-  // AKISSACK - Range Plot Ref: AK8E
+  // AKISSACK - Range Plots Ref: AK8E
   MaxRangeFeatures.clear();
+  MidRangeFeatures.clear();
+  MinRangeFeatures.clear();
 
   // MAXIMUM ------------------------------------
   var style = new ol.style.Style({
@@ -2273,8 +2299,8 @@ function refreshTableInfo() {
     geometry: new ol.geom.Polygon([polyCoords]),
   });
   rangeFeature.setStyle(style);
-  if (MidRangeShow) {
-    MaxRangeFeatures.push(rangeFeature);
+  if (MidRangeShow && MidRangeHeight > 0) {
+    MidRangeFeatures.push(rangeFeature);
   } // Medium range
 
   // MINIMUM ------------------------------------
@@ -2298,8 +2324,8 @@ function refreshTableInfo() {
   });
   rangeFeature.setStyle(style);
   //if (MinRangeHeight > 0) {
-  if (MinRangeShow) {
-    MaxRangeFeatures.push(rangeFeature);
+  if (MinRangeShow && MinRangeHeight > 0) {
+    MinRangeFeatures.push(rangeFeature);
   } // Minimum range
 }
 
@@ -2962,7 +2988,6 @@ function getFlightAwareIdentLink(ident, linkText) {
       "</a>"
     );
   }
-
   return "";
 }
 
@@ -2985,7 +3010,6 @@ function getFlightAwareModeSLink(code, ident, linkText) {
     linkHtml += '/redirect">' + linkText + "</a>";
     return linkHtml;
   }
-
   return "";
 }
 
@@ -2997,7 +3021,6 @@ function getFlightAwarePhotoLink(registration) {
       '">See Photos</a>'
     );
   }
-
   return "";
 }
 
@@ -3009,7 +3032,6 @@ function getJetPhotosPhotoLink(registration) {
       '">See Photos</a>'
     );
   }
-
   return "";
 }
 
@@ -3028,7 +3050,6 @@ function getAirframesModeSLink(code) {
       "</a>"
     );
   }
-
   return "";
 }
 

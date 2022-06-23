@@ -783,9 +783,9 @@ PlaneObject.prototype.updateTick = function (
 				localStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
 				localStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));				
 			}
-			console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX");
+			//console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX");
             if (SleafordMySql) {
-			  console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX "+this.altitude);
+			  //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX "+this.altitude);
               updateMySqlRange(
                 "max",
                 this.siteBearing,
