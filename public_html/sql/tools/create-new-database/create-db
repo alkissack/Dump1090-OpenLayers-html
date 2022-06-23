@@ -12,8 +12,9 @@
 echo "----------------------"
 echo "|    Get new csv     |"
 echo "----------------------"
-rm data1.csv
-cp /var/lib/mysql-files/data1.csv ./
+rm dataold.csv
+cp data1.csv dataold.csv
+mv /var/lib/mysql-files/data1.csv ./
 
 echo "----------------------"
 echo "|  Add Header to csv |"
