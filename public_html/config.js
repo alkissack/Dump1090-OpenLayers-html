@@ -133,11 +133,11 @@ BingMapsAPIKey = "";
 MapzenAPIKey = null;
 
 
-UseDefaultTerrianRings  = true;         // default Terrian rings color, otherwise colored by altitude (color defined in TerrianColorByAlt)
-UseTerrianLineDash      = false;        // true: dashed or false: solid terrian rings
-TerrianLineWidth        = 1;            // line width of terrian rings
-TerrianAltitudes        = [9842,39370]; // altitudes in ft as in alt parameter TerrianColorByAlt, replace XXXXXXX with your code: sudo wget -O /usr/share/dump1090-fa/html/upintheair.json "www.heywhatsthat.com/api/upintheair.json?id=XXXXXXX&refraction=0.25&alts=3000,12000" 
-TerrianColorByAlt       = {             // colours depending on altitude (UseDefaultTerrianRings must be false and TerrianAltitudes must be set), default same as colours of planes in air, alt in ft
+UseDefaultTerrainRings  = true;         // default Terrian rings color, otherwise colored by altitude (color defined in TerrainColorByAlt)
+UseTerrainLineDash      = true ;        // true: dashed or false: solid terrain rings
+TerrainLineWidth        = 1;            // line width of terrain rings
+TerrainAltitudes        = [9842,39370]; // altitudes in ft as in alt parameter TerrainColorByAlt, replace XXXXXXX with your code: sudo wget -O /usr/share/dump1090-fa/html/upintheair.json "www.heywhatsthat.com/api/upintheair.json?id=XXXXXXX&refraction=0.25&alts=3000,12000" 
+TerrainColorByAlt       = {             // colours depending on altitude (UseDefaultTerrainRings must be false and TerrainAltitudes must be set), default same as colours of planes in air, alt in ft
         h: [ { alt: 2000,  val: 20 },    // orange
              { alt: 10000, val: 140 },   // light green
              { alt: 40000, val: 300 } ], // magenta
@@ -175,7 +175,7 @@ MidRangeHeight	     = 10000 ; // ft - mid range ring - Set -1 to disable collect
 MidRangeLikely 	     =   125 ; // nm - practical max
 MidRangeShow         = true ; // set to show mid range currently captured (assuming MidRangeHeight is set too)
 
-MaxRangeHeight       = 50000 ; 
+MaxRangeHeight       = 99999 ; 
 MaxRangeLikely 	     =   300 ; // nm - practical max 300
 MaxRangeShow         =  true ; // set to show max range currently captured 
 
@@ -205,5 +205,5 @@ ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-ind
 // ----------------------------------------------------------------------------------------------------------------------------
 ShowMyFindsLayer     = false ;	// Private plot (non-aircraft related)
 ShowSleafordRange    = false ;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
-SleafordMySql        = false ;   // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
+SleafordMySql        = false ;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------

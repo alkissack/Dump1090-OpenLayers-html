@@ -702,25 +702,25 @@ PlaneObject.prototype.updateTick = function (
         // AKISSACK store range plot details  Ref AK8H
         // ------------------------------------------------
 		
-		// MINUMUM RANGE RINGS - MinRangeHeight is set in config.js as the upper bound for this ring
-		//                     - MinRangeLikely is set in config.js and is maximum likely distance for MinRangeHeight    
+        // MINUMUM RANGE RINGS - MinRangeHeight is set in config.js as the upper bound for this ring
+        //                     - MinRangeLikely is set in config.js and is maximum likely distance for MinRangeHeight    
         if (this.altitude <= MinRangeHeight) {
           if ( MinRngRange[this.siteBearing] < this.siteNm && this.siteNm < MinRangeLikely ) {  // Update sessionStorage and also update MariaDb if in use
             MinRngRange[this.siteBearing] = this.siteNm;
             MinRngLat[this.siteBearing] = this.position[1];
             MinRngLon[this.siteBearing] = this.position[0];
-			if (TypeOfStorageSession == 'Session') {
+              if (TypeOfStorageSession == 'Session') {
                 sessionStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
                 sessionStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
                 sessionStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
-			} else {
+              } else {
                 localStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
                 localStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
                 localStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));				
-			}
-			//console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MIN");
+              }
+              //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MIN");
             if (SleafordMySql) {
-			  //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.fl);
+              //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.fl);
               updateMySqlRange(
                 "min",
                 this.siteBearing,
@@ -734,8 +734,8 @@ PlaneObject.prototype.updateTick = function (
           }
         }
 		
-		// MIDDLE RANGE RINGS  - MidRangeHeight is set in config.js as the upper bound for this ring
-		//                     - MidRangeLikely is set in config.js and is maximum likely distance for MidRangeHeight    
+        // MIDDLE RANGE RINGS  - MidRangeHeight is set in config.js as the upper bound for this ring
+        //                     - MidRangeLikely is set in config.js and is maximum likely distance for MidRangeHeight    
         if (this.altitude <= MidRangeHeight) {
           if (MidRngRange[this.siteBearing] < this.siteNm && this.siteNm < MidRangeLikely) {
             MidRngRange[this.siteBearing] = this.siteNm;
@@ -766,8 +766,8 @@ PlaneObject.prototype.updateTick = function (
           }
         }
 		
-		// MAXIMUM RANGE RINGS - MaxRangeHeight is set in config.js as the upper bound for this ring. 
-		//                     - MaxRangeLikely is set in config.js and is maximum likely distance for MaxRangeHeight   
+        // MAXIMUM RANGE RINGS - MaxRangeHeight is set in config.js as the upper bound for this ring. 
+        //                     - MaxRangeLikely is set in config.js and is maximum likely distance for MaxRangeHeight   
         //                     - These are theoretical absolute maximums to weed out bad plots		
         if (this.altitude <= MaxRangeHeight) {
           if ( MaxRngRange[this.siteBearing] < this.siteNm && this.siteNm < MaxRangeLikely) {

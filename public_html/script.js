@@ -350,7 +350,7 @@ function initialize() {
       start_load_history();
     });
 
-// AKISSACK Range plot - Now able to read from local (or session) storage if available Ref: AK8C
+    // AKISSACK Range plot - Now able to read from local (or session) storage if available Ref: AK8C
     if (TypeOfStorageSession == 'Session') {
 	    if (sessionStorage.getItem("MaxRngLon") && sessionStorage.getItem("MaxRngLat") && sessionStorage.getItem("MaxRngRange")) {
 			console.log("Loading max range");
@@ -578,14 +578,14 @@ function initialize_map() {
     sortByDistance();
   } else {
     SitePosition = null;
-    PlaneRowTemplate.cells[9].style.display = "none"; // hide distance column
+    PlaneRowTemplate.cells[9].style.display = "none";           // hide distance column
     document.getElementById("distance").style.display = "none"; // hide distance header
     sortByAltitude();
   }
 
   // Maybe hide flag info
   if (!ShowFlags) {
-    PlaneRowTemplate.cells[1].style.display = "none"; // hide flag column
+    PlaneRowTemplate.cells[1].style.display = "none";       // hide flag column
     document.getElementById("flag").style.display = "none"; // hide flag header
     document.getElementById("infoblock_country").style.display = "none"; // hide country row
   }
@@ -1140,9 +1140,10 @@ function initialize_map() {
   OLMap = new ol.Map({
     target: "map_canvas",
     layers: layers,
+
     view: new ol.View({
-      center: ol.proj.fromLonLat([CenterLon, CenterLat]),
-      //zoomFactor: 2,
+    center: ol.proj.fromLonLat([CenterLon, CenterLat]),
+      //zoomFactor: 1,
       zoom: ZoomLvl,
     }),
     controls: [
@@ -1724,26 +1725,26 @@ function initialize_map() {
   request.done(function (data) {
     var ringStyle;
 
-    if (UseDefaultTerrianRings) {
+    if (UseDefaultTerrainRings) {
       ringStyle = new ol.style.Style({
         fill: null,
         stroke: new ol.style.Stroke({
-          color: "#000000",
-          lineDash: UseTerrianLineDash ? [4, 4] : null,
-          width: TerrianLineWidth,
+          color: "#0000ff",
+          lineDash: UseTerrainLineDash ? [4, 4] : null,
+          width: TerrainLineWidth,
         }),
       });
     } else {
       ringStyle = [];
 
-      for (var i = 0; i < TerrianAltitudes.length; ++i) {
+      for (var i = 0; i < TerrainAltitudes.length; ++i) {
         ringStyle.push(
           new ol.style.Style({
             fill: null,
             stroke: new ol.style.Stroke({
-              color: getTerrianColorByAlti(TerrianAltitudes[i]),
-              lineDash: UseTerrianLineDash ? [4, 4] : null,
-              width: TerrianLineWidth,
+              color: getTerrainColorByAlti(TerrianAltitudes[i]),
+              lineDash: UseTerrainLineDash ? [4, 4] : null,
+              width: TerrainLineWidth,
             }),
           })
         );
@@ -1761,7 +1762,7 @@ function initialize_map() {
         geom.transform("EPSG:4326", "EPSG:3857");
 
         var feature = new ol.Feature(geom);
-        if (UseDefaultTerrianRings) {
+        if (UseDefaultTerrainRings) {
           feature.setStyle(ringStyle);
         } else {
           feature.setStyle(ringStyle[i]);
@@ -2717,7 +2718,7 @@ function showMap() {
   $("#splitter").show();
   $("#sudo_buttons").show();
   $("#show_map_button").hide();
-  $("#sidebar_container").width("470px");
+  $("#sidebar_container").width("auto");  
   setColumnVisibility();
   setSelectedInfoBlockVisibility();
   updateMapSize();
@@ -3072,13 +3073,13 @@ function getAirframesModeSLinkIcao(code) {
   return "";
 }
 
-function getTerrianColorByAlti(alti) {
-  var s = TerrianColorByAlt.s;
-  var l = TerrianColorByAlt.l;
+function getTerrainColorByAlti(alti) {
+  var s = TerrainColorByAlt.s;
+  var l = TerrainColorByAlt.l;
 
   // find the pair of points the current altitude lies between,
   // and interpolate the hue between those points
-  var hpoints = TerrianColorByAlt.h;
+  var hpoints = TerrainColorByAlt.h;
   var h = hpoints[0].val;
   for (var i = hpoints.length - 1; i >= 0; --i) {
     if (alti > hpoints[i].alt) {

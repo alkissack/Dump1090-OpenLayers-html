@@ -94,7 +94,7 @@ html, body {
 
 #sidebar_container {
     display: flex;
-    width: 500px;  /* AKISSACK  ------------ Ref: AK9F */
+    width: auto;  /* AKISSACK  ------------ Ref: AK9F */
     left: 0 !important;
 }
 
@@ -123,7 +123,7 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 #spinny { width: 128px; height: 128px; position: absolute; top: 50%; left: 50%; margin: -64px 0 0 -64px; }
 #loader_progress { width: 250px; height: 20px; position: absolute; top: 50%; left: 50%; margin: 128px 0 0 -125px; }
 
-#tableinfo { font-size: 10pt;  font-family: monospace;} /* AKISSACK  ------------ Ref: AK9F */
+#tableinfo { font-size: 10pt;  font-family: Menlo-Regular, monospace;} /* AKISSACK  ------------ Ref: AK9F  */ 
 /* #tableinfo { font-size: small; } */
 
 #sudo_buttons {
@@ -150,11 +150,11 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 }
 
 .verticalRateTriangle {
-    font-family: "Courier New",monospace;
+    font-family: Menlo-Regular,monospace;
 }
 
 .icaoCodeColumn {
-    font-family: monospace;
+    font-family: Menlo-Regular, monospace;
     text-transform: uppercase;
 }
 
@@ -165,7 +165,7 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 .squawk7500 { font-weight: bold; background-color: #ff5555; }
 .squawk7600 { font-weight: bold; background-color: #00ffff; }
 .squawk7700 { font-weight: bold; background-color: #ffff00; }
-.selected   { background-color: #dddddd; }
+.selected   { background-color: #dddd66; }
 .plane_table_row { cursor: pointer; }
 .hidden { display: none; }
 
