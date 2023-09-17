@@ -871,19 +871,27 @@ PlaneObject.prototype.updateMarker = function (moved) {
               tmpText = this.icaotype ? this.icaotype : "Unknown Type";
             }
             labelText = labelText + "\n" + tmpText;
-          } else {
-            labelText = labelText + "\n[" + (this.fl ? this.fl : "?") + v + "]";
-          }
+          } 
 
           //LINE THREE
           labelText =
             labelText +
             "\n" +
-            this.icao.toUpperCase() +
-            " [" +
-            (this.fl ? this.fl : "?") +
-            v +
-            "]";
+            this.icao.toUpperCase();
+
+          var hgt = parseInt(this.fl ? (this.fl) : 0);
+          hgt = convert_altitude(hgt*100, DisplayUnits);
+          //console.log("Height.. " + hgt);
+          labelText =
+            labelText +
+            "[" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft")  + "]";
+
+          //labelText =
+          //  labelText +
+          //  " [" +
+          //  (this.fl ? this.fl : "?") +
+          //  v +
+          //  "]";
         }
 
         var hexColour = this.labelColour; // New section for semi transparency

@@ -530,7 +530,7 @@ function end_load_history() {
   fetchData();
 }
 
-// Make a LineString with 'points'-number points
+// Make a LineString with 'points'- number points
 // that is a closed circle on the sphere such that the
 // great circle distance from 'center' to each point is
 // 'radius' meters
@@ -1578,13 +1578,14 @@ function initialize_map() {
               popname = popname + " [" + Planes[feature.hex].registration + "]";
 
               //LINE THREE
+              var hgt = parseInt(Planes[feature.hex].altitude ? (Planes[feature.hex].altitude) : 0);
+              hgt = convert_altitude(hgt, DisplayUnits);
+              //console.log("Height.. " + hgt);
               popname =
                 popname +
-                "\n" +
-                (Planes[feature.hex].altitude
-                  ? parseInt(Planes[feature.hex].altitude)
-                  : "?");
-              popname = popname + " ft and " + vsi;
+                "\n" + parseInt(hgt) + (DisplayUnits === "metric" ? "m & " : " ft & ")  + vsi;
+
+
               //LINE FOUR
               popname =
                 popname +
@@ -1598,18 +1599,21 @@ function initialize_map() {
                 (Planes[feature.hex].operator
                   ? Planes[feature.hex].operator
                   : "");
+
+              var dst = parseInt(Planes[feature.hex].siteNm ? (Planes[feature.hex].siteNm) : 0);
+              dst =  convert_nm_distance(dst, DisplayUnits);
+              //console.log("Distance.. " + dst);
               popname =
                 popname +
-                " " +
-                (Planes[feature.hex].siteNm
-                  ? Planes[feature.hex].siteNm + "nm"
-                  : "");
+                " " + dst.toFixed(2) + (DisplayUnits === "metric" ? " km " : DisplayUnits === "imperial" ? " mile " : " nm ");
+
               popname =
                 popname +
                 " " +
                 (Planes[feature.hex].siteBearing
                   ? Planes[feature.hex].siteBearing + "\u00B0"
                   : "");
+
             } else {
               popname = "ICAO: " + Planes[feature.hex].icao;
               popname =
@@ -1628,12 +1632,14 @@ function initialize_map() {
                 (Planes[feature.hex].registration
                   ? Planes[feature.hex].registration
                   : "?");
+
+              var hgt = parseInt(Planes[feature.hex].altitude ? (Planes[feature.hex].altitude) : 0);
+              hgt = convert_altitude(hgt, DisplayUnits);
+              //console.log("Height.. " + hgt);
               popname =
                 popname +
-                "\nFt:   " +
-                (Planes[feature.hex].altitude
-                  ? parseInt(Planes[feature.hex].altitude)
-                  : "?");
+                "\nAlt:  " + parseInt(hgt) + (DisplayUnits === "metric" ? "m " : " ft ");
+
             }
             overlay.getElement().innerHTML = popname ? popname : "";
             return feature;
@@ -3116,4 +3122,15 @@ function getTerrainColorByAlti(alti) {
     (l / 5).toFixed(0) * 5 +
     "%)"
   );
+}
+
+// dist in nm
+function convert_nm_distance(dist, displayUnits) {
+	if (displayUnits === "metric") {
+		return (dist * 1.852); // nm  to kilometers
+	}
+	else if (displayUnits === "imperial") {
+		return (dist * 1.15078); // meters to miles
+	}
+	return (dist); // nautical miles
 }
