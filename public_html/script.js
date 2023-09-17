@@ -353,7 +353,7 @@ function initialize() {
     // AKISSACK Range plot - Now able to read from local (or session) storage if available Ref: AK8C
     if (TypeOfStorageSession == 'Session') {
 	    if (sessionStorage.getItem("MaxRngLon") && sessionStorage.getItem("MaxRngLat") && sessionStorage.getItem("MaxRngRange")) {
-			console.log("Loading max range");
+			console.log("Loading max range from session storage");
 			MaxRngLat = JSON.parse(sessionStorage.getItem("MaxRngLat"));
 			MaxRngLon = JSON.parse(sessionStorage.getItem("MaxRngLon"));
 			MaxRngRange = JSON.parse(sessionStorage.getItem("MaxRngRange"));
@@ -393,7 +393,7 @@ function initialize() {
 		}
 	} else {
 	    if (localStorage.getItem("MaxRngLon") && localStorage.getItem("MaxRngLat") && localStorage.getItem("MaxRngRange")) {
-			console.log("Loading max range");
+			console.log("Loading max range from local storage");
 			MaxRngLat = JSON.parse(localStorage.getItem("MaxRngLat"));
 			MaxRngLon = JSON.parse(localStorage.getItem("MaxRngLon"));
 			MaxRngRange = JSON.parse(localStorage.getItem("MaxRngRange"));
@@ -432,7 +432,6 @@ function initialize() {
 			}
 		}
 	}
-
 }
 
 var CurrentHistoryFetch = null;
@@ -1230,8 +1229,7 @@ function initialize_map() {
           format_distance_long(akrng, DisplayUnits, 0)
         );
       } else {
-        // no range or bearing required, just return akret
-        return akret;
+        return akret; // no range or bearing required, just return akret
       }
     };
   };
@@ -2690,6 +2688,49 @@ function resetRangePlot() {
     MinRngLat[j] = MaxRngLat[j];
     MinRngLon[j] = MaxRngLon[j];
   }
+}
+
+function saveMaxRange() {
+  var rangemax = [];
+  var rangemid = [];
+  var rangemin = [];
+
+  for (var j = 0; j < 360; j++) {
+    rangemax[j] = [j, MaxRngRange[j], MaxRngLat[j], MaxRngLon[j]]  
+    rangemid[j] = [j, MidRngRange[j], MidRngLat[j], MidRngLon[j]]  
+    rangemin[j] = [j, MinRngRange[j], MinRngLat[j], MinRngLon[j]]  
+  }
+
+  const datamax = JSON.stringify(rangemax);
+  const datamid = JSON.stringify(rangemid);
+  const datamin = JSON.stringify(rangemin);
+
+  //console.log("data.json written correctly " + datamax);
+
+  const link = document.createElement("a");
+  var blob = new Blob([datamax], { 
+    type: "text/plain;charset=utf-8",
+  }); // Create blob object with file content
+  link.href = URL.createObjectURL(blob );  // Add file content in the object URL
+  link.download = "maxRange.json";         // Add file name
+  link.click();                            // Add click event to <a> tag to save file.
+  URL.revokeObjectURL(link.href);
+
+  blob = new Blob([datamid], { 
+    type: "text/plain;charset=utf-8",
+  }); // Create blob object with file content
+  link.href = URL.createObjectURL(blob );  // Add file content in the object URL
+  link.download = "midRange.json";         // Add file name
+  link.click();                            // Add click event to <a> tag to save file.
+  URL.revokeObjectURL(link.href);
+
+  blob = new Blob([datamin], { 
+    type: "text/plain;charset=utf-8",
+  }); // Create blob object with file content
+  link.href = URL.createObjectURL(blob );  // Add file content in the object URL
+  link.download = "minRange.json";         // Add file name
+  link.click();                            // Add click event to <a> tag to save file.
+  URL.revokeObjectURL(link.href);
 }
 
 function updateMapSize() {

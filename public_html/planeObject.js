@@ -1106,7 +1106,7 @@ function updateMySqlRange(ring,           bearing,        dist,              lat
                  "&fltlvl="  + fl,
             dataType: "json",
   	        success: function(data) {
-  	             //  never saw a success message, not sure why
+  	         //  never saw a success message, not sure why
                  //var successmessage = '*** SQL Range Data was succesfully saved';
                  //console.log("*** ")+data;
             },
