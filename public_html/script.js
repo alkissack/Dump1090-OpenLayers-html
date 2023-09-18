@@ -289,6 +289,7 @@ function initialize() {
 
   // Set initial element visibility
   $("#show_map_button").hide();
+  $("#show_range_admin_buttons").hide();
   setColumnVisibility();
 
   // Initialize other controls
@@ -2690,7 +2691,7 @@ function resetRangePlot() {
   }
 }
 
-function saveMaxRange() {
+function exportRangePlot() {
   var rangemax = [];
   var rangemid = [];
   var rangemin = [];
@@ -2718,19 +2719,67 @@ function saveMaxRange() {
 
   blob = new Blob([datamid], { 
     type: "text/plain;charset=utf-8",
-  }); // Create blob object with file content
-  link.href = URL.createObjectURL(blob );  // Add file content in the object URL
-  link.download = "midRange.json";         // Add file name
-  link.click();                            // Add click event to <a> tag to save file.
+  });  
+  link.href = URL.createObjectURL(blob );   
+  link.download = "midRange.json";          
+  link.click();                           
   URL.revokeObjectURL(link.href);
 
   blob = new Blob([datamin], { 
     type: "text/plain;charset=utf-8",
-  }); // Create blob object with file content
-  link.href = URL.createObjectURL(blob );  // Add file content in the object URL
-  link.download = "minRange.json";         // Add file name
-  link.click();                            // Add click event to <a> tag to save file.
+  });  
+  link.href = URL.createObjectURL(blob );   
+  link.download = "minRange.json";         
+  link.click();                            
   URL.revokeObjectURL(link.href);
+}
+
+function importRangePlot() {
+  fetch('./backup/maxRange.json')
+    .then((response) => response.json())
+    .then((json) => importMax(json));
+
+  fetch('./backup/midRange.json')
+    .then((response) => response.json())
+    .then((json) => importMid(json));
+
+  fetch('./backup/minRange.json')
+    .then((response) => response.json())
+    .then((json) => importMin(json));
+
+}
+
+function importMax(json) {
+  console.log(json);
+  for (var j = 0; j < json.length; j++) {
+    var obj = json[j];
+    MaxRngRange[j] = obj[1];
+    MaxRngLat[j] = obj[2];
+    MaxRngLon[j] = obj[3]
+  }
+  console.log("data.json read " + MaxRngRange );
+}
+
+function importMid(json) {
+  console.log(json);
+  for (var j = 0; j < json.length; j++) {
+    var obj = json[j];
+    MidRngRange[j] = obj[1];
+    MidRngLat[j] = obj[2];
+    MidRngLon[j] = obj[3]
+  }
+  //console.log("data.json read " + MidRngRange );
+}
+
+function importMin(json) {
+  console.log(json);
+  for (var j = 0; j < json.length; j++) {
+    var obj = json[j];
+    MinRngRange[j] = obj[1];
+    MinRngLat[j] = obj[2];
+    MinRngLon[j] = obj[3]
+  }
+  //console.log("data.json read " + MinRngRange );
 }
 
 function updateMapSize() {
@@ -2752,6 +2801,7 @@ function expandSidebar(e) {
   $("#toggle_sidebar_control").hide();
   $("#splitter").hide();
   $("#sudo_buttons").hide();
+  $("#show_range_admin_buttons").show();
   $("#show_map_button").show();
   $("#sidebar_container").width("100%");
   setColumnVisibility();
@@ -2763,6 +2813,7 @@ function showMap() {
   $("#map_container").show();
   $("#toggle_sidebar_control").show();
   $("#splitter").show();
+  $("#show_range_admin_buttons").hide();
   $("#sudo_buttons").show();
   $("#show_map_button").hide();
   $("#sidebar_container").width("auto");  

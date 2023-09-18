@@ -112,40 +112,35 @@
 								<td>
 									<b id="infoblock_name">FlightAware dump1090</b>
 								</td>
-								<td>
-									<span id="show_map_button" class="sidebarButton pointer">Show Map</span>
+								<td colspan="4"><div id="show_map_button"><span class="sidebarButton pointer" onclick="showMap();">Show Map</span></div></td>
+								<td> <div id="show_range_admin_buttons"> 
+									<span class="sidebarButtonRed pointer" ondblclick="exportRangePlot();">Export Ranges (double click)</span> <!-- AKISSACK Ref: ref: AK8K -->
+									<span class="sidebarButtonRed pointer" ondblclick="importRangePlot();">Import Ranges (double click)</span> <!-- AKISSACK Ref: ref: AK8K -->
+									<span class="sidebarButtonRed pointer" ondblclick="resetRangePlot();">Clear Ranges (double click)</span> <!-- AKISSACK Ref: ref: AK8K -->
+								   </div>
 								</td>
 								<td style="text-align: right">
 									<a href="https://github.com/flightaware/dump1090" id="dump1090_version" target="_blank"></a>
 								</td>
 							</tr>
-
 							<tr>
-								<td colspan="2">
+								<td colspan="3">
 									<div id="sudo_buttons">
 										<span class="sidebarButton pointer" onclick="resetMap();">Reset Map</span>
-										<span class="sidebarButton pointer" onclick="selectAllPlanes();">Select All Aircraft</span>
+										<span class="sidebarButton pointer" onclick="selectAllPlanes();">Select All</span>
 										<span class="sidebarButton pointer" onclick="selectMilPlanes();">Select Specials</span> <!-- AKISSACK Ref: AK9G -->
-										<span class="sidebarButton pointer" onclick="deselectAllPlanes();">DeSelect Aircraft</span>
-										<span class="sidebarButton pointer" ondblclick="resetRangePlot();">Reset Range</span> <!-- AKISSACK Ref: ref: AK8K -->
-										<span class="sidebarButton pointer" ondblclick="saveMaxRange();">Save Ranges</span> <!-- AKISSACK Ref: ref: AK8K -->
+										<span class="sidebarButton pointer" onclick="deselectAllPlanes();">DeSelect</span>
 									</div>
 								</td>
 							</tr>
-
 							<tr class="infoblock_body">
-								<td>Aircraft (total): <span id="dump1090_total_ac">n/a</span></td>
-								<td>Messages: <span id="dump1090_message_rate">n/a</span>/sec</td>
-							</tr>
-
-							<tr class="infoblock_body">
-								<td>(with positions): <span id="dump1090_total_ac_positions">n/a</span></td>
+								<td>Aircraft (total/posn): <span id="dump1090_total_ac">n/a</span>/<span id="dump1090_total_ac_positions">n/a</span></td>
+								<td>Msgs: <span id="dump1090_message_rate">n/a</span>/sec</td>
 								<td>Max: <span id="dump1090_max_range">n/a</span> <span class="distanceUnit"></span></td> <!-- Ref: AK9S -->
 								<!-- <td>History: <span id="dump1090_total_history">n/a</span> positions</td> Ref: AK9S -->
 							</tr>
 						</table>
 					</div> <!-- dump1090_infoblock -->
-
 					<div id="units_container">
 <!--  AKISSACK Remove units option from panel
 						<label for="units_selector">Units:</label>

@@ -124,12 +124,17 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 #loader_progress { width: 250px; height: 20px; position: absolute; top: 50%; left: 50%; margin: 128px 0 0 -125px; }
 
 #tableinfo { font-size: 10pt;  font-family: Menlo-Regular, monospace;} /* AKISSACK  ------------ Ref: AK9F  */ 
-/* #tableinfo { font-size: small; } */
 
 #sudo_buttons {
     display: flex;
-    padding: 15px 20px 15px 20px;
+    padding: 1px 1px 1px 1px;
     justify-content: space-between;
+}
+
+#show_range_admin_buttons {
+    display: inline;
+    padding: 1px 1px 1px 1px;
+    justify-content: center;
 }
 
 #units_container,
@@ -158,8 +163,6 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
     text-transform: uppercase;
 }
 
-
-
 .vPosition  { background-color: #C3FFDF; }
 .mlat       { background-color: #C7EAFC; }
 .squawk7500 { font-weight: bold; background-color: #ff5555; }
@@ -183,6 +186,13 @@ div#loader { z-index: 99; position: absolute; left: 0; top: 0; bottom: 0; right:
 
 .sidebarButton {
      background-color: #409EDF;
+     padding: 4px 15px 4px 15px;
+     color: #FFFFFF;
+     font-weight: normal;
+     font-size: small;
+}
+.sidebarButtonRed {
+     background-color: #cc0000;
      padding: 4px 15px 4px 15px;
      color: #FFFFFF;
      font-weight: normal;
