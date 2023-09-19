@@ -67,6 +67,8 @@ var MinRngRange = [];  // AKISSACK Range plot    Ref: AK8B
 var MinRngLat = [];    // AKISSACK Range plot    Ref: AK8B
 var MinRngLon = [];    // AKISSACK Range plot    Ref: AK8B
 
+var lastSidebarWidth = 0; // AKISSACK mapsize    Ref: AK11A
+
 var SitePosition = null;
 var ReceiverClock = null;
 
@@ -78,6 +80,16 @@ var MessageCountHistory = [];
 var MessageRate = 0;
 
 var NBSP = "\u00a0";
+
+function checkSidebarWidthChange() {  // AKISSACK mapsize    Ref: AK11A
+  var newSidebarWidth = 0; 
+  newSidebarWidth = $("#sidebar_container").width();
+  if (lastSidebarWidth != newSidebarWidth ) {
+    console.log("The sidebar was resized");
+    updateMapSize();
+    lastSidebarWidth = newSidebarWidth ;
+  }
+}
 
 function processReceiverUpdate(data) {
   // Loop through all the planes in the data packet
@@ -235,6 +247,7 @@ function fetchData() {
 
 var PositionHistorySize = 0;
 function initialize() {
+
   // Set page basics
   document.title = PageName;
   MaxRange = 0; // AKISSACK  Display range  Ref: AK9T
@@ -516,7 +529,7 @@ function end_load_history() {
 
   PositionHistoryBuffer = null;
 
-  console.log("Completing init");
+  console.log("Completing initialisation.");
 
   refreshTableInfo();
   refreshSelected();
@@ -525,6 +538,8 @@ function end_load_history() {
   // Setup our timer to poll from the server.
   window.setInterval(fetchData, RefreshInterval);
   window.setInterval(reaper, 60000);
+  lastSidebarWidth = $("#sidebar_container").width();  // AKISSACK mapsize    Ref: AK11A
+  //window.setInterval(checkSidebarWidthChange, 1000);   // AKISSACK mapsize    Ref: AK11A
 
   // And kick off one refresh immediately.
   fetchData();
@@ -2036,6 +2051,8 @@ function refreshSelected() {
 
 // Refreshes the larger table of all the planes
 function refreshTableInfo() {
+  checkSidebarWidthChange(); // AKISSACK mapsize    Ref: AK11A
+
   var show_squawk_warning = false;
 
   TrackedAircraft = 0;
