@@ -99,9 +99,6 @@ SiteCircles = true; // true to show circles (only shown if the center marker is 
 // In miles, nautical miles, or km (depending settings value 'DisplayUnits')
 SiteCirclesDistances = new Array(100,150,200,250);
 
-// Show the clocks at the top of the righthand pane? You can disable the clocks if you want here
-ShowClocks = false;
-
 // Controls page title, righthand pane when nothing is selected
 PageName = "FlightAware";
 
@@ -145,7 +142,7 @@ TerrainColorByAlt       = {             // colours depending on altitude (UseDef
         l: 50,
 };
 
-ShowSiteRingDistanceText = false;       // show the distance text in site rings
+ShowSiteRingDistanceText = true;       // show the distance text in site rings
 
 UseJetPhotosPhotoLink    = false;       // Use jetphotos.com instead of FlightAware for photo links
 
@@ -155,29 +152,30 @@ UseJetPhotosPhotoLink    = false;       // Use jetphotos.com instead of FlightAw
 // #$HTTP["url"] =~ "^/dump1090-fa/data/.*\.json$" {
 //       setenv.add-response-header = ( "Access-Control-Allow-Origin" => "*" )
 // #}
+
 EndpointDump1090        = "";    // insert here endpoint to other computer where dump1090 is running (ex: http://192.168.1.152:8080/), leave it empty if it is running here
 
 // ----------------------------------------------------------------------------------------------------------------------------
 // Options to enable/disable modifications provided in Dump1090-OpenLayers3-html by Al Kissack
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMouseLatLong     = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
-ShowAdditionalMaps   = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
-ShowPermanentLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
-ShowHoverOverLabels  = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
-ShowRanges           = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
+ShowMouseLatLong     = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
+ShowAdditionalMaps   = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
+ShowPermanentLabels  = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
+ShowHoverOverLabels  = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
+ShowRanges           = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 
 			         // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
 MinRangeHeight	     =  2000 ; // ft - inner range ring - Set -1 to disable collection and display
 MinRangeLikely 	     =    75 ; // nm - practical max (to supress spikes from bad data)
-MinRangeShow         = true ; // set to show min range currently captured (assuming MinRangeHeight is set too)
+MinRangeShow         = true; // set to show min range currently captured (assuming MinRangeHeight is set too)
 
 MidRangeHeight	     = 10000 ; // ft - mid range ring - Set -1 to disable collection and display
 MidRangeLikely 	     =   125 ; // nm - practical max
-MidRangeShow         = true ; // set to show mid range currently captured (assuming MidRangeHeight is set too)
+MidRangeShow         = true; // set to show mid range currently captured (assuming MidRangeHeight is set too)
 
 MaxRangeHeight       = 99999 ; 
 MaxRangeLikely 	     =   300 ; // nm - practical max 300
-MaxRangeShow         =  true ; // set to show max range currently captured 
+MaxRangeShow         =  true; // set to show max range currently captured 
 
 RangeLine	     =     1 ; // Line width for range plot
 
@@ -193,10 +191,10 @@ ShowUKMilLayers      = true;   // https://github.com/alkissack/Dump1090-OpenLaye
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PERSONAL OPTIONS      https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyPreferences    = true ;  // Required to enable the FOUR options below
-ShowAdditionalData   = true ;  //
-ShowMyIcons          = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
-ShowSimpleColours    = true ;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
+ShowMyPreferences    = true;  // Required to enable the FOUR options below
+ShowAdditionalData   = true;  //
+ShowMyIcons          = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
+ShowSimpleColours    = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 			       // ******************************************************************************
 ShowHTMLColumns	     = true ;  // *** If you turn this off, use the original-index.html file instead         ***
 			       // ******************************************************************************

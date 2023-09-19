@@ -3,14 +3,14 @@
 
 // Define our global variables
 var OLMap = null;
-var StaticFeatures = new ol.Collection();
+var StaticFeatures     = new ol.Collection();
 var SiteCircleFeatures = new ol.Collection();
-var PlaneIconFeatures = new ol.Collection();
+var PlaneIconFeatures  = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
-var MyFeatures = new ol.Collection();            // AKISSACK Ref: AK9U
-var MaxRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
-var MidRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
-var MinRangeFeatures = new ol.Collection();      // AKISSACK Ref: AK8A
+var MyFeatures         = new ol.Collection();    // AKISSACK Ref: AK9U
+var MaxRangeFeatures   = new ol.Collection();    // AKISSACK Ref: AK8A
+var MidRangeFeatures   = new ol.Collection();    // AKISSACK Ref: AK8A
+var MinRangeFeatures   = new ol.Collection();    // AKISSACK Ref: AK8A
 var SleafordRangeFeatures = new ol.Collection(); // AKISSACK Ref: AK8Z
 var Planes = {};
 var PlanesOrdered = [];
@@ -21,30 +21,17 @@ var FollowSelected = false;
 // --------------------------------------------------------------------------------------
 // AKISSACK - Variables -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
-var acsntext = " "; // Default label for label data -                           Ref: AK7C
+var acsntext = " ";            // Default label for label data -                Ref: AK7C
 var SelectedMilPlanes = false; // Allow selection of all planes of interest     Ref: AK9G
 // --------------------------------------------------------------------------------------
 // ----------------------------------------------------------------------------- AKISSACK
 var SpecialSquawks = {
-  7500: {
-    cssClass: "squawk7500",
-    markerColor: "rgb(255, 85, 85)",
-    text: "Aircraft Hijacking",
-  },
-  7600: {
-    cssClass: "squawk7600",
-    markerColor: "rgb(0, 255, 255)",
-    text: "Radio Failure",
-  },
-  7700: {
-    cssClass: "squawk7700",
-    markerColor: "rgb(255, 255, 0)",
-    text: "General Emergency",
-  },
+        '7500' : { cssClass: 'squawk7500', markerColor: 'rgb(255, 85, 85)', text: 'Aircraft Hijacking' },
+        '7600' : { cssClass: 'squawk7600', markerColor: 'rgb(0, 255, 255)', text: 'Radio Failure' },
+        '7700' : { cssClass: 'squawk7700', markerColor: 'rgb(255, 255, 0)', text: 'General Emergency' }
 };
 
-// Get current map settings
-var CenterLat, CenterLon, ZoomLvl, MapType;
+var CenterLat, CenterLon, ZoomLvl, MapType;  // Get current map settings
 
 var Dump1090Version = "unknown version";
 var RefreshInterval = 1000;
@@ -80,6 +67,9 @@ var MessageCountHistory = [];
 var MessageRate = 0;
 
 var NBSP = "\u00a0";
+
+var layers;
+var layerGroup;
 
 function checkSidebarWidthChange() {  // AKISSACK mapsize    Ref: AKDD
   var newSidebarWidth = 0; 
@@ -257,36 +247,7 @@ function initialize() {
 
   PlaneRowTemplate = document.getElementById("plane_row_template");
 
-  if (!ShowClocks) {
-    $("#timestamps").css("display", "none");
-  } else {
-    // Create the clocks.
-    new CoolClock({
-      canvasId: "utcclock",
-      skinId: "classic",
-      displayRadius: 40,
-      showSecondHand: true,
-      gmtOffset: "0", // this has to be a string!
-      showDigital: false,
-      logClock: false,
-      logClockRev: false,
-    });
-
-    ReceiverClock = new CoolClock({
-      canvasId: "receiverclock",
-      skinId: "classic",
-      displayRadius: 40,
-      showSecondHand: true,
-      gmtOffset: null,
-      showDigital: false,
-      logClock: false,
-      logClockRev: false,
-    });
-
-    // disable ticking on the receiver clock, we will update it ourselves
-    ReceiverClock.tick = function () {};
-  }
-
+  $("#timestamps").css("display", "none"); // AKISSACK remove clocks
   $("#loader").removeClass("hidden");
 
   // Set up map/sidebar splitter
@@ -314,18 +275,9 @@ function initialize() {
     errorPlacement: function (error, element) {
       return true;
     },
-
     rules: {
-      minAltitude: {
-        number: true,
-        min: -99999,
-        max: 99999,
-      },
-      maxAltitude: {
-        number: true,
-        min: -99999,
-        max: 99999,
-      },
+      minAltitude: {number: true, min: -99999, max: 99999,},
+      maxAltitude: {number: true, min: -99999, max: 99999,},
     },
   });
   $("#altitude_filter_reset_button").click(onResetAltitudeFilter);
@@ -539,8 +491,6 @@ function end_load_history() {
   window.setInterval(fetchData, RefreshInterval);
   window.setInterval(reaper, 60000);
   lastSidebarWidth = $("#sidebar_container").width();  // AKISSACK mapsize    Ref: AKDD
-  //window.setInterval(checkSidebarWidthChange, 1000);   // AKISSACK mapsize    Ref: AKDD
-
   // And kick off one refresh immediately.
   fetchData();
 }
@@ -550,29 +500,27 @@ function end_load_history() {
 // great circle distance from 'center' to each point is
 // 'radius' meters
 function make_geodesic_circle(center, radius, points) {
-  var angularDistance = radius / 6378137.0;
-  var lon1 = (center[0] * Math.PI) / 180.0;
-  var lat1 = (center[1] * Math.PI) / 180.0;
-  var geom = new ol.geom.LineString();
-  for (var i = 0; i <= points; ++i) {
-    var bearing = (i * 2 * Math.PI) / points;
+        var angularDistance = radius / 6378137.0;
+        var lon1 = center[0] * Math.PI / 180.0;
+        var lat1 = center[1] * Math.PI / 180.0;
+        var geom;
+        for (var i = 0; i <= points; ++i) {
+            var bearing = i * 2 * Math.PI / points;
 
-    var lat2 = Math.asin(
-      Math.sin(lat1) * Math.cos(angularDistance) +
-        Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(bearing)
-    );
-    var lon2 =
-      lon1 +
-      Math.atan2(
-        Math.sin(bearing) * Math.sin(angularDistance) * Math.cos(lat1),
-        Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2)
-      );
+            var lat2 = Math.asin( Math.sin(lat1)*Math.cos(angularDistance) +
+                Math.cos(lat1)*Math.sin(angularDistance)*Math.cos(bearing) );
+            var lon2 = lon1 + Math.atan2(Math.sin(bearing)*Math.sin(angularDistance)*Math.cos(lat1),
+                Math.cos(angularDistance)-Math.sin(lat1)*Math.sin(lat2));
 
-    lat2 = (lat2 * 180.0) / Math.PI;
-    lon2 = (lon2 * 180.0) / Math.PI;
-    geom.appendCoordinate([lon2, lat2]);
-  }
-  return geom;
+            lat2 = lat2 * 180.0 / Math.PI;
+            lon2 = lon2 * 180.0 / Math.PI;
+            if (!geom) {
+                geom = new ol.geom.LineString([[lon2, lat2]]);
+            } else {
+                geom.appendCoordinate([lon2, lat2]);
+            }
+        }
+        return geom;
 }
 
 // Initalizes the map and starts up our timers to call various functions
@@ -605,7 +553,7 @@ function initialize_map() {
     document.getElementById("infoblock_country").style.display = "none"; // hide country row
   }
 
-  // Initialize OL3
+  // Initialize OL6
   var layers = createBaseLayers();
 
   // --------------------------------------------------------------
@@ -637,10 +585,6 @@ function initialize_map() {
             fill: new ol.style.Fill({
               color: "#003300",
             }),
-            //stroke: new ol.style.Stroke({
-            //	color: '#ccffcc',
-            //	width: 3.5
-            //})
           }),
         });
         var styles = [style];
@@ -835,7 +779,7 @@ function initialize_map() {
         ],
       })
     );
-  }
+  } // End
 
   // --------------------------------------------------------------
   // AKISSACK - ADD LAYERS ----------------------  ref: AK4A ends
@@ -1085,7 +1029,7 @@ function initialize_map() {
 		midRangeLayer,      // Ref: AK8D
 		minRangeLayer,      // Ref: AK8D
 		SleafordRangeLayer, // Ref: AK8Y
-		iconsLayer,
+		iconsLayer
 	],
 	})
   );
@@ -1111,8 +1055,13 @@ function initialize_map() {
   }
   
   var foundType = false;
+  var baseCount = 0;
 
-  ol.control.LayerSwitcher.forEachRecursive(layers, function (lyr) {
+  layerGroup = new ol.layer.Group({
+    layers: layers
+  })
+
+  ol.control.LayerSwitcher.forEachRecursive(layerGroup, function (lyr) {
     if (!lyr.get("name")) return;
 
     if (lyr.get("type") === "base") {
@@ -1163,7 +1112,6 @@ function initialize_map() {
     }),
     controls: [
       new ol.control.Zoom(),
-      //new ol.control.ZoomSlider(),
       new ol.control.Rotate(),
       new ol.control.Attribution({ collapsed: true }),
       new ol.control.ScaleLine({ units: DisplayUnits }),
@@ -1201,11 +1149,15 @@ function initialize_map() {
     }
   });
 
+  var hitTolerance = 5;
   OLMap.on(["click", "dblclick"], function (evt) {
     var hex = evt.map.forEachFeatureAtPixel(
       evt.pixel,
       function (feature, layer) {
         return feature.hex;
+      },
+      {
+         hitTolerance: hitTolerance,
       },
       null,
       function (layer) {
@@ -1235,8 +1187,7 @@ function initialize_map() {
         var akbrn = parseInt(
           getBearing(SitePosition[1], SitePosition[0], coord1[1], coord1[0])
         ).toString();
-        var akWGS84 = new ol.Sphere(6378137);
-        var akrng = akWGS84.haversineDistance(SitePosition, coord1);
+        var akrng = ol.sphere.getDistance(SitePosition, coord1);
         return (
           akret +
           " " +
@@ -1454,7 +1405,7 @@ function initialize_map() {
 
     $(
       function () 
-	  //-----------------------------------------------------------------------
+      //-----------------------------------------------------------------------
       // Send a http request with AJAX http://api.jquery.com/jQuery.ajax/
       // install: apt-get install mysql-client php5-mysql
       //-----------------------------------------------------------------------
@@ -1533,14 +1484,14 @@ function initialize_map() {
     overlay.setMap(OLMap);
 
     // trap mouse moving over
-    //var hitTolerance = 100;
+    var hitTolerance = 5;
     OLMap.on("pointermove", function (evt) {
       var feature = OLMap.forEachFeatureAtPixel(
         evt.pixel,
         function (feature, layer) {
           overlay.setPosition(evt.coordinate);
           var popname = feature.get("name");
-          //console.log(popname);
+          //console.log("popname: " + popname);
 
           if (
             ShowMyFindsLayer &&
@@ -1550,6 +1501,7 @@ function initialize_map() {
             overlay.getElement().innerHTML = popname ? popname : "";
             return feature;
           }
+
           if (popname === "~") {
             var vsi = "";
             if (Planes[feature.hex].vert_rate !== "undefined") {
@@ -1562,6 +1514,7 @@ function initialize_map() {
                 } else vsi = "level";
               }
             }
+
             if (ShowAdditionalData) {
               //LINE ONE
               popname = Planes[feature.hex].ac_aircraft
@@ -1598,7 +1551,6 @@ function initialize_map() {
               popname =
                 popname +
                 "\n" + parseInt(hgt) + (DisplayUnits === "metric" ? "m & " : " ft & ")  + vsi;
-
 
               //LINE FOUR
               popname =
@@ -1663,6 +1615,9 @@ function initialize_map() {
             return null;
           }
         },
+        {
+           hitTolerance: hitTolerance,
+        },
         null,
         function (layer) {
           if (ShowMyFindsLayer) {
@@ -1721,80 +1676,59 @@ function initialize_map() {
     }
   }
 
-  // Add terrain-limit rings. To enable this:
-  //
-  //  create a panorama for your receiver location on heywhatsthat.com
-  //
-  //  note the "view" value from the URL at the top of the panorama
-  //    i.e. the XXXX in http://www.heywhatsthat.com/?view=XXXX
-  //
-  // fetch a json file from the API for the altitudes you want to see:
-  //
-  //  wget -O /usr/share/dump1090-mutability/html/upintheair.json \
-  //    'http://www.heywhatsthat.com/api/upintheair.json?id=XXXX&refraction=0.25&alts=3048,9144'
-  //
-  // NB: altitudes are in _meters_, you can specify a list of altitudes
+        // Add terrain-limit rings. To enable this:
+        //
+        //  create a panorama for your receiver location on heywhatsthat.com
+        //
+        //  note the "view" value from the URL at the top of the panorama
+        //    i.e. the XXXX in http://www.heywhatsthat.com/?view=XXXX
+        //
+        // fetch a json file from the API for the altitudes you want to see:
+        //
+        //  wget -O /usr/share/dump1090-mutability/html/upintheair.json \
+        //    'http://www.heywhatsthat.com/api/upintheair.json?id=XXXX&refraction=0.25&alts=3048,9144'
+        //
+        // NB: altitudes are in _meters_, you can specify a list of altitudes
 
-  // kick off an ajax request that will add the rings when it's done
-  var request = $.ajax({
-    url: "upintheair.json",
-    timeout: 5000,
-    cache: true,
-    dataType: "json",
-  });
-  request.done(function (data) {
-    var ringStyle;
+        // kick off an ajax request that will add the rings when it's done
+        var request = $.ajax({ url: 'upintheair.json',
+                               timeout: 5000,
+                               cache: true,
+                               dataType: 'json' });
+        request.done(function(data) {
+                for (var i = 0; i < data.rings.length; ++i) {
+                        var geom = new ol.geom.LineString([]);
+                        var points = data.rings[i].points;
+                        if (points.length > 0) {
+                                for (var j = 0; j < points.length; ++j) {
+                                        geom.appendCoordinate([ points[j][1], points[j][0] ]);
+                                }
+                                geom.appendCoordinate([ points[0][1], points[0][0] ]);
+                                geom.transform('EPSG:4326', 'EPSG:3857');
 
-    if (UseDefaultTerrainRings) {
-      ringStyle = new ol.style.Style({
-        fill: null,
-        stroke: new ol.style.Stroke({
-          color: "#0000ff",
-          lineDash: UseTerrainLineDash ? [4, 4] : null,
-          width: TerrainLineWidth,
-        }),
-      });
-    } else {
-      ringStyle = [];
+                                var feature = new ol.Feature(geom);
+                                feature.setStyle(ringStyleForAlt(data.rings[i].alt));
+                                StaticFeatures.push(feature);
+                        }
+                }
+        });
 
-      for (var i = 0; i < TerrainAltitudes.length; ++i) {
-        ringStyle.push(
-          new ol.style.Style({
-            fill: null,
-            stroke: new ol.style.Stroke({
-              color: getTerrainColorByAlti(TerrianAltitudes[i]),
-              lineDash: UseTerrainLineDash ? [4, 4] : null,
-              width: TerrainLineWidth,
-            }),
-          })
-        );
-      }
-    }
+        request.fail(function(jqxhr, status, error) {
+                // no rings available, do nothing
+        });
+}
 
-    for (var i = 0; i < data.rings.length; ++i) {
-      var geom = new ol.geom.LineString();
-      var points = data.rings[i].points;
-      if (points.length > 0) {
-        for (var j = 0; j < points.length; ++j) {
-          geom.appendCoordinate([points[j][1], points[j][0]]);
-        }
-        geom.appendCoordinate([points[0][1], points[0][0]]);
-        geom.transform("EPSG:4326", "EPSG:3857");
-
-        var feature = new ol.Feature(geom);
-        if (UseDefaultTerrainRings) {
-          feature.setStyle(ringStyle);
-        } else {
-          feature.setStyle(ringStyle[i]);
-        }
-        StaticFeatures.push(feature);
-      }
-    }
-  });
-
-  request.fail(function (jqxhr, status, error) {
-    // no rings available, do nothing
-  });
+function ringStyleForAlt(altitude) {
+        return new ol.style.Style({
+                fill: null,
+                stroke: new ol.style.Stroke({
+                  color: "#aa0000",
+                  lineDash: UseTerrainLineDash ? [4, 4] : null,
+                  width: TerrainLineWidth,
+                  //color: PlaneObject.prototype.hslRepr(PlaneObject.prototype.getAltitudeColor(altitude*3.281)), // converting from m to ft
+                  //width: 1
+                })
+        });
 }
 
 function createSiteCircleFeatures() {

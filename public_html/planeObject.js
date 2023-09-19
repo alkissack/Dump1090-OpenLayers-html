@@ -637,9 +637,10 @@ PlaneObject.prototype.updateData = function (receiver_timestamp, data) {
     this.last_position_time = receiver_timestamp - data.seen_pos;
 
     if (SitePosition !== null) {
-      var WGS84 = new ol.Sphere(6378137);
-      this.sitedist = WGS84.haversineDistance(SitePosition, this.position);
+      //var WGS84 = new ol.Sphere(6378137);
+      //this.sitedist = WGS84.haversineDistance(SitePosition, this.position);
       //  AKISSACK     - Store a bearing and nm distance for our range plot            Ref AK8G
+      this.sitedist = ol.sphere.getDistance(SitePosition, this.position);
       this.siteBearing = parseInt(
         getBearing(
           SitePosition[1],

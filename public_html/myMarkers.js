@@ -542,38 +542,6 @@ var MyCategoryIcons = {
 
 };
 
-/*  Original FA code
-function getBaseMarker(category, typeDesignator, typeDescription, wtc) {
-        if (typeDesignator in TypeDesignatorIcons) {
-                return TypeDesignatorIcons[typeDesignator];
-        }
-
-        if (typeDescription !== undefined && typeDescription !== null && typeDescription.length === 3) {
-                if (wtc !== undefined && wtc !== null && wtc.length === 1) {
-                        var typeDescriptionWithWtc = typeDescription + "-" + wtc;
-                        if (typeDescriptionWithWtc in TypeDescriptionIcons) {
-                                return TypeDescriptionIcons[typeDescriptionWithWtc];
-                        }
-                }
-
-                if (typeDescription in TypeDescriptionIcons) {
-                        return TypeDescriptionIcons[typeDescription];
-                }
-
-                var basicType = typeDescription.charAt(0);
-                if (basicType in TypeDescriptionIcons) {
-                        return TypeDescriptionIcons[basicType];
-                }
-        }
-
-        if (category in CategoryIcons) {
-                return CategoryIcons[category];
-        }
-
-        return DefaultIcon;
-}
-*/
-
 var MyDefaultIcon = {
         key : "default",
         scale : 0.4,
