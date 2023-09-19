@@ -67,7 +67,7 @@ var MinRngRange = [];  // AKISSACK Range plot    Ref: AK8B
 var MinRngLat = [];    // AKISSACK Range plot    Ref: AK8B
 var MinRngLon = [];    // AKISSACK Range plot    Ref: AK8B
 
-var lastSidebarWidth = 0; // AKISSACK mapsize    Ref: AK11A
+var lastSidebarWidth = 0; // AKISSACK mapsize    Ref: AKDD
 
 var SitePosition = null;
 var ReceiverClock = null;
@@ -81,7 +81,7 @@ var MessageRate = 0;
 
 var NBSP = "\u00a0";
 
-function checkSidebarWidthChange() {  // AKISSACK mapsize    Ref: AK11A
+function checkSidebarWidthChange() {  // AKISSACK mapsize    Ref: AKDD
   var newSidebarWidth = 0; 
   newSidebarWidth = $("#sidebar_container").width();
   if (lastSidebarWidth != newSidebarWidth ) {
@@ -538,8 +538,8 @@ function end_load_history() {
   // Setup our timer to poll from the server.
   window.setInterval(fetchData, RefreshInterval);
   window.setInterval(reaper, 60000);
-  lastSidebarWidth = $("#sidebar_container").width();  // AKISSACK mapsize    Ref: AK11A
-  //window.setInterval(checkSidebarWidthChange, 1000);   // AKISSACK mapsize    Ref: AK11A
+  lastSidebarWidth = $("#sidebar_container").width();  // AKISSACK mapsize    Ref: AKDD
+  //window.setInterval(checkSidebarWidthChange, 1000);   // AKISSACK mapsize    Ref: AKDD
 
   // And kick off one refresh immediately.
   fetchData();
@@ -2051,7 +2051,7 @@ function refreshSelected() {
 
 // Refreshes the larger table of all the planes
 function refreshTableInfo() {
-  checkSidebarWidthChange(); // AKISSACK mapsize    Ref: AK11A
+  checkSidebarWidthChange(); // AKISSACK mapsize    Ref: AKDD
 
   var show_squawk_warning = false;
 
