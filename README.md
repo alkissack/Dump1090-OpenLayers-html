@@ -22,15 +22,16 @@ Originaly amended for my own purposes, but having had several requests to share 
 8. Maximum range plot - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 
 9. Export/Import range plot - When you expand the sidebar (no map) there are an additional 3 red buttons.  Clear ranges - reverts all ranges to zero. Export ranges - saves 3 files to local machine (downloads). Import ranges - imports ranges from the backup folder on the server (files must exist and be called minRange.json, midRange.json & maxRange.json)
-   
+
 ## Also some additional modifications:
 
-10. Miscellaneous changes - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
+A. Miscellaneous changes - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 
-11. Personalised icons - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/A.-Aircraft-icon-changes
+B. Personalised icons - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/A.-Aircraft-icon-changes
 
-12. Ability to filter special aircraft - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/B.-Filter-aircraft-of-interest
+C. Ability to filter special aircraft - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/B.-Filter-aircraft-of-interest
 
+D. Setting the sidebar side to auto and then the tableinfo width varying, could cuase the map to lose its correct aspect ratio.  see comments labelled: // AKISSACK mapsize    Ref: AKDD
 
 # Credits:
 Webserver (html sub-directory) changes by Allan Kissack
