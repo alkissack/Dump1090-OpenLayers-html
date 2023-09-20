@@ -140,7 +140,6 @@ function processReceiverUpdate(data) {
             evt.stopPropagation();
             return;
           }
-
           if (!$("#map_container").is(":visible")) {
             showMap();
           }
@@ -726,7 +725,7 @@ function initialize_map() {
     });
 
     var airportLayer = new ol.layer.Vector({
-      name: "airways",
+      name: "airports",
       type: "overlay",
       title: "Airports",
       source: new ol.source.Vector({
@@ -769,13 +768,13 @@ function initialize_map() {
         title: "UK",
         layers: [
           ukairspaceLayer,
-          airwaysLayer,
-          airwaysMRCLayer,
-          airportLayer,
-          atzLayer,
-          ukCTALayer,
-          vordmeLayer,
           navPointsLayer,
+          airwaysMRCLayer,
+          vordmeLayer,
+          airwaysLayer,
+          ukCTALayer,
+          atzLayer,
+          airportLayer,
         ],
       })
     );
@@ -900,7 +899,7 @@ function initialize_map() {
     layers.push(
       new ol.layer.Group({
         title: "UK Military",
-        layers: [matzLayer, matzafLayer, dangerLayer, ukmilLayer, AARLayer],
+        layers: [ukmilLayer,AARLayer,dangerLayer,matzLayer,matzafLayer],
       })
     );
   }
@@ -1016,6 +1015,7 @@ function initialize_map() {
 				features: StaticFeatures,
 			}),
 		}),
+
 		new ol.layer.Vector({
 			name: "ac_trail",
 			type: "overlay",
@@ -1024,12 +1024,13 @@ function initialize_map() {
 				features: PlaneTrailFeatures,
 			}),
 		}),
-		rangeLayer,
-		maxRangeLayer,      // Ref: AK8D
-		midRangeLayer,      // Ref: AK8D
-		minRangeLayer,      // Ref: AK8D
 		SleafordRangeLayer, // Ref: AK8Y
-		iconsLayer
+		iconsLayer,
+		rangeLayer,
+		minRangeLayer,      // Ref: AK8D
+		midRangeLayer,      // Ref: AK8D
+		maxRangeLayer,      // Ref: AK8D
+
 	],
 	})
   );
@@ -1900,8 +1901,7 @@ function refreshSelected() {
   var emerg = document.getElementById("selected_emergency");
   if (selected.squawk in SpecialSquawks) {
     emerg.className = SpecialSquawks[selected.squawk].cssClass;
-    emerg.textContent =
-      NBSP + "Squawking: " + SpecialSquawks[selected.squawk].text + NBSP;
+    emerg.textContent = NBSP + "Squawking: " + SpecialSquawks[selected.squawk].text + NBSP;
   } else {
     emerg.className = "hidden";
   }
@@ -2532,6 +2532,7 @@ function selectAllPlanes() {
 // AKISSACK --------------- Ref: AK9G
 function selectMilPlanes() {
   // if mil planes are already selected, deselect them all
+  //console.log("mil "+SelectedMilPlanes);
   if (SelectedMilPlanes) {
     deselectMilPlanes();
   } else {
@@ -2605,6 +2606,7 @@ function deselectAllPlanes() {
   }
   SelectedPlane = null;
   SelectedAllPlanes = false;
+  deselectMilPlanes();
   refreshSelected();
 }
 
@@ -2799,7 +2801,7 @@ function setColumnVisibility() {
     showColumn(infoTable, "#msgs", !mapIsVisible);
     showColumn(infoTable, "#seen", !mapIsVisible);
     showColumn(infoTable, "#vert_rate", !mapIsVisible);
-    showColumn(infoTable, "#rssi", !mapIsVisible);
+    showColumn(infoTable, "#rssi", !mapIsVisible); 
     showColumn(infoTable, "#lat", !mapIsVisible);
     showColumn(infoTable, "#lon", !mapIsVisible);
     showColumn(infoTable, "#data_source", !mapIsVisible);

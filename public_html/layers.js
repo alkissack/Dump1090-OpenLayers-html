@@ -5,33 +5,9 @@
 
 function createBaseLayers() {
         var layers = [];
-
         var world = [];
         var us = [];
 
-	// ------------------------------------------------------------
-        // AKISSACK - DEFAULT MAPS ------------------- ref: AK2A starts
-	// ------------------------------------------------------------
-	if (ShowAdditionalMaps) {
-            world.push(new ol.layer.Tile({
-               	source: new ol.source.OSM({
-        		"url" : "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-      		}),
-               	name: 'osm light',
-               	title: 'OpenStreetMap Light',
-               	type: 'base',
-            }));
-	}
-	// ------------------------------------------------------------
-        // ---------------------------------------------- ref: AK2A ends
-	// ------------------------------------------------------------
-
-        world.push(new ol.layer.Tile({
-                source: new ol.source.OSM(),
-                name: 'osm',
-                title: 'OpenStreetMap',
-                type: 'base',
-        }));
 
 	// ------------------------------------------------------------
         // AKISSACK - additional MAPS ---------------- ref: AK2B starts
@@ -88,6 +64,30 @@ function createBaseLayers() {
         if (MapzenAPIKey) {
                 world.push(createMapzenLayer());
         }
+
+        world.push(new ol.layer.Tile({
+                source: new ol.source.OSM(),
+                name: 'osm',
+                title: 'OpenStreetMap',
+                type: 'base',
+        }));
+
+	// ------------------------------------------------------------
+        // AKISSACK - DEFAULT MAPS ------------------- ref: AK2A starts
+	// ------------------------------------------------------------
+	if (ShowAdditionalMaps) {
+            world.push(new ol.layer.Tile({
+               	source: new ol.source.OSM({
+        		"url" : "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+      		}),
+               	name: 'osm light',
+               	title: 'OpenStreetMap Light',
+               	type: 'base',
+            }));
+	}
+	// ------------------------------------------------------------
+        // ---------------------------------------------- ref: AK2A ends
+	// ------------------------------------------------------------
 
 	// ------------------------------------------------------------
         // AKISSACK - US Layers ---------------------- ref: AK3A starts
