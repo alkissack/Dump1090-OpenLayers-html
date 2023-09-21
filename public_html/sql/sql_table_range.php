@@ -1,6 +1,6 @@
-<?php 
+<?php
 
-  $databaseName = "AllanK";
-  $tableName    = "MaxRange";
+$databaseName = "AllanK";
+$tableName = "MaxRange";
 
 ?>

@@ -1,8 +1,10 @@
 <html>
-  <head>
-    <script language="javascript" type="text/javascript" src="../jquery/jquery-3.0.0.min.js"></script>
-  </head>
-  <body>
+
+<head>
+  <script language="javascript" type="text/javascript" src="../jquery/jquery-3.0.0.min.js"></script>
+</head>
+
+<body>
 
   <!-------------------------------------------------------------------------
   1) Create some html content that can be accessed by jquery
@@ -13,36 +15,34 @@
 
   <script id="source" language="javascript" type="text/javascript">
 
-  $(function () 
-  {
-    $.ajax({                                      
-      url: 'sql-finds-layer.php',     
-      async: false ,    
-      data: "",  
-      dataType: 'json',  
-      success: function(retData)  
-      {
-        for (var i in retData)
-        {
-          var oneFind = retData[i];  
-        
-          for(var y in oneFind ) {  
-	     if(y == "Lat") {
-		var lat = oneFind[y];
-	     } else if (y == "Long") {
-		var lon = oneFind[y];
-	     } else if (y == "Name") {
-		var name = oneFind[y];
-	     }
-	 }
+    $(function () {
+      $.ajax({
+        url: 'sql-finds-layer.php',
+        async: false,
+        data: "",
+        dataType: 'json',
+        success: function (retData) {
+          for (var i in retData) {
+            var oneFind = retData[i];
 
-         $('#output').append(name+" lat:"+lat+" lon:"+lon).append("<br />");
-        } 
-      } 
+            for (var y in oneFind) {
+              if (y == "Lat") {
+                var lat = oneFind[y];
+              } else if (y == "Long") {
+                var lon = oneFind[y];
+              } else if (y == "Name") {
+                var name = oneFind[y];
+              }
+            }
 
+            $('#output').append(name + " lat:" + lat + " lon:" + lon).append("<br />");
+          }
+        }
+
+      });
     });
-  }); 
 
   </script>
-  </body>
+</body>
+
 </html>
