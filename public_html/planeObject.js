@@ -842,7 +842,7 @@ PlaneObject.prototype.updateMarker = function (moved) {
         var labelText = "";
         this.labelColour = "#ffffff";
 
-        if (ZoomLvl > 8) {
+        if (ZoomLvl > 10) {
           if (this.vert_rate > 256) {
             v = UP_TRIANGLE;
           } else {
