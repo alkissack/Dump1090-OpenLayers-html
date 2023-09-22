@@ -7,7 +7,7 @@ var StaticFeatures = new ol.Collection();
 var SiteCircleFeatures = new ol.Collection();
 var PlaneIconFeatures = new ol.Collection();
 var PlaneTrailFeatures = new ol.Collection();
-var MyFeatures = new ol.Collection();    // AKISSACK Ref: AK9U
+var MyFeatures = new ol.Collection();          // AKISSACK Ref: AK9U
 var MaxRangeFeatures = new ol.Collection();    // AKISSACK Ref: AK8A
 var MidRangeFeatures = new ol.Collection();    // AKISSACK Ref: AK8A
 var MinRangeFeatures = new ol.Collection();    // AKISSACK Ref: AK8A
@@ -75,7 +75,7 @@ function checkSidebarWidthChange() {  // AKISSACK mapsize    Ref: AKDD
     var newSidebarWidth = 0;
     newSidebarWidth = $("#sidebar_container").width();
     if (lastSidebarWidth != newSidebarWidth) {
-        console.log("The sidebar was resized");
+        //console.log("The sidebar was resized");
         updateMapSize();
         lastSidebarWidth = newSidebarWidth;
     }
@@ -528,7 +528,7 @@ function initialize_map() {
     CenterLat = Number(localStorage["CenterLat"]) || DefaultCenterLat;
     CenterLon = Number(localStorage["CenterLon"]) || DefaultCenterLon;
     ZoomLvl = Number(localStorage["ZoomLvl"]) || DefaultZoomLvl;
-    MapType = localStorage["MapType"];
+    MapType = localStorage["MapType"] || "osm light";
 
     // Set SitePosition, initialize sorting
     if (
@@ -789,6 +789,29 @@ function initialize_map() {
     // --------------------------------------------------------------
 
     if (ShowUKMilLayers) {
+        var awacLayer = new ol.layer.Vector({
+            name: "awac",
+            type: "overlay",
+            title: "AWACS Zones",
+            source: new ol.source.Vector({
+                url: "layers/UK_Mil_AWACS_Orbits.geojson",
+                format: new ol.format.GeoJSON({
+                    defaultDataProjection: "EPSG:4326",
+                    projection: "EPSG:3857",
+                }),
+            }),
+            style: new ol.style.Style({
+                fill: new ol.style.Fill({
+                    color: "rgba(0, 255,0, 0.05)",
+                }),
+                stroke: new ol.style.Stroke({
+                    color: "rgba(0, 255,0, 0.5)",
+                    width: 0.75,
+                }),
+            }),
+        });
+        awacLayer.setVisible(false);
+
         var dangerLayer = new ol.layer.Vector({
             name: "danger",
             type: "overlay",
@@ -899,7 +922,7 @@ function initialize_map() {
         layers.push(
             new ol.layer.Group({
                 title: "UK Military",
-                layers: [ukmilLayer, AARLayer, dangerLayer, matzLayer, matzafLayer],
+                layers: [ukmilLayer, awacLayer, AARLayer, dangerLayer, matzLayer, matzafLayer],
             })
         );
     }
@@ -1063,9 +1086,13 @@ function initialize_map() {
     })
 
     ol.control.LayerSwitcher.forEachRecursive(layerGroup, function (lyr) {
-        if (!lyr.get("name")) return;
-
+        if (!lyr.get("name")) {
+            //console.log("DEBUG 1 " + baseCount );
+            return;
+        }
+ 
         if (lyr.get("type") === "base") {
+            baseCount++;
             if (MapType === lyr.get("name")) {
                 foundType = true;
                 lyr.setVisible(true);
@@ -1076,6 +1103,7 @@ function initialize_map() {
             lyr.on("change:visible", function (evt) {
                 if (evt.target.getVisible()) {
                     MapType = localStorage["MapType"] = evt.target.get("name");
+                    createSiteCircleFeatures();
                 }
             });
         } else if (lyr.get("type") === "overlay") {
@@ -1091,10 +1119,11 @@ function initialize_map() {
             });
         }
     });
-
+    //console.log("DEBUG 1 " + baseCount + " " + foundType);
     if (!foundType) {
         ol.control.LayerSwitcher.forEachRecursive(layers, function (lyr) {
-            if (foundType) return;
+            if (foundType) 
+                return;
             if (lyr.get("type") === "base") {
                 lyr.setVisible(true);
                 foundType = true;
@@ -1108,19 +1137,22 @@ function initialize_map() {
 
         view: new ol.View({
             center: ol.proj.fromLonLat([CenterLon, CenterLat]),
-            //zoomFactor: 1,
-            zoom: ZoomLvl,
+            zoom: ZoomLvl
         }),
         controls: [
             new ol.control.Zoom(),
             new ol.control.Rotate(),
             new ol.control.Attribution({ collapsed: true }),
             new ol.control.ScaleLine({ units: DisplayUnits }),
-            new ol.control.LayerSwitcher(),
+            //new ol.control.LayerSwitcher(),
         ],
         loadTilesWhileAnimating: true,
         loadTilesWhileInteracting: true,
     });
+
+    if (baseCount > 1) {
+        OLMap.addControl(new ol.control.LayerSwitcher());
+    }
 
     // Listeners for newly created Map
     OLMap.getView().on("change:center", function (event) {
@@ -2705,36 +2737,32 @@ function importRangePlot() {
 }
 
 function importMax(json) {
-    console.log(json);
+    //console.log(json);
     for (var j = 0; j < json.length; j++) {
         var obj = json[j];
         MaxRngRange[j] = obj[1];
         MaxRngLat[j] = obj[2];
         MaxRngLon[j] = obj[3]
     }
-    console.log("data.json read " + MaxRngRange);
+    //console.log("data.json read " + MaxRngRange);
 }
 
 function importMid(json) {
-    console.log(json);
     for (var j = 0; j < json.length; j++) {
         var obj = json[j];
         MidRngRange[j] = obj[1];
         MidRngLat[j] = obj[2];
         MidRngLon[j] = obj[3]
     }
-    //console.log("data.json read " + MidRngRange );
 }
 
 function importMin(json) {
-    console.log(json);
     for (var j = 0; j < json.length; j++) {
         var obj = json[j];
         MinRngRange[j] = obj[1];
         MinRngLat[j] = obj[2];
         MinRngLon[j] = obj[3]
     }
-    //console.log("data.json read " + MinRngRange );
 }
 
 function updateMapSize() {

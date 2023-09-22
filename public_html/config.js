@@ -28,10 +28,10 @@ DefaultZoomLvl = 7;
 // Center marker. If dump1090 provides a receiver location,
 // that location is used and these settings are ignored.
 
-SiteShow = true;		// true to show a center marker
-SiteLat = 53;		// position of the marker
-SiteLon = -0.4;		// *****  CHANGE THE LAT/LONG to match your location *****
-SiteName = "Rx";		// tooltip of the marker
+SiteShow = true;	// true to show a center marker
+SiteLat  = 53;		// position of the marker
+SiteLon  = -0.4;	// *****  CHANGE THE LAT/LONG to match your location *****
+SiteName = "Rx";	// tooltip of the marker
 
 // Default center of the map.
 DefaultCenterLat = SiteLat;
@@ -130,21 +130,21 @@ BingMapsAPIKey = "";
 MapzenAPIKey = null;
 
 
-UseDefaultTerrainRings = true;         // default Terrian rings color, otherwise colored by altitude (color defined in TerrainColorByAlt)
+UseDefaultTerrainRings = true;    // default Terrian rings color, otherwise colored by altitude (color defined in TerrainColorByAlt)
 UseTerrainLineDash = true;        // true: dashed or false: solid terrain rings
-TerrainLineWidth = 1;            // line width of terrain rings
+TerrainLineWidth = 1;             // line width of terrain rings
 TerrainAltitudes = [9842, 39370]; // altitudes in ft as in alt parameter TerrainColorByAlt, replace XXXXXXX with your code: sudo wget -O /usr/share/dump1090-fa/html/upintheair.json "www.heywhatsthat.com/api/upintheair.json?id=XXXXXXX&refraction=0.25&alts=3000,12000" 
 TerrainColorByAlt = {             // colours depending on altitude (UseDefaultTerrainRings must be false and TerrainAltitudes must be set), default same as colours of planes in air, alt in ft
-    h: [{ alt: 2000, val: 20 },    // orange
-    { alt: 10000, val: 140 },   // light green
-    { alt: 40000, val: 300 }], // magenta
+    h: [{ alt: 2000, val: 20 },   // orange
+    { alt: 10000, val: 140 },     // light green
+    { alt: 40000, val: 300 }],    // magenta
     s: 85,
     l: 50,
 };
 
-ShowSiteRingDistanceText = true;       // show the distance text in site rings
+ShowSiteRingDistanceText = true;  // show the distance text in site rings
 
-UseJetPhotosPhotoLink = false;       // Use jetphotos.com instead of FlightAware for photo links
+UseJetPhotosPhotoLink = false;    // Use jetphotos.com instead of FlightAware for photo links
 
 // for this you have to change /etc/lighttpd/conf-enabled/89-dump1090-fa.conf : commenting out the filter $HTTP["url"] =~ "^/dump1090-fa/data/.*\.json$"  and always send the response header
 // maybe filter is not correct --- Help wanted
@@ -158,50 +158,50 @@ EndpointDump1090 = "";    // insert here endpoint to other computer where dump10
 // ----------------------------------------------------------------------------------------------------------------------------
 // Options to enable/disable modifications provided in Dump1090-OpenLayers3-html by Al Kissack
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMouseLatLong = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
-ShowAdditionalMaps = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
+ShowMouseLatLong = true;     // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/1.-Mouse-position-Latitude-and-Longitude
+ShowAdditionalMaps = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/2.-Additional-maps
 ShowPermanentLabels = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 ShowHoverOverLabels = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/6.-Hover-over-labels
-ShowRanges = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
+ShowRanges = true;           // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 
 // If showing ranges, set SiteLat/SiteLon as these are the zero range positions till plot is drawn
-MinRangeHeight = 2000; // ft - inner range ring - Set -1 to disable collection and display
-MinRangeLikely = 75; // nm - practical max (to supress spikes from bad data)
-MinRangeShow = true; // set to show min range currently captured (assuming MinRangeHeight is set too)
+MinRangeHeight = 2000;   // ft - inner range ring - Set -1 to disable collection and display
+MinRangeLikely = 75;     // nm - practical max (to supress spikes from bad data)
+MinRangeShow = true;     // set to show min range currently captured (assuming MinRangeHeight is set too)
 
 MidRangeHeight = 10000; // ft - mid range ring - Set -1 to disable collection and display
-MidRangeLikely = 125; // nm - practical max
-MidRangeShow = true; // set to show mid range currently captured (assuming MidRangeHeight is set too)
+MidRangeLikely = 125;   // nm - practical max
+MidRangeShow = true;    // set to show mid range currently captured (assuming MidRangeHeight is set too)
 
 MaxRangeHeight = 99999;
 MaxRangeLikely = 300; // nm - practical max 300
-MaxRangeShow = true; // set to show max range currently captured 
+MaxRangeShow = true;  // set to show max range currently captured 
 
-RangeLine = 1; // Line width for range plot
+RangeLine = 1;        // Line width for range plot
 
 TypeOfStorageSession = 'Local';  // Local or Session - Session applies per browser session, Local persists for the browser if closed and reopened.
 
 // ----------------------------------------------------------------------------------------------------------------------------
 //           UK ONLY :
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowUSLayers = false;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
-ShowUKCivviLayers = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
+ShowUSLayers = false;     // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
+ShowUKCivviLayers = true; // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
 ShowUKMilLayers = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays
 
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PERSONAL OPTIONS      https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 // ----------------------------------------------------------------------------------------------------------------------------
 ShowMyPreferences = true;  // Required to enable the FOUR options below
-ShowAdditionalData = true;  //
-ShowMyIcons = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
+ShowAdditionalData = true; 
+ShowMyIcons = true;        // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/10.-Aircraft-icon-changes
 ShowSimpleColours = true;  // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 // ******************************************************************************
-ShowHTMLColumns = true;  // *** If you turn this off, use the original-index.html file instead         ***
+ShowHTMLColumns = true;   // *** If you turn this off, use the original-index.html file instead         ***
 // ******************************************************************************
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PRIVATE OPTIONS
 // ----------------------------------------------------------------------------------------------------------------------------
-ShowMyFindsLayer = false;	// Private plot (non-aircraft related)
+ShowMyFindsLayer = false;   // Private plot (non-aircraft related)
 ShowSleafordRange = false;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
-SleafordMySql = false;  // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
+SleafordMySql = false;      // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 // ----------------------------------------------------------------------------------------------------------------------------

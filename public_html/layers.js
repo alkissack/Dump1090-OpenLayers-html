@@ -8,7 +8,6 @@ function createBaseLayers() {
     var world = [];
     var us = [];
 
-
     // ------------------------------------------------------------
     // AKISSACK - additional MAPS ---------------- ref: AK2B starts
     // ------------------------------------------------------------
@@ -24,6 +23,16 @@ function createBaseLayers() {
             type: 'base',
         }));
 
+        //world.push(new ol.layer.Tile({
+        //        source: new ol.source.XYZ({
+        //                "url" : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
+        //                "attributions" : "Tiles © Esri - Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
+        //        }),
+        //        name: 'esri_topo',
+        //        title: 'ESRI Topographic',
+        //        type: 'base',
+        //}));
+
         world.push(new ol.layer.Tile({
             source: new ol.source.OSM({
                 "url": "http://{a-d}.tile.stamen.com/terrain-background/{z}/{x}/{y}.png",
@@ -34,6 +43,51 @@ function createBaseLayers() {
             title: 'Terrain',
             type: 'base',
         }));
+
+        //world.push(new ol.layer.Tile({
+        //    source: new ol.source.OSM({
+        //            "url" : "https://{a-z}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
+        //            "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
+        //                   + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+        //    }),
+        //    name: 'carto_dark',
+        //    title: 'Carto Dark (+labels)',
+        //    type: 'base',
+        //}));
+
+        world.push(new ol.layer.Tile({
+                source: new ol.source.OSM({
+                        "url" : "https://{a-z}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
+                        "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
+                               + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+                }),
+                name: 'carto_dark_nolabels',
+                title: 'Carto Dark',
+                type: 'base',
+        }));
+
+        //world.push(new ol.layer.Tile({
+        //        source: new ol.source.OSM({
+        //                "url" : "https://{a-z}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        //                "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
+        //                       + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+        //        }),
+        //        name: 'carto_light_all',
+        //        title: 'Carto Light (+labels)',
+        //        type: 'base',
+        //}));
+
+        world.push(new ol.layer.Tile({
+                source: new ol.source.OSM({
+                        "url" : "https://{a-z}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
+                        "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
+                               + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+                }),
+                name: 'carto_light_nolabels',
+                title: 'Carto Light',
+                type: 'base',
+        }));
+
 
     }
     // ------------------------------------------------------------
@@ -75,16 +129,15 @@ function createBaseLayers() {
     // ------------------------------------------------------------
     // AKISSACK - DEFAULT MAPS ------------------- ref: AK2A starts
     // ------------------------------------------------------------
-    if (ShowAdditionalMaps) {
-        world.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
-                "url": "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
-            }),
-            name: 'osm light',
-            title: 'OpenStreetMap Light',
-            type: 'base',
-        }));
-    }
+    world.push(new ol.layer.Tile({
+        source: new ol.source.OSM({
+            "url": "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+        }),
+        name: 'osm light',
+        title: 'OpenStreetMap Light',
+        type: 'base',
+    }));
+
     // ------------------------------------------------------------
     // ---------------------------------------------- ref: AK2A ends
     // ------------------------------------------------------------
