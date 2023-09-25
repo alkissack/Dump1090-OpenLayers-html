@@ -886,13 +886,6 @@ PlaneObject.prototype.updateMarker = function (moved) {
                     labelText =
                         labelText +
                         "[" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft") + "]";
-
-                    //labelText =
-                    //  labelText +
-                    //  " [" +
-                    //  (this.fl ? this.fl : "?") +
-                    //  v +
-                    //  "]";
                 }
 
                 var hexColour = this.labelColour; // New section for semi transparency
@@ -1043,7 +1036,6 @@ PlaneObject.prototype.updateLines = function () {
             } else {
                 seg.feature.setStyle(airStyle);
             }
-
             PlaneTrailFeatures.push(seg.feature);
         }
     }
@@ -1053,10 +1045,12 @@ PlaneObject.prototype.destroy = function () {
     this.clearLines();
     this.clearMarker();
 };
+
 // AKISSACK Ref: AK8I
 function radians(n) {
     return n * (Math.PI / 180);
 }
+
 function degrees(n) {
     return n * (180 / Math.PI);
 }

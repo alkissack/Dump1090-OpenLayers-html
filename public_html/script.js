@@ -528,7 +528,7 @@ function initialize_map() {
     CenterLat = Number(localStorage["CenterLat"]) || DefaultCenterLat;
     CenterLon = Number(localStorage["CenterLon"]) || DefaultCenterLon;
     ZoomLvl = Number(localStorage["ZoomLvl"]) || DefaultZoomLvl;
-    MapType = localStorage["MapType"] || "osm light";
+    MapType = localStorage["MapType"] || "osm_light";
 
     // Set SitePosition, initialize sorting
     if (
@@ -558,6 +558,62 @@ function initialize_map() {
     // --------------------------------------------------------------
     // AKISSACK - ADD LAYERS ----------------------  ref: AK4A starts
     // --------------------------------------------------------------
+ 
+   // Defining Light Styles
+    var aarDayStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({color: "rgba(128,128,255, 0.5)", width: 1,}),
+        fill: new ol.style.Fill({color: "rgba(0,0,255, 0.05)", }),
+    });
+    var tacanDayStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({color: "rgba(0,0,102,0.2)", width: 3, }),
+    });
+    var matzDayStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(0,0,255, 0.05)", }),
+        stroke: new ol.style.Stroke({color: "rgba(128,0,0, 0.5)", width: 0.75, }),
+    });
+    var ctaDayStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(0, 127,0, 0.03)", }),
+        stroke: new ol.style.Stroke({color: "rgba(0,64,0, 0.2)", width: 1, }),
+    });
+    var airwaysDayStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(0, 102,0, 0.07)", }),
+        stroke: new ol.style.Stroke({color: "rgba(0, 64,0, 0.5)", width: 0.2, }),
+    });
+    var corridorDayStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(102, 0,0, 0.07)", }),
+        stroke: new ol.style.Stroke({color: "rgba(255, 0,0, 0.5)", width: 0.2, }),
+    });
+    var ukDayStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({color: "rgba(0,102,0, 0.2)", width: 3, }),
+    });
+
+    // Defining Dark Styles
+    var aarNightStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({color: "rgba(128,128,255, 0.5)", width: 1, }),
+        fill: new ol.style.Fill({color: "rgba(128,128,255, 0.05)", }),
+    });
+    var tacanNightStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({color: "rgba(128,128,255,0.2)", width: 3, }),
+    });
+    var matzNightStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(128,128,255, 0.05)", }),
+        stroke: new ol.style.Stroke({color: "rgba(255,128,128, 0.5)", width: 0.75,}),
+    });
+    var ctaNightStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(128, 255,128, 0.03)", }),
+        stroke: new ol.style.Stroke({color: "rgba(128,255,128, 0.2)", width: 1, }),
+    });
+    var airwaysNightStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(128, 255,128, 0.07)", }),
+        stroke: new ol.style.Stroke({color: "rgba(128,255,128, 0.5)", width: 0.2, }),
+    });
+    var corridorNightStyle = new ol.style.Style({
+        fill: new ol.style.Fill({color: "rgba(255,128,128, 0.07)", }),
+        stroke: new ol.style.Stroke({color: "rgba(255, 0,0, 0.5)", width: 0.2,}),
+    });
+    var ukNightStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({color: "rgba(64,255,64, 0.2)", width: 3, }),
+    });
 
     if (ShowUKCivviLayers) {
         var vordmeLayer = new ol.layer.Vector({
@@ -582,7 +638,7 @@ function initialize_map() {
                         offsetX: 1,
                         offsetY: -11,
                         fill: new ol.style.Fill({
-                            color: "#003300",
+                            color: "#009900",
                         }),
                     }),
                 });
@@ -619,7 +675,7 @@ function initialize_map() {
                         offsetX: -1,
                         offsetY: 10,
                         fill: new ol.style.Fill({
-                            color: "#003300",
+                            color: "#009900",
                         }),
                     }),
                 });
@@ -644,15 +700,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(0, 102,0, 0.07)",
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(0, 64,0, 0.5)",
-                    width: 0.2,
-                }),
-            }),
+            style: airwaysDayStyle,
         });
         airwaysLayer.setVisible(false);
 
@@ -667,15 +715,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(102, 0,0, 0.07)",
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(255, 0,0, 0.5)",
-                    width: 0.2,
-                }),
-            }),
+            style: corridorDayStyle,
         });
         airwaysMRCLayer.setVisible(false);
 
@@ -690,15 +730,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(0, 127,0, 0.03)",
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(0,64,0, 0.2)",
-                    width: 1,
-                }),
-            }),
+            style: ctaDayStyle,
         });
         ukCTALayer.setVisible(false);
 
@@ -754,12 +786,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "rgba(0,102,0, 0.2)",
-                    width: 3,
-                }),
-            }),
+            style: ukDayStyle,
         });
         ukairspaceLayer.setVisible(false);
 
@@ -789,6 +816,8 @@ function initialize_map() {
     // --------------------------------------------------------------
 
     if (ShowUKMilLayers) {
+
+        // LAYERS for UK Military
         var awacLayer = new ol.layer.Vector({
             name: "awac",
             type: "overlay",
@@ -846,15 +875,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(0,0,255, 0.05)",
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(0,0,128, 0.5)",
-                    width: 0.75,
-                }),
-            }),
+            style: aarDayStyle,
         });
         AARLayer.setVisible(false);
 
@@ -869,15 +890,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                fill: new ol.style.Fill({
-                    color: "rgba(0,0,255, 0.05)",
-                }),
-                stroke: new ol.style.Stroke({
-                    color: "rgba(128,0,0, 0.5)",
-                    width: 0.75,
-                }),
-            }),
+            style: matzDayStyle, 
         });
 
         var matzafLayer = new ol.layer.Vector({
@@ -910,12 +923,7 @@ function initialize_map() {
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "rgba(0,0,102,0.2)",
-                    width: 3,
-                }),
-            }),
+            style: tacanDayStyle,
         });
         ukmilLayer.setVisible(false);
 
@@ -1087,12 +1095,14 @@ function initialize_map() {
 
     ol.control.LayerSwitcher.forEachRecursive(layerGroup, function (lyr) {
         if (!lyr.get("name")) {
-            //console.log("DEBUG 1 " + baseCount );
+            //console.log("DEBUG " + baseCount );
             return;
         }
  
         if (lyr.get("type") === "base") {
             baseCount++;
+            console.log("DEBUG  " + baseCount + "-" + lyr.get("type") + "-" + lyr.get("name"));
+
             if (MapType === lyr.get("name")) {
                 foundType = true;
                 lyr.setVisible(true);
@@ -1104,6 +1114,7 @@ function initialize_map() {
                 if (evt.target.getVisible()) {
                     MapType = localStorage["MapType"] = evt.target.get("name");
                     createSiteCircleFeatures();
+                    baseLayerChange(evt.target.get("name"));
                 }
             });
         } else if (lyr.get("type") === "overlay") {
@@ -1119,7 +1130,7 @@ function initialize_map() {
             });
         }
     });
-    //console.log("DEBUG 1 " + baseCount + " " + foundType);
+
     if (!foundType) {
         ol.control.LayerSwitcher.forEachRecursive(layers, function (lyr) {
             if (foundType) 
@@ -1222,10 +1233,7 @@ function initialize_map() {
                 ).toString();
                 var akrng = ol.sphere.getDistance(SitePosition, coord1);
                 return (
-                    akret +
-                    " " +
-                    akbrn +
-                    "\u00B0 " +
+                    akret + " " + akbrn + "\u00B0 " +
                     format_distance_long(akrng, DisplayUnits, 0)
                 );
             } else {
@@ -1237,7 +1245,6 @@ function initialize_map() {
     var mousePosition = new ol.control.MousePosition({
         coordinateFormat: llFormat(3), // ol.coordinate.createStringXY(4),
         projection: "EPSG:4326",
-        //target: document.getElementById('mouseposition').innerHTML = "X "+ akLat,
         target: document.getElementById("mouseposition"),
         undefinedHTML: "&nbsp;",
     });
@@ -1751,6 +1758,29 @@ function initialize_map() {
     request.fail(function (jqxhr, status, error) {
         // no rings available, do nothing
     });
+
+    function baseLayerChange(n) {
+        //console.log("DEBUG - layer change " + n);
+        if(n === "carto_dark_nolabels") {
+            //console.log("DEBUG - dark");
+            AARLayer.setStyle(aarNightStyle);
+            ukmilLayer.setStyle(tacanNightStyle);
+            matzLayer.setStyle(matzNightStyle); 
+            ukCTALayer.setStyle(ctaNightStyle);
+            airwaysLayer.setStyle(airwaysNightStyle);
+            airwaysMRCLayer.setStyle(corridorNightStyle);
+            ukairspaceLayer.setStyle(ukNightStyle);
+        } else {
+            //console.log("DEBUG - light");
+            AARLayer.setStyle(aarDayStyle);
+            ukmilLayer.setStyle(tacanDayStyle);
+            matzLayer.setStyle(matzDayStyle); 
+            ukCTALayer.setStyle(ctaDayStyle);
+            airwaysLayer.setStyle(airwaysDayStyle);
+            airwaysMRCLayer.setStyle(corridorDayStyle);
+            ukairspaceLayer.setStyle(ukDayStyle);
+        }
+    }
 }
 
 function ringStyleForAlt(altitude) {
@@ -2876,7 +2906,6 @@ function adjustSelectedInfoBlockPosition() {
     }
 
     var selectedPlane = Planes[SelectedPlane];
-
     if (
         selectedPlane === undefined ||
         selectedPlane === null ||
@@ -3064,10 +3093,7 @@ function getFlightAwareIdentLink(ident, linkText) {
         }
         return (
             '<a target="_blank" href="https://flightaware.com/live/flight/' +
-            ident.trim() +
-            '">' +
-            linkText +
-            "</a>"
+            ident.trim() + '">' + linkText + "</a>"
         );
     }
     return "";
@@ -3209,3 +3235,4 @@ function convert_nm_distance(dist, displayUnits) {
     }
     return (dist); // nautical miles
 }
+

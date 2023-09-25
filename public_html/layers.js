@@ -63,8 +63,12 @@ function createBaseLayers() {
                 }),
                 name: 'carto_dark_nolabels',
                 title: 'Carto Dark',
-                type: 'base',
+                type: 'base'
         }));
+
+        //OLMap.getView().on('change:visible', function(){
+        //  console.log("DEBUG");
+        //});
 
         //world.push(new ol.layer.Tile({
         //        source: new ol.source.OSM({
@@ -74,7 +78,7 @@ function createBaseLayers() {
         //        }),
         //        name: 'carto_light_all',
         //        title: 'Carto Light (+labels)',
-        //        type: 'base',
+        //        type: 'base'
         //}));
 
         world.push(new ol.layer.Tile({
@@ -133,7 +137,7 @@ function createBaseLayers() {
         source: new ol.source.OSM({
             "url": "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
         }),
-        name: 'osm light',
+        name: 'osm_light',
         title: 'OpenStreetMap Light',
         type: 'base',
     }));
