@@ -839,7 +839,7 @@ PlaneObject.prototype.updateMarker = function (moved) {
             // ---------------------------------------------------------------------
             if (ShowPermanentLabels) {
                 // Update label as as well as moving we may have gone up or down
-                var v = "-"; // An indication of level, climbing or decending
+                var v = ""; // An indication of level, climbing or decending
                 var labelText = "";
                 this.labelColour = "#ffffff";
 
@@ -863,7 +863,7 @@ PlaneObject.prototype.updateMarker = function (moved) {
                         //LINE TWO
                         var hgt = parseInt(this.fl ? (this.fl) : 0);
                         hgt = convert_altitude(hgt * 100, DisplayUnits);
-                        labelText = labelText + "\n" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft") ;
+                        labelText = labelText + "\n" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft") + v;
                     } else {
                         // LINE ONE
                         labelText = this.flight ? this.flight : "No Ident ";
