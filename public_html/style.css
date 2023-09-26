@@ -103,6 +103,7 @@ body {
     width: auto;
     /* AKISSACK  ------------ Ref: AK9F */
     left: 0 !important;
+    color: black;
 }
 
 #splitter {
@@ -116,6 +117,9 @@ body {
     flex: 1 1 auto;
     padding: 10px;
     overflow: scroll;
+}
+#planes_table {
+    color: black;
 }
 
 div#SpecialSquawkWarning {
@@ -219,11 +223,14 @@ div#loader {
 }
 
 .vPosition {
-    background-color: #C3FFDF;
+    background-color: #C3FFDF;  //green
 }
 
 .mlat {
-    background-color: #C7EAFC;
+    background-color: #C7EAFC;  //blue
+}
+.acdefault {
+    background-color: #dddddd;
 }
 
 .squawk7500 {
@@ -310,6 +317,7 @@ div#loader {
 }
 
 .altitudeFilterInput {
+    background-color: #aaaaaa;
     width: 50px;
 }
 
@@ -323,7 +331,7 @@ input.error {
     top: 86px !important;
     right: 10px !important;
 }
-
+   
 /* AKISSACK - ref: AK1B Starts ---------------------------------------------------------------------------- */
 div#mouseposition {
     position: absolute;

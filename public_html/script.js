@@ -18,6 +18,7 @@ var PlaneFilter = {};
 var SelectedPlane = null;
 var SelectedAllPlanes = false;
 var FollowSelected = false;
+var IsDarkMap = false;
 // --------------------------------------------------------------------------------------
 // AKISSACK - Variables -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
@@ -1093,19 +1094,23 @@ function initialize_map() {
         layers: layers
     })
 
+    MapType = localStorage["MapType"];
+    //console.log("MapType " + MapType);
+
     ol.control.LayerSwitcher.forEachRecursive(layerGroup, function (lyr) {
         if (!lyr.get("name")) {
-            //console.log("DEBUG " + baseCount );
             return;
         }
  
         if (lyr.get("type") === "base") {
             baseCount++;
-            console.log("DEBUG  " + baseCount + "-" + lyr.get("type") + "-" + lyr.get("name"));
+            //console.log("DEBUG  " + baseCount + "-" + lyr.get("type") + "-" + lyr.get("name"));
 
             if (MapType === lyr.get("name")) {
                 foundType = true;
                 lyr.setVisible(true);
+                baseLayerChange(MapType);
+                //console.log("DEBUG MapType " + baseCount + "-" + lyr.get("type") + " - " + lyr.get("name"));
             } else {
                 lyr.setVisible(false);
             }
@@ -1763,6 +1768,8 @@ function initialize_map() {
         //console.log("DEBUG - layer change " + n);
         if(n === "carto_dark_nolabels") {
             //console.log("DEBUG - dark");
+            IsDarkMap = true;
+            // Style changes
             AARLayer.setStyle(aarNightStyle);
             ukmilLayer.setStyle(tacanNightStyle);
             matzLayer.setStyle(matzNightStyle); 
@@ -1770,8 +1777,17 @@ function initialize_map() {
             airwaysLayer.setStyle(airwaysNightStyle);
             airwaysMRCLayer.setStyle(corridorNightStyle);
             ukairspaceLayer.setStyle(ukNightStyle);
+            const elementInfo = document.querySelector('#selected_infoblock');
+            elementInfo.style.background = '#888888';
+            const elementCanvas = document.querySelector('body');
+            elementCanvas.style.backgroundColor= '#444444';
+            const elementSide = document.querySelector('#sidebar_container');
+            elementSide.style.color= '#ffffff';
+            const elementMouse = document.querySelector('div#mouseposition');
+            elementMouse.style.color= '#ffffff';
         } else {
             //console.log("DEBUG - light");
+            IsDarkMap = false;
             AARLayer.setStyle(aarDayStyle);
             ukmilLayer.setStyle(tacanDayStyle);
             matzLayer.setStyle(matzDayStyle); 
@@ -1779,6 +1795,15 @@ function initialize_map() {
             airwaysLayer.setStyle(airwaysDayStyle);
             airwaysMRCLayer.setStyle(corridorDayStyle);
             ukairspaceLayer.setStyle(ukDayStyle);
+            const elementInfo = document.querySelector('#selected_infoblock');
+            elementInfo.style.background = '#ffffff';
+            const elementCanvas= document.querySelector('body');
+            elementCanvas.style.backgroundColor= '#ffffff';
+            const elementSide = document.querySelector('#sidebar_container');
+            elementSide.style.color= '#000000';
+            const elementMouse = document.querySelector('div#mouseposition');
+            elementMouse.style.color= 'blue';
+
         }
     }
 }
@@ -2088,15 +2113,19 @@ function refreshTableInfo() {
 
             var classes = "plane_table_row";
 
-            if (tableplane.position !== null && tableplane.seen_pos < 60) {
-                ++TrackedAircraftPositions;
-                if (tableplane.position_from_mlat) classes += " mlat";
-                else classes += " vPosition";
-            }
+            if (tableplane.position !== null) {
+                if (tableplane.seen_pos < 60) {
+                    ++TrackedAircraftPositions;
+                    if (tableplane.position_from_mlat) {
+                        classes += " mlat"; 
+                    } else classes += " vPosition";
+                } else classes += " acdefault";
+            } else {
+                 classes += " acdefault";
+	    }
             if (tableplane.icao == SelectedPlane) classes += " selected";
 
-            if (tableplane.is_interesting == "Y") {
-                // AKISSACK ------------ Ref: AK9F
+            if (tableplane.is_interesting == "Y") { // AKISSACK ------------ Ref: AK9F
                 classes += " ofInterest ";
             }
 
@@ -2132,7 +2161,7 @@ function refreshTableInfo() {
                 var tmpTxt1 =
                     tableplane.ac_aircraft !== null ? tableplane.ac_aircraft : "-";
                 if (tmpTxt1 === "-" || tmpTxt1 === "") {
-                    //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
+                    //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers-html/issues/3
                     tmpTxt1 = tableplane.icaotype
                         ? tableplane.icaotype
                         : "Unknown aircraft";

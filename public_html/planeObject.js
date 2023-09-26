@@ -891,7 +891,7 @@ PlaneObject.prototype.updateMarker = function (moved) {
                 var hexColour = this.labelColour; // New section for semi transparency
                 var myStrokeColour = ol.color.asArray(hexColour);
                 myStrokeColour = myStrokeColour.slice();
-                myStrokeColour[3] = this.selected ? 0.5 : 0.25; // change the alpha of the colour
+                myStrokeColour[3] = this.selected ? (IsDarkMap ? 1 : 0.5) : (IsDarkMap ? 1 : 0.25) ; //1 : 1 ; //0.5 : 0.25; // change the alpha of the colour
                 if (ShowAdditionalData) {
                     hexColour = this.is_interesting ? "#ff0000" : "#0000ff";
                 } else {
