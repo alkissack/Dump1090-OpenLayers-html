@@ -851,72 +851,73 @@ PlaneObject.prototype.updateMarker = function (moved) {
                             v = DOWN_TRIANGLE;
                         }
                     }
+  
+                    if (IsDarkMap) {
+                        // LINE ONE
+                        labelText = "# ";
+                        labelText = labelText + (this.squawk ? this.squawk : "No Squawk ");
+                        if (this.selected && !SelectedAllPlanes) {
+                            this.labelColour = "#ffff00"; 
+                        } else this.labelColour = "#ffffff"; 
 
-                    // LINE ONE
-                    labelText = this.flight ? this.flight : "No Ident ";
-                    if (this.registration) {
-                        labelText = labelText + this.registration;
-                    }
-                    labelText = labelText + (this.squawk ? " [" + this.squawk + "]" : "");
-
-                    if (this.selected && !SelectedAllPlanes) {
-                        this.labelColour = "#ffff00"; //this.labelColour = 'yellow' changed for semi transparency
+                        //LINE TWO
+                        var hgt = parseInt(this.fl ? (this.fl) : 0);
+                        hgt = convert_altitude(hgt * 100, DisplayUnits);
+                        labelText = labelText + "\n" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft") ;
                     } else {
-                        this.labelColour = "#ffffff"; //this.labelColour = 'white'
-                    }
+                        // LINE ONE
+                        labelText = this.flight ? this.flight : "No Ident ";
+                        if (this.registration) {labelText = labelText + this.registration;}
+                        labelText = labelText + (this.squawk ? " [" + this.squawk + "]" : "");
+                        if (this.selected && !SelectedAllPlanes) {
+                            this.labelColour = "#ffff00"; 
+                        } else this.labelColour = "#ffffff"; 
 
-                    //LINE TWO
-                    if (ShowAdditionalData) {
-                        //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
-                        var tmpText = this.ac_aircraft ? this.ac_aircraft : "-";
-                        if (tmpText === "-") {
-                            tmpText = this.icaotype ? this.icaotype : "Unknown Type";
+                        //LINE TWO
+                        if (ShowAdditionalData) {
+                            //  Let's try an alternative to ID -> https://github.com/alkissack/Dump1090-OpenLayers3-html/issues/3
+                            var tmpText = this.ac_aircraft ? this.ac_aircraft : "-";
+                            if (tmpText === "-") {tmpText = this.icaotype ? this.icaotype : "Unknown Type";}
+                            labelText = labelText + "\n" + tmpText;
                         }
-                        labelText = labelText + "\n" + tmpText;
+
+                        //LINE THREE
+                        labelText = labelText + "\n" + this.icao.toUpperCase();
+                        var hgt = parseInt(this.fl ? (this.fl) : 0);
+                        hgt = convert_altitude(hgt * 100, DisplayUnits);
+                        labelText = labelText + "[" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft") + "]";
                     }
-
-                    //LINE THREE
-                    labelText =
-                        labelText +
-                        "\n" +
-                        this.icao.toUpperCase();
-
-                    var hgt = parseInt(this.fl ? (this.fl) : 0);
-                    hgt = convert_altitude(hgt * 100, DisplayUnits);
-                    //console.log("Height.. " + hgt);
-                    labelText =
-                        labelText +
-                        "[" + parseInt(hgt) + (DisplayUnits === "metric" ? "m" : " ft") + "]";
                 }
 
                 var hexColour = this.labelColour; // New section for semi transparency
                 var myStrokeColour = ol.color.asArray(hexColour);
                 myStrokeColour = myStrokeColour.slice();
-                myStrokeColour[3] = this.selected ? (IsDarkMap ? 1 : 0.5) : (IsDarkMap ? 1 : 0.25) ; //1 : 1 ; //0.5 : 0.25; // change the alpha of the colour
+                myStrokeColour[3] = this.selected ? (IsDarkMap ? 1 : 0.5) : (IsDarkMap ? 1 : 0.25) ;  // change alpha
                 if (ShowAdditionalData) {
-                    hexColour = this.is_interesting ? "#ff0000" : "#0000ff";
+                    hexColour = this.is_interesting ? (IsDarkMap ? "#aa0000" : "#ff0000") : (IsDarkMap ? "#6666ff" : "#0000ff") ;
                 } else {
-                    hexColour = "#0000ff";
+                    hexColour = (IsDarkMap ? "#0000aa" : "#0000ff");
                 }
+
                 var myFillColour = ol.color.asArray(hexColour);
                 myFillColour = myFillColour.slice();
-                myFillColour[3] = this.selected ? 0.8 : 0.7;
+                myFillColour[3] = 1; //this.selected ? 1 : 1;
 
                 var newS = new ol.style.Style({
                     text: new ol.style.Text({
                         text: labelText,
                         fill: new ol.style.Fill({
-                            color: myFillColour, //(this.is_interesting ? 'rgb(255,0,0)' : 'rgb(0,0,255)')
+                            color: myFillColour,
                         }),
                         stroke: new ol.style.Stroke({
-                            color: myStrokeColour, //this.labelColour,
-                            width: 4,
+                            color: (IsDarkMap ? "transparent" : myStrokeColour), 
+                            width: (IsDarkMap ? 2 : 2),
                         }),
                         textAlign: "left",
                         textBaseline: "bottom",
-                        font: "normal 9px tahoma",
-                        offsetX: +15,
-                        offsetY: +30,
+                        font: (IsDarkMap ? "bold  11px tahoma" : "normal 9px tahoma"),
+                        offsetX: +25,
+                        offsetY: +15,
                     }),
                     image: this.markerIcon,
                 });
