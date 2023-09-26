@@ -526,10 +526,9 @@ function make_geodesic_circle(center, radius, points) {
 // Initalizes the map and starts up our timers to call various functions
 function initialize_map() {
     // Load stored map settings if present
-    CenterLat = Number(localStorage["CenterLat"]) || DefaultCenterLat;
-    CenterLon = Number(localStorage["CenterLon"]) || DefaultCenterLon;
-    ZoomLvl = Number(localStorage["ZoomLvl"]) || DefaultZoomLvl;
-    MapType = localStorage["MapType"] || "osm_light";
+    CenterLat = Number(localStorage["CenterLat"]) ||  DefaultCenterLat;
+    CenterLon = Number(localStorage["CenterLon"]) ||  DefaultCenterLon;
+    ZoomLvl = Number(localStorage["ZoomLvl"]) ||  DefaultZoomLvl;
 
     // Set SitePosition, initialize sorting
     if (
@@ -1087,15 +1086,20 @@ function initialize_map() {
         );
     }
 
+    MapType = localStorage["MapType"];
+    if (MapType === undefined) {
+      console.log("MapType local is " + MapType);
+
+      MapType = "osm_light";
+    }
+    console.log("MapType is " + MapType);
+
     var foundType = false;
     var baseCount = 0;
 
     layerGroup = new ol.layer.Group({
         layers: layers
     })
-
-    MapType = localStorage["MapType"];
-    //console.log("MapType " + MapType);
 
     ol.control.LayerSwitcher.forEachRecursive(layerGroup, function (lyr) {
         if (!lyr.get("name")) {
@@ -1104,13 +1108,14 @@ function initialize_map() {
  
         if (lyr.get("type") === "base") {
             baseCount++;
-            //console.log("DEBUG  " + baseCount + "-" + lyr.get("type") + "-" + lyr.get("name"));
+            //console.log("DEBUG BASE " + baseCount + " - " + lyr.get("type") + " - " + lyr.get("name"));
+            //console.log("DEBUG MapType " + MapType);
 
             if (MapType === lyr.get("name")) {
                 foundType = true;
                 lyr.setVisible(true);
                 baseLayerChange(MapType);
-                //console.log("DEBUG MapType " + baseCount + "-" + lyr.get("type") + " - " + lyr.get("name"));
+                //console.log("DEBUG MapType " + baseCount + " - " + lyr.get("type") + " - " + lyr.get("name"));
             } else {
                 lyr.setVisible(false);
             }
