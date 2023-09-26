@@ -837,13 +837,14 @@ PlaneObject.prototype.updateMarker = function (moved) {
             // ---------------------------------------------------------------------
             // AKISSACK - PERMANENT LABEL PART 2 - Update ---------------- ref: AK7A
             // ---------------------------------------------------------------------
+            //console.log("ASPL " + AllwaysShowPermanentLabels );
             if (ShowPermanentLabels) {
                 // Update label as as well as moving we may have gone up or down
                 var v = ""; // An indication of level, climbing or decending
                 var labelText = "";
                 this.labelColour = "#ffffff";
 
-                if (ZoomLvl > 10) {
+                if (ZoomLvl > 10 || AllwaysShowPermanentLabels ) {
                     if (this.vert_rate > 256) {
                         v = UP_TRIANGLE;
                     } else {

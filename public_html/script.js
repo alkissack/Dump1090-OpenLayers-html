@@ -19,6 +19,7 @@ var SelectedPlane = null;
 var SelectedAllPlanes = false;
 var FollowSelected = false;
 var IsDarkMap = false;
+var AllwaysShowPermanentLabels = false;
 // --------------------------------------------------------------------------------------
 // AKISSACK - Variables -----------------------------------------------------------------
 // --------------------------------------------------------------------------------------
@@ -2704,6 +2705,7 @@ function deselectAllPlanes() {
     }
     SelectedPlane = null;
     SelectedAllPlanes = false;
+    AllwaysShowPermanentLabels = false;
     deselectMilPlanes();
     refreshSelected();
 }
@@ -3270,3 +3272,7 @@ function convert_nm_distance(dist, displayUnits) {
     return (dist); // nautical miles
 }
 
+function showLabels() {
+  AllwaysShowPermanentLabels = true;
+  //console.log("ASPL " + AllwaysShowPermanentLabels );
+}
