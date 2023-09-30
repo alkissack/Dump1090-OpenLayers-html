@@ -855,8 +855,14 @@ PlaneObject.prototype.updateMarker = function (moved) {
   
                     if (IsDarkMap) {
                         // LINE ONE
-                        labelText = "# ";
+                        if (this.registration) {
+                            labelText = labelText + this.registration;
+                        } else {
+                            if (this.flight) {labelText = labelText + this.flight};
+                        }
+                        labelText = labelText + " [";
                         labelText = labelText + (this.squawk ? this.squawk : "No Squawk ");
+                        labelText = labelText + "]";
                         if (this.selected && !SelectedAllPlanes) {
                             this.labelColour = "#ffff00"; 
                         } else this.labelColour = "#ffffff"; 
