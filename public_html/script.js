@@ -751,7 +751,7 @@ function initialize_map() {
                     color: "rgba(0,255,0, 0.03)",
                 }),
                 stroke: new ol.style.Stroke({
-                    color: "rgba(0, 80, 0, 0.5)",
+                    color: "rgba(0, 192, 0, 0.5)",
                     width: 1,
                 }),
             }),
@@ -762,18 +762,34 @@ function initialize_map() {
             type: "overlay",
             title: "Airports",
             source: new ol.source.Vector({
-                url: "layers/UK_Civi_Airports.geojson",
+                url: "layers/UK_Civi_Airports_named.geojson",
                 format: new ol.format.GeoJSON({
                     defaultDataProjection: "EPSG:4326",
                     projection: "EPSG:3857",
                 }),
             }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "rgba(200,16,64, 0.5)",
-                    width: 1.5,
-                }),
-            }),
+            style: (function () {
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(0,0,255,1)",
+                        width: 1.5,
+                    }),
+                    text: new ol.style.Text({
+                        text: "name",
+                        scale: 1,
+                        offsetX: 1,
+                        offsetY: -10,
+                        fill: new ol.style.Fill({
+                            color: "#666699",
+                        }),
+                    }),
+                });
+                var styles = [style];
+                return function (feature, resolution) {
+                    if (ShowAirfieldNames) {style.getText().setText(feature.get("name_1"));}
+                    return styles;
+                };
+            })(),
         });
 
         var ukairspaceLayer = new ol.layer.Vector({
@@ -817,6 +833,44 @@ function initialize_map() {
     // --------------------------------------------------------------
 
     if (ShowUKMilLayers) {
+
+        var matzafLayer= new ol.layer.Vector({
+            name: "matzaf",
+            type: "overlay",
+            title: "Airfields",
+            source: new ol.source.Vector({
+                url: "layers/UK_Mil_Airfield_runways_named.geojson",
+                format: new ol.format.GeoJSON({
+                    defaultDataProjection: "EPSG:4326",
+                    projection: "EPSG:3857",
+                }),
+            }),
+
+            style: (function () {
+                var style = new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                        color: "rgba(255,0,0,1)",
+                        width: 1.5,
+                    }),
+                    text: new ol.style.Text({
+                        text: "name",
+                        scale: 1,
+                        offsetX: 1,
+                        offsetY: -10,
+                        fill: new ol.style.Fill({
+                            color: "#669966",
+                        }),
+                    }),
+                });
+                var styles = [style];
+                return function (feature, resolution) {
+                    if (ShowAirfieldNames) {style.getText().setText(feature.get("name_1"));}
+                    return styles;
+                };
+            })(),
+
+        });
+
 
         // LAYERS for UK Military
         var awacLayer = new ol.layer.Vector({
@@ -885,32 +939,13 @@ function initialize_map() {
             type: "overlay",
             title: "MATZ",
             source: new ol.source.Vector({
-                url: "layers/UK_MATZ.geojson",
+                url: "layers/UK_MATZ-2023.geojson",
                 format: new ol.format.GeoJSON({
                     defaultDataProjection: "EPSG:4326",
                     projection: "EPSG:3857",
                 }),
             }),
             style: matzDayStyle, 
-        });
-
-        var matzafLayer = new ol.layer.Vector({
-            name: "matzaf",
-            type: "overlay",
-            title: "Airfields",
-            source: new ol.source.Vector({
-                url: "layers/UK_Mil_Airfield_runways.geojson",
-                format: new ol.format.GeoJSON({
-                    defaultDataProjection: "EPSG:4326",
-                    projection: "EPSG:3857",
-                }),
-            }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: "rgba(200,16,64, 0.5)",
-                    width: 1,
-                }),
-            }),
         });
 
         var ukmilLayer = new ol.layer.Vector({
