@@ -786,7 +786,9 @@ function initialize_map() {
                 });
                 var styles = [style];
                 return function (feature, resolution) {
-                    if (ShowAirfieldNames) {style.getText().setText(feature.get("name_1"));}
+                    if (ShowAirfieldNames) {
+                       style.getText().setText(feature.get("name_1"));
+                    }else style.getText().setText("");
                     return styles;
                 };
             })(),
@@ -864,7 +866,9 @@ function initialize_map() {
                 });
                 var styles = [style];
                 return function (feature, resolution) {
-                    if (ShowAirfieldNames) {style.getText().setText(feature.get("name_1"));}
+                    if (ShowAirfieldNames) {
+                        style.getText().setText(feature.get("name_1"));
+                    }else style.getText().setText("");
                     return styles;
                 };
             })(),
