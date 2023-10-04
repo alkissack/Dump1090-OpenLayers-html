@@ -187,7 +187,7 @@ TypeOfStorageSession = 'Local';  // Local or Session - Session applies per brows
 ShowUSLayers = false;     // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/3.-US-Layers
 ShowUKCivviLayers = true; // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/4.-UK-Civilian-overlays
 ShowUKMilLayers = true;   // https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/5.-UK-Military-overlays
-
+ShowAirfieldNames = true; // show airfield name when runway is selected.
 // ----------------------------------------------------------------------------------------------------------------------------
 //           PERSONAL OPTIONS      https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/9.-Minor-personal-preference-changes
 // ----------------------------------------------------------------------------------------------------------------------------
