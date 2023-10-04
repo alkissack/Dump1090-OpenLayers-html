@@ -786,7 +786,7 @@ function initialize_map() {
                 });
                 var styles = [style];
                 return function (feature, resolution) {
-                    if (ShowAirfieldNames) {
+                    if (ShowAirfieldNames && ZoomLvl > 7.5) {
                        style.getText().setText(feature.get("name_1"));
                     }else style.getText().setText("");
                     return styles;
@@ -836,6 +836,8 @@ function initialize_map() {
 
     if (ShowUKMilLayers) {
 
+        // LAYERS for UK Military
+
         var matzafLayer= new ol.layer.Vector({
             name: "matzaf",
             type: "overlay",
@@ -866,7 +868,7 @@ function initialize_map() {
                 });
                 var styles = [style];
                 return function (feature, resolution) {
-                    if (ShowAirfieldNames) {
+                    if (ShowAirfieldNames && ZoomLvl > 7.5) {
                         style.getText().setText(feature.get("name_1"));
                     }else style.getText().setText("");
                     return styles;
@@ -875,8 +877,6 @@ function initialize_map() {
 
         });
 
-
-        // LAYERS for UK Military
         var awacLayer = new ol.layer.Vector({
             name: "awac",
             type: "overlay",
@@ -1284,7 +1284,7 @@ function initialize_map() {
                 var akrng = ol.sphere.getDistance(SitePosition, coord1);
                 return (
                     akret + " " + akbrn + "\u00B0 " +
-                    format_distance_long(akrng, DisplayUnits, 0)
+                    format_distance_long(akrng, DisplayUnits, 0) //+ " "+ZoomLvl
                 );
             } else {
                 return akret; // no range or bearing required, just return akret
@@ -1293,7 +1293,7 @@ function initialize_map() {
     };
 
     var mousePosition = new ol.control.MousePosition({
-        coordinateFormat: llFormat(3), // ol.coordinate.createStringXY(4),
+        coordinateFormat: llFormat(3), 
         projection: "EPSG:4326",
         target: document.getElementById("mouseposition"),
         undefinedHTML: "&nbsp;",
