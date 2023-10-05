@@ -853,7 +853,7 @@ function initialize_map() {
             style: (function () {
                 var style = new ol.style.Style({
                     stroke: new ol.style.Stroke({
-                        color: "rgba(255,0,0,1)",
+                        color: "rgba(192,0,0,1)",
                         width: 1.5,
                     }),
                     text: new ol.style.Text({
@@ -862,7 +862,7 @@ function initialize_map() {
                         offsetX: 1,
                         offsetY: -10,
                         fill: new ol.style.Fill({
-                            color: "#669966",
+                            color: "#666699",
                         }),
                     }),
                 });
