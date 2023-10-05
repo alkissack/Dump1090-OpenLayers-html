@@ -67,6 +67,7 @@
 { "type": "Feature", "properties": { "id": null, "name_1": null, "code_1": null, "notes_1": "Syerston" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.923922150658458, 53.019476601266788 ], [ -0.900698864794108, 53.026723303654457 ] ] } },
 { "type": "Feature", "properties": { "id": null, "name_1": null, "code_1": null, "notes_1": "Syerston" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.901695928945708, 53.01877685521427 ], [ -0.910212518573958, 53.028047569420991 ] ] } },
 { "type": "Feature", "properties": { "id": null, "name_1": null, "code_1": null, "notes_1": "Cranwell N" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.49638935132032, 53.039464551710616 ], [ -0.48629407678537, 53.046757846159856 ] ] } },
-{ "type": "Feature", "properties": { "id": null, "name_1": null, "code_1": null, "notes_1": "Cranwell N" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.49904818905792, 53.040338813050944 ], [ -0.48454921452007, 53.045409179223022 ] ] } }
+{ "type": "Feature", "properties": { "id": null, "name_1": null, "code_1": null, "notes_1": "Cranwell N" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.49904818905792, 53.040338813050944 ], [ -0.48454921452007, 53.045409179223022 ] ] } },
+{ "type": "Feature", "properties": { "id": null, "name_1": "Cottesmore", "code_1": null, "notes_1": "Cottesmore" }, "geometry": { "type": "LineString", "coordinates": [ [ -0.635214319450771, 52.745053554300668 ], [ -0.66188578550607, 52.726740949106158 ] ] } }
 ]
 }
