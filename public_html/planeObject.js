@@ -402,7 +402,7 @@ PlaneObject.prototype.getMarkerColor = function () {
 
     // ---------------------------   AKISSACK mono colour  Ref: AK9C Start
     if (ShowMyPreferences && ShowSimpleColours) {
-        var myColour = IsDarkMap ? "#0000FF" : "#333399";
+        var myColour = IsDarkMap ? "#0000AA" : "#333399";
         if (this.is_interesting) {
             myColour = IsDarkMap ? "#FF0000" : "#993333";
         }
