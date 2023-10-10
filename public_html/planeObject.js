@@ -402,11 +402,10 @@ PlaneObject.prototype.getMarkerColor = function () {
 
     // ---------------------------   AKISSACK mono colour  Ref: AK9C Start
     if (ShowMyPreferences && ShowSimpleColours) {
-        var myColour = IsDarkMap ? "#0000AA" : "#333399";
+        var myColour = IsDarkMap ? "#0000FF" : "#333399";
         if (this.is_interesting) {
             myColour = IsDarkMap ? "#FF0000" : "#993333";
         }
-        //console.log("myColour "+ myColour);
         return myColour;
     } else {
         // ---------------------------   AKISSACK mono colour  Ref: AK9C ends
@@ -855,14 +854,12 @@ PlaneObject.prototype.updateMarker = function (moved) {
   
                     if (IsDarkMap) {
                         // LINE ONE
-                        if (this.registration) {
-                            labelText = labelText + this.registration;
+                         if (this.flight) {
+                             labelText = labelText + this.flight;
                         } else {
-                            if (this.flight) {labelText = labelText + this.flight};
+                             if (this.registration) {labelText = labelText + this.registration};
                         }
-                        labelText = labelText + " [";
-                        labelText = labelText + (this.squawk ? this.squawk : "No Squawk ");
-                        labelText = labelText + "]";
+                        labelText = labelText + " [" + (this.squawk ? this.squawk : "No Squawk ") + "]";
                         if (this.selected && !SelectedAllPlanes) {
                             this.labelColour = "#ffff00"; 
                         } else this.labelColour = "#ffffff"; 
