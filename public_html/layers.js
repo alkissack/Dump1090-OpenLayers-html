@@ -14,46 +14,18 @@ function createBaseLayers() {
     if (ShowAdditionalMaps) {
         world.push(new ol.layer.Tile({
             source: new ol.source.OSM({
-                "url": "http://{a-d}.tile.stamen.com/terrain/{z}/{x}/{y}.png",
-                "attributions": 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. '
-                    + 'Data by <a _href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
+                "url": "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}@2x.png",
+                "attributions": [
+                  '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>',
+                  '&copy; <a href="https://stamen.com/" target="_blank">Stamen Design</a>',
+                  '&copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>',
+                  '&copy; <a href="https://www.openstreetmap.org/about/" target="_blank">OpenStreetMap contributors</a>'
+                ],
             }),
             name: 'terrain',
             title: 'Terrain + Roads',
             type: 'base',
         }));
-
-        //world.push(new ol.layer.Tile({
-        //        source: new ol.source.XYZ({
-        //                "url" : "https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}",
-        //                "attributions" : "Tiles © Esri - Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community",
-        //        }),
-        //        name: 'esri_topo',
-        //        title: 'ESRI Topographic',
-        //        type: 'base',
-        //}));
-
-        world.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
-                "url": "http://{a-d}.tile.stamen.com/terrain-background/{z}/{x}/{y}.png",
-                "attributions": 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. '
-                    + 'Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-            }),
-            name: 'terrain',
-            title: 'Terrain',
-            type: 'base',
-        }));
-
-        //world.push(new ol.layer.Tile({
-        //    source: new ol.source.OSM({
-        //            "url" : "https://{a-z}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-        //            "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
-        //                   + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-        //    }),
-        //    name: 'carto_dark',
-        //    title: 'Carto Dark (+labels)',
-        //    type: 'base',
-        //}));
 
         world.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
@@ -66,20 +38,6 @@ function createBaseLayers() {
                 type: 'base'
         }));
 
-        //OLMap.getView().on('change:visible', function(){
-        //  console.log("DEBUG");
-        //});
-
-        //world.push(new ol.layer.Tile({
-        //        source: new ol.source.OSM({
-        //                "url" : "https://{a-z}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
-        //                "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
-        //                       + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
-        //        }),
-        //        name: 'carto_light_all',
-        //        title: 'Carto Light (+labels)',
-        //        type: 'base'
-        //}));
 
         world.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
