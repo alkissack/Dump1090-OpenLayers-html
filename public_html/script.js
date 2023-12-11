@@ -2801,29 +2801,31 @@ function exportRangePlot() {
     //console.log("data.json written correctly " + datamax);
 
     const link = document.createElement("a");
+
     var blob = new Blob([datamax], {
         type: "text/plain;charset=utf-8",
     }); // Create blob object with file content
-    link.href = URL.createObjectURL(blob);  // Add file content in the object URL
+    link.href = URL.createObjectURL(blob);   // Add file content in the object URL
     link.download = "maxRange.json";         // Add file name
     link.click();                            // Add click event to <a> tag to save file.
     URL.revokeObjectURL(link.href);
 
-    blob = new Blob([datamid], {
-        type: "text/plain;charset=utf-8",
-    });
-    link.href = URL.createObjectURL(blob);
-    link.download = "midRange.json";
-    link.click();
-    URL.revokeObjectURL(link.href);
+    setTimeout(function(){
+        blob = new Blob([datamid], {type: "text/plain;charset=utf-8",});
+        link.href = URL.createObjectURL(blob);
+        link.download = "midRange.json";
+        link.click();
+        URL.revokeObjectURL(link.href);
+        setTimeout(function(){
+            blob = new Blob([datamin], {type: "text/plain;charset=utf-8",});
+            link.href = URL.createObjectURL(blob);
+            link.download = "minRange.json";
+            link.click();
+            URL.revokeObjectURL(link.href);
+        },5000); //delay is in milliseconds 
 
-    blob = new Blob([datamin], {
-        type: "text/plain;charset=utf-8",
-    });
-    link.href = URL.createObjectURL(blob);
-    link.download = "minRange.json";
-    link.click();
-    URL.revokeObjectURL(link.href);
+    },5000); //delay is in milliseconds 
+
 }
 
 function importRangePlot() {
