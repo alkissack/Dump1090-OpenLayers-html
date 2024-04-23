@@ -49,18 +49,19 @@ function PlaneObject(icao) {
     // Akissack - additional variables for various modifications - Ref: AK9Z Start incl.
     this.is_vetted = false;
     this.is_interesting = ""; // 'Y' or not
-    this.my_vet = ""; // 1 = Mil/noTrail 2 = Civ/noTrail 5 = Mil/Trail 6 = Civ/Trail 0 = ?/noTrail 3,4,7 = ERR
-    this.my_trail = ""; // trail on by default
-    this.ac_type = ""; // icao type
-    this.ac_shortname = ""; // Short a/c name
-    this.ac_aircraft = ""; // Long a/c name
-    this.ac_category = ""; // My category for images -  eg 2prop
+    this.my_vet = "";         // 1 = Mil/noTrail 2 = Civ/noTrail 5 = Mil/Trail 6 = Civ/Trail 0 = ?/noTrail 3,4,7 = ERR
+    this.my_trail = "";       // trail on by default
+    this.ac_type = "";        // icao type
+    this.ac_shortname = "";   // Short a/c name
+    this.ac_aircraft = "";    // Long a/c name
+    this.ac_category = "";    // My category for images -  eg 2prop
     this.ac_country = "";
     this.ac_operator = "-";
     // Akissack - additional variables for various modifications - Ref: AK9Z Ends
-    this.siteBearing = 0; // ref: AK8F
-    this.siteNm = 0; // ref: AK8F
-    this.fl = 0; // ref: AK8F
+    this.siteBearing = 0;      // ref: AK8F
+    this.siteBearingSlot = 0;  // ref: Github issue #17
+    this.siteNm = 0;           // ref: AK8F
+    this.fl = 0;               // ref: AK8F
 
     // start from a computed registration, let the DB override it
     // if it has something else.
@@ -641,15 +642,40 @@ PlaneObject.prototype.updateData = function (receiver_timestamp, data) {
             //this.sitedist = WGS84.haversineDistance(SitePosition, this.position);
             //  AKISSACK     - Store a bearing and nm distance for our range plot            Ref AK8G
             this.sitedist = ol.sphere.getDistance(SitePosition, this.position);
-            this.siteBearing = parseInt(
-                getBearing(
+
+            //  increased the resolution from one degree to half-degree  // ref: Github issue #17
+
+            this.siteBearing = getBearing(
                     SitePosition[1],
                     SitePosition[0],
                     this.position[1],
                     this.position[0]
-                ).toFixed(0)
-            );
-            this.siteNm = parseInt((this.sitedist / 1852).toFixed(0));
+            ).toFixed(1);
+
+            this.siteBearingSlot = Math.round(2 * this.siteBearing);
+            if (this.siteBearingSlot == 720) this.siteBearingSlot=0;
+
+            //this.siteBearingSlot = Math.round(2 * getBearing(
+            //        SitePosition[1],
+            //        SitePosition[0],
+            //        this.position[1],
+            //        this.position[0]
+            //).toFixed(1));
+	    
+            //this.siteBearing = parseInt(
+            //    getBearing(
+            //        SitePosition[1],
+            //        SitePosition[0],
+            //        this.position[1],
+            //        this.position[0]
+            //    ).toFixed(0)
+            //);
+
+            this.siteNm = parseInt((this.sitedist / 1852).toFixed(1));
+
+            //if (this.icao.substring(0,5) == "43c74"){
+            //  console.log(this.icao+" bearing: "+this.siteBearing+" slot: "+this.siteBearingSlot +" , range: "+this.siteNm);
+            //}
         }
 
         this.position_from_mlat = false;
@@ -706,10 +732,10 @@ PlaneObject.prototype.updateTick = function (
                 // MINUMUM RANGE RINGS - MinRangeHeight is set in config.js as the upper bound for this ring
                 //                     - MinRangeLikely is set in config.js and is maximum likely distance for MinRangeHeight    
                 if (this.altitude <= MinRangeHeight) {
-                    if (MinRngRange[this.siteBearing] < this.siteNm && this.siteNm < MinRangeLikely) {  // Update sessionStorage and also update MariaDb if in use
-                        MinRngRange[this.siteBearing] = this.siteNm;
-                        MinRngLat[this.siteBearing] = this.position[1];
-                        MinRngLon[this.siteBearing] = this.position[0];
+                    if (MinRngRange[this.siteBearingSlot] < this.siteNm && this.siteNm < MinRangeLikely) {  // Update sessionStorage and also update MariaDb if in use
+                        MinRngRange[this.siteBearingSlot] = this.siteNm;
+                        MinRngLat[this.siteBearingSlot] = this.position[1];
+                        MinRngLon[this.siteBearingSlot] = this.position[0];
                         if (TypeOfStorageSession == 'Session') {
                             sessionStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
                             sessionStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
@@ -719,9 +745,9 @@ PlaneObject.prototype.updateTick = function (
                             localStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
                             localStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
                         }
-                        //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MIN");
+                        //console.log("slot: "+this.siteBearingSlot+" "+("000" + this.siteBearing).slice(-5) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MIN range.");
                         if (SleafordMySql) {
-                            //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.fl);
+                            //console.log(("000" + this.siteBearingSlot).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.fl);
                             updateMySqlRange(
                                 "min",
                                 this.siteBearing,
@@ -738,10 +764,10 @@ PlaneObject.prototype.updateTick = function (
                 // MIDDLE RANGE RINGS  - MidRangeHeight is set in config.js as the upper bound for this ring
                 //                     - MidRangeLikely is set in config.js and is maximum likely distance for MidRangeHeight    
                 if (this.altitude <= MidRangeHeight) {
-                    if (MidRngRange[this.siteBearing] < this.siteNm && this.siteNm < MidRangeLikely) {
-                        MidRngRange[this.siteBearing] = this.siteNm;
-                        MidRngLat[this.siteBearing] = this.position[1];
-                        MidRngLon[this.siteBearing] = this.position[0];
+                    if (MidRngRange[this.siteBearingSlot] < this.siteNm && this.siteNm < MidRangeLikely) {
+                        MidRngRange[this.siteBearingSlot] = this.siteNm;
+                        MidRngLat[this.siteBearingSlot] = this.position[1];
+                        MidRngLon[this.siteBearingSlot] = this.position[0];
                         if (TypeOfStorageSession == 'Session') {
                             sessionStorage.setItem("MidRngRange", JSON.stringify(MidRngRange));
                             sessionStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
@@ -751,7 +777,7 @@ PlaneObject.prototype.updateTick = function (
                             localStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
                             localStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));
                         }
-                        //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID");
+                        //console.log("slot: "+this.siteBearingSlot+" "+("000" + this.siteBearing).slice(-5) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID range.");
                         if (SleafordMySql) {
                             //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MID "+this.altitude);
                             updateMySqlRange(
@@ -771,10 +797,10 @@ PlaneObject.prototype.updateTick = function (
                 //                     - MaxRangeLikely is set in config.js and is maximum likely distance for MaxRangeHeight   
                 //                     - These are theoretical absolute maximums to weed out bad plots		
                 if (this.altitude <= MaxRangeHeight) {
-                    if (MaxRngRange[this.siteBearing] < this.siteNm && this.siteNm < MaxRangeLikely) {
-                        MaxRngRange[this.siteBearing] = this.siteNm;
-                        MaxRngLat[this.siteBearing] = this.position[1];
-                        MaxRngLon[this.siteBearing] = this.position[0];
+                    if (MaxRngRange[this.siteBearingSlot] < this.siteNm && this.siteNm < MaxRangeLikely) {
+                        MaxRngRange[this.siteBearingSlot] = this.siteNm;
+                        MaxRngLat[this.siteBearingSlot] = this.position[1];
+                        MaxRngLon[this.siteBearingSlot] = this.position[0];
                         if (TypeOfStorageSession == 'Session') {
                             sessionStorage.setItem("MaxRngRange", JSON.stringify(MaxRngRange));
                             sessionStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
@@ -784,7 +810,7 @@ PlaneObject.prototype.updateTick = function (
                             localStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
                             localStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));
                         }
-                        //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX");
+                        //console.log("slot: "+this.siteBearingSlot+" "+("000" + this.siteBearing).slice(-5) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX range.");
                         if (SleafordMySql) {
                             //console.log(("000" + this.siteBearing).slice(-3) + "° " + ("000" + this.siteNm).slice(-3)+"nm logged as MAX "+this.altitude);
                             updateMySqlRange(
@@ -1057,7 +1083,7 @@ function radians(n) {
     return n * (Math.PI / 180);
 }
 
-function degrees(n) {
+function degrees(n) {  //degrees to radians
     return n * (180 / Math.PI);
 }
 
@@ -1077,7 +1103,7 @@ function getBearing(startLat, startLong, endLat, endLong) {
     if (Math.abs(dLong) > Math.PI) {
         if (dLong > 0.0) dLong = -(2.0 * Math.PI - dLong);
         else dLong = 2.0 * Math.PI + dLong;
-    }
+    };
 
     return (degrees(Math.atan2(dLong, dPhi)) + 360.0) % 360.0;
 }

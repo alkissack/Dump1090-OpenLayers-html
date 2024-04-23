@@ -326,7 +326,7 @@ function initialize() {
             MaxRngRange = JSON.parse(sessionStorage.getItem("MaxRngRange"));
         } else {
             //console.log("Setting up max range");
-            for (var j = 0; j < 360; j++) {
+            for (var j = 0; j < 720; j++) {
                 MaxRngRange[j] = 0;
                 MaxRngLat[j] = SiteLat;
                 MaxRngLon[j] = SiteLon;
@@ -339,7 +339,7 @@ function initialize() {
             MidRngLon = JSON.parse(sessionStorage.getItem("MidRngLon"));
             MidRngRange = JSON.parse(sessionStorage.getItem("MidRngRange"));
         } else {
-            for (var j = 0; j < 360; j++) {
+            for (var j = 0; j < 720; j++) {
                 MidRngRange[j] = 0;
                 MidRngLat[j] = SiteLat;
                 MidRngLon[j] = SiteLon;
@@ -352,7 +352,7 @@ function initialize() {
             MinRngLon = JSON.parse(sessionStorage.getItem("MinRngLon"));
             MinRngRange = JSON.parse(sessionStorage.getItem("MinRngRange"));
         } else {
-            for (var j = 0; j < 360; j++) {
+            for (var j = 0; j < 720; j++) {
                 MinRngRange[j] = 0;
                 MinRngLat[j] = SiteLat;
                 MinRngLon[j] = SiteLon;
@@ -366,7 +366,7 @@ function initialize() {
             MaxRngRange = JSON.parse(localStorage.getItem("MaxRngRange"));
         } else {
             //console.log("Setting up max range");
-            for (var j = 0; j < 360; j++) {
+            for (var j = 0; j < 720; j++) {
                 MaxRngRange[j] = 0;
                 MaxRngLat[j] = SiteLat;
                 MaxRngLon[j] = SiteLon;
@@ -379,7 +379,7 @@ function initialize() {
             MidRngLon = JSON.parse(localStorage.getItem("MidRngLon"));
             MidRngRange = JSON.parse(localStorage.getItem("MidRngRange"));
         } else {
-            for (var j = 0; j < 360; j++) {
+            for (var j = 0; j < 720; j++) {
                 MidRngRange[j] = 0;
                 MidRngLat[j] = SiteLat;
                 MidRngLon[j] = SiteLon;
@@ -392,7 +392,7 @@ function initialize() {
             MinRngLon = JSON.parse(localStorage.getItem("MinRngLon"));
             MinRngRange = JSON.parse(localStorage.getItem("MinRngRange"));
         } else {
-            for (var j = 0; j < 360; j++) {
+            for (var j = 0; j < 720; j++) {
                 MinRngRange[j] = 0;
                 MinRngLat[j] = SiteLat;
                 MinRngLon[j] = SiteLon;
@@ -1106,13 +1106,14 @@ function initialize_map() {
         })
     );
 
+    //console.log ("Finds: " + ShowMyFindsLayer +" "+ SleafordMySql);
 
     if (ShowMyFindsLayer && SleafordMySql) {
         // AKISSACK Ref: AK9U
         var myLayer = new ol.layer.Vector({
             name: "my_layer",
             type: "overlay",
-            title: "My Layer",
+            title: "Finds",
             source: new ol.source.Vector({
                 features: MyFeatures,
             }),
@@ -1129,7 +1130,6 @@ function initialize_map() {
     MapType = localStorage["MapType"];
     if (MapType === undefined) {
       console.log("MapType local is " + MapType);
-
       MapType = "osm_light";
     }
     console.log("MapType is " + MapType);
@@ -1539,18 +1539,24 @@ function initialize_map() {
                         ),
                         name: findname + "<br>" + findnumber,
                     });
-                    if (findicon === "coin") {
-                        f.setStyle(fCoin);
-                    } else if (findicon === "coins") {
-                        f.setStyle(fCoins);
-                    } else if (findicon === "coinr") {
-                        f.setStyle(fCoinr);
-                    } else if (findicon === "mil") {
-                        f.setStyle(fMil);
-                    } else if (findicon === "spec") {
-                        f.setStyle(fSpec);
-                    } else if (findicon === "spader") {
-                        f.setStyle(fSpader);
+
+		    //Simpler iconisation
+		    if (findname.startsWith("Coin")){
+	                f.setStyle(fCoin);
+		    //}
+
+                    //if (findicon === "coin") {
+                    //    f.setStyle(fCoin);
+                    //} else if (findicon === "coins") {
+                    //    f.setStyle(fCoins);
+                    //} else if (findicon === "coinr") {
+                    //    f.setStyle(fCoinr);
+                    //} else if (findicon === "mil") {
+                    //    f.setStyle(fMil);
+                    //} else if (findicon === "spec") {
+                    //    f.setStyle(fSpec);
+                    //} else if (findicon === "spader") {
+                    //    f.setStyle(fSpader);
                     } else {
                         f.setStyle(fSpade);
                     }
@@ -2361,7 +2367,7 @@ function refreshTableInfo() {
     });
 
     var polyCoords = [];
-    for (var i = 0; i < 360; i++) {
+    for (var i = 0; i < 720; i++) {
         polyCoords.push(
             ol.proj.transform([MaxRngLon[i], MaxRngLat[i]], "EPSG:4326", "EPSG:3857")
         );
@@ -2385,7 +2391,7 @@ function refreshTableInfo() {
         }),
     });
     var polyCoords = [];
-    for (var i = 0; i < 360; i++) {
+    for (var i = 0; i < 720; i++) {
         polyCoords.push(
             ol.proj.transform([MidRngLon[i], MidRngLat[i]], "EPSG:4326", "EPSG:3857")
         );
@@ -2409,7 +2415,7 @@ function refreshTableInfo() {
         }),
     });
     var polyCoords = [];
-    for (var i = 0; i < 360; i++) {
+    for (var i = 0; i < 720; i++) {
         polyCoords.push(
             ol.proj.transform([MinRngLon[i], MinRngLat[i]], "EPSG:4326", "EPSG:3857")
         );
@@ -2770,7 +2776,7 @@ function resetMap() {
 }
 
 function resetRangePlot() {
-    for (var j = 0; j < 360; j++) {
+    for (var j = 0; j < 720; j++) {  // 360 --> 720 ref: Github issue #17
         MaxRngRange[j] = 0;
         MaxRngLat[j] = SiteLat;
         MaxRngLon[j] = SiteLon;
@@ -2788,7 +2794,7 @@ function exportRangePlot() {
     var rangemid = [];
     var rangemin = [];
 
-    for (var j = 0; j < 360; j++) {
+    for (var j = 0; j < 720; j++) {  // 360 --> 720 ref: Github issue #17
         rangemax[j] = [j, MaxRngRange[j], MaxRngLat[j], MaxRngLon[j]]
         rangemid[j] = [j, MidRngRange[j], MidRngLat[j], MidRngLon[j]]
         rangemin[j] = [j, MinRngRange[j], MinRngLat[j], MinRngLon[j]]
@@ -2802,15 +2808,13 @@ function exportRangePlot() {
 
     const link = document.createElement("a");
 
-    var blob = new Blob([datamax], {
-        type: "text/plain;charset=utf-8",
-    }); // Create blob object with file content
+    var blob = new Blob([datamax], {type: "text/plain;charset=utf-8",}); // Create blob object with file content
     link.href = URL.createObjectURL(blob);   // Add file content in the object URL
     link.download = "maxRange.json";         // Add file name
     link.click();                            // Add click event to <a> tag to save file.
     URL.revokeObjectURL(link.href);
 
-    setTimeout(function(){
+    setTimeout(function(){                   // ref: Github issue #19
         blob = new Blob([datamid], {type: "text/plain;charset=utf-8",});
         link.href = URL.createObjectURL(blob);
         link.download = "midRange.json";
@@ -2822,9 +2826,9 @@ function exportRangePlot() {
             link.download = "minRange.json";
             link.click();
             URL.revokeObjectURL(link.href);
-        },5000); //delay is in milliseconds 
+        },3000); //delay is in milliseconds 
 
-    },5000); //delay is in milliseconds 
+    },3000); //delay is in milliseconds 
 
 }
 
@@ -2844,33 +2848,88 @@ function importRangePlot() {
 }
 
 function importMax(json) {
-    //console.log(json);
-    for (var j = 0; j < json.length; j++) {
-        var obj = json[j];
-        MaxRngRange[j] = obj[1];
-        MaxRngLat[j] = obj[2];
-        MaxRngLon[j] = obj[3]
-    }
-    //console.log("data.json read " + MaxRngRange);
+    //console.log(json.length);
+    if (json.length === 360) {
+      for (var j = 0; j < json.length; j++) {
+          var obj = json[j];
+          var rslot = 2 * obj[0];
+          var rslotnew = rslot +1 ; 
+          MaxRngRange[rslot] = obj[1];
+          MaxRngLat[rslot]   = obj[2];
+          MaxRngLon[rslot]   = obj[3]
+
+          MaxRngRange[rslotnew] = obj[1];
+          MaxRngLat[rslotnew]   = obj[2];
+          MaxRngLon[rslotnew]   = obj[3]
+      }
+    } else { // 360 --> 720 ref: Github issue #17
+      for (var j = 0; j < json.length; j++) {
+          var obj = json[j];
+          MaxRngRange[obj[0]] = obj[1];
+          MaxRngLat[obj[0]]   = obj[2];
+          MaxRngLon[obj[0]]   = obj[3]
+      }
+    } 
+    //console.log(MaxRngRange +" "+MaxRngLat+" "+MaxRngLon);
 }
 
 function importMid(json) {
-    for (var j = 0; j < json.length; j++) {
-        var obj = json[j];
-        MidRngRange[j] = obj[1];
-        MidRngLat[j] = obj[2];
-        MidRngLon[j] = obj[3]
-    }
+    if (json.length === 360) {
+      for (var j = 0; j < json.length; j++) {
+          var obj = json[j];
+          var rslot = 2 * obj[0];
+          var rslotnew = rslot +1 ; 
+          MidRngRange[rslot] = obj[1];
+          MidRngLat[rslot]   = obj[2];
+          MidRngLon[rslot]   = obj[3]
+
+          MidRngRange[rslotnew] = obj[1];
+          MidRngLat[rslotnew]   = obj[2];
+          MidRngLon[rslotnew]   = obj[3]
+      }
+    } else { // 360 --> 720 ref: Github issue #17
+      for (var j = 0; j < json.length; j++) {
+          var obj = json[j];
+          MidRngRange[obj[0]] = obj[1];
+          MidRngLat[obj[0]]   = obj[2];
+          MidRngLon[obj[0]]   = obj[3]
+      }
+    } 
 }
 
 function importMin(json) {
-    for (var j = 0; j < json.length; j++) {
-        var obj = json[j];
-        MinRngRange[j] = obj[1];
-        MinRngLat[j] = obj[2];
-        MinRngLon[j] = obj[3]
-    }
+    if (json.length === 360) {
+      for (var j = 0; j < json.length; j++) {
+          var obj = json[j];
+          var rslot = 2 * obj[0];
+          var rslotnew = rslot +1 ; 
+          MinRngRange[rslot] = obj[1];
+          MinRngLat[rslot]   = obj[2];
+          MinRngLon[rslot]   = obj[3]
+
+          MinRngRange[rslotnew] = obj[1];
+          MinRngLat[rslotnew]   = obj[2];
+          MinRngLon[rslotnew]   = obj[3]
+      }
+    } else { // 360 --> 720 ref: Github issue #17
+      for (var j = 0; j < json.length; j++) {
+          var obj = json[j];
+          MinRngRange[obj[0]] = obj[1];
+          MinRngLat[obj[0]]   = obj[2];
+          MinRngLon[obj[0]]   = obj[3]
+      }
+    } 
 }
+
+
+//function importMin(json) {
+//    for (var j = 0; j < json.length; j++) {
+//        var obj = json[j];
+//        MinRngRange[obj[0]] = obj[1];
+//        MinRngLat[obj[0]]   = obj[2];
+//        MinRngLon[obj[0]]   = obj[3]
+//    }
+//}
 
 function updateMapSize() {
     OLMap.updateSize();

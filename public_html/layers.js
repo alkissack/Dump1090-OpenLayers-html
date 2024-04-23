@@ -13,7 +13,7 @@ function createBaseLayers() {
     // ------------------------------------------------------------
     if (ShowAdditionalMaps) {
         world.push(new ol.layer.Tile({
-            source: new ol.source.OSM({
+            source: new ol.source.OSM({                             // ref: Github issue #18
                 "url": "https://tiles.stadiamaps.com/tiles/stamen_terrain/{z}/{x}/{y}@2x.png",
                 "attributions": [
                   '&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>',
