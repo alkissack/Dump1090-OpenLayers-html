@@ -809,22 +809,44 @@ function initialize_map() {
         });
         ukairspaceLayer.setVisible(false);
 
-        layers.push(
-            new ol.layer.Group({
-                title: "UK",
-                layers: [
-                    ukairspaceLayer,
-                    navPointsLayer,
-                    airwaysMRCLayer,
-                    vordmeLayer,
-                    airwaysLayer,
-                    ukCTALayer,
-                    atzLayer,
-                    airportLayer,
-                ],
-            })
-        );
-    } // End
+        var openaip = new ol.layer.Tile({
+            name: 'openaip',
+         title: 'openAIP',
+         type: 'overlay',
+         source: new ol.source.OSM({
+            "url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
+            "attributions" : "openAIP.net",
+            attributionsCollapsible: false,
+            maxZoom: 12,
+            //transition: tileTransition,
+            opaque: false,
+            opacity: 0.5,
+            format: new ol.format.GeoJSON({
+                defaultDataProjection: "EPSG:4326",
+                projection: "EPSG:3857",
+            }),
+         }),
+     });
+     openaip.setVisible(false);
+
+     layers.push(
+         new ol.layer.Group({
+             title: "UK",
+             layers: [
+          openaip,
+                 ukairspaceLayer,
+                 navPointsLayer,
+                 airwaysMRCLayer,
+                 vordmeLayer,
+                 airwaysLayer,
+                 ukCTALayer,
+                 atzLayer,
+                 airportLayer,
+             ],
+         })
+     );
+ } // End
+
 
     // --------------------------------------------------------------
     // AKISSACK - ADD LAYERS ----------------------  ref: AK4A ends
