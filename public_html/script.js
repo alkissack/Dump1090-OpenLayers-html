@@ -810,24 +810,27 @@ function initialize_map() {
         ukairspaceLayer.setVisible(false);
 
         var openaip = new ol.layer.Tile({
-            name: 'openaip',
-         title: 'openAIP',
-         type: 'overlay',
-         source: new ol.source.OSM({
-            "url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
-            "attributions" : "openAIP.net",
-            attributionsCollapsible: false,
-            maxZoom: 12,
-            //transition: tileTransition,
-            opaque: false,
-            opacity: 0.5,
-            format: new ol.format.GeoJSON({
-                defaultDataProjection: "EPSG:4326",
-                projection: "EPSG:3857",
+            // https://docs.openaip.net/?urls.primaryName=Tiles%20API
+       	    name: 'openaip',
+            title: 'openAIP',
+            type: 'overlay',
+            source: new ol.source.OSM({
+               "url" : "https://api.tiles.openaip.net/api/data/openaip/{z}/{x}/{y}.png?apiKey="+OpenAIPAPIKey,
+	       // Below caused partial display of tiles
+               //"url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
+               "attributions" : "openAIP.net",
+               attributionsCollapsible: false,
+               maxZoom: 12,
+               //transition: tileTransition,
+               opaque: false,
+               opacity: 0.5,
+               format: new ol.format.GeoJSON({
+                   defaultDataProjection: "EPSG:4326",
+                   projection: "EPSG:3857",
+               }),
             }),
-         }),
-     });
-     openaip.setVisible(false);
+        });
+        openaip.setVisible(false);
 
      layers.push(
          new ol.layer.Group({
