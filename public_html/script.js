@@ -812,13 +812,13 @@ function initialize_map() {
         var openaip = new ol.layer.Tile({
             // https://docs.openaip.net/?urls.primaryName=Tiles%20API
        	    name: 'openaip',
-            title: 'openAIP',
+            title: 'OpenAIP',
             type: 'overlay',
             source: new ol.source.OSM({
                "url" : "https://api.tiles.openaip.net/api/data/openaip/{z}/{x}/{y}.png?apiKey="+OpenAIPAPIKey,
 	       // Below caused partial display of tiles
                //"url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
-               "attributions" : "openAIP.net",
+               "attributions" : "OpenAIP.net",
                attributionsCollapsible: false,
                maxZoom: 12,
                //transition: tileTransition,
