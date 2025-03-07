@@ -2197,8 +2197,8 @@ function refreshTableInfo() {
                     } else classes += " vPosition";
                 } else classes += " acdefault";
             } else {
-                 classes += " acdefault";
-	    }
+                 classes += " acdefaultnopos";
+	        }
             if (tableplane.icao == SelectedPlane) classes += " selected";
 
             if (tableplane.is_interesting == "Y") { // AKISSACK ------------ Ref: AK9F

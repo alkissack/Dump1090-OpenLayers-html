@@ -232,6 +232,9 @@ div#loader {
 .acdefault {
     background-color: #dddddd;
 }
+.acdefaultnopos {
+    background-color: #ece2e9;
+}
 
 .squawk7500 {
     font-weight: bold;
