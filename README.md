@@ -19,7 +19,7 @@ Originaly amended for my own purposes, but having had several requests to share 
 
 7. Permanent labels - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/7.-Permanent-labels
 
-8. Maximum range plot - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
+8. Maximum, mid & min range plots - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/8.-Maximum-range-plot
 
 9. Export/Import range plot - When you expand the sidebar (no map) there are an additional 3 red buttons (double click required to action).  Clear ranges - reverts all ranges to zero. Export ranges - saves 3 files to local machine (downloads). Import ranges - imports ranges from the backup folder on the server (files must exist and be called minRange.json, midRange.json & maxRange.json).  These are only a single range per compass degree so not as fine as that plotted, but hopefully still of some value.
 
