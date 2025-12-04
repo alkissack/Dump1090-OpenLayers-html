@@ -29,11 +29,11 @@ def readcsv(name, infile, blocks):
                 entry[k] = v
 
         if len(entry) > 0:
-            ac_count += 1
-
-            bkey = icao24[0:1].upper()
-            dkey = icao24[1:].upper()
-            blocks[bkey].setdefault(dkey, {}).update(entry)
+            bkey = icao24[0].upper()
+            if bkey != '~':
+                ac_count += 1
+                dkey = icao24[1:].upper()
+                blocks[bkey].setdefault(dkey, {}).update(entry)
 
     print >>sys.stderr, 'Read', ac_count, 'aircraft from', name
 
