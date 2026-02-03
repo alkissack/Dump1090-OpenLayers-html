@@ -2778,7 +2778,7 @@ function exportRangePlot() {
 
 }
 
-//function importRangePlot() {
+//function importRangePlot() {  // Issue #25
 //    fetch('./backup/maxRange.json')
 //        .then((response) => response.json())
 //        .then((json) => importMax(json));
@@ -2793,7 +2793,7 @@ function exportRangePlot() {
 
 //}
 
-async function importRangePlot() {
+async function importRangePlot() { // Issue #25
   try {
     const [maxRes, midRes, minRes] = await Promise.all([
       fetch('./backup/maxRange.json', { cache: 'no-store' }),
