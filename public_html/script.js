@@ -1016,8 +1016,7 @@ function initialize_map() {
     if (ShowSleafordRange) {
         // AKISSACK  Ref: AK8Y
         // This is just to show a range ring (based on current experience)
-        // for my home QTH. Not usefull for anyone else other than as a technique
-        // These points are stored in mySql as seen, and retrieved to draw this
+        // for my home QTH. Not useful for anyone else other than as a technique
 
         var SleafordRangeLayer = new ol.layer.Vector({
             name: "mrange",
