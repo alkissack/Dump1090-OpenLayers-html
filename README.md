@@ -31,7 +31,7 @@ B. Personalised icons - wiki https://github.com/alkissack/Dump1090-OpenLayers3-h
 
 C. Ability to filter special aircraft - wiki https://github.com/alkissack/Dump1090-OpenLayers3-html/wiki/B.-Filter-aircraft-of-interest
 
-D. Setting the sidebar side to auto and then the tableinfo width varying, could cuase the map to lose its correct aspect ratio.  see comments labelled: // AKISSACK mapsize    Ref: AKDD
+D. Setting the sidebar side to auto and then the tableinfo width varying, could cause the map to lose its correct aspect ratio.  see comments labelled: // AKISSACK mapsize    Ref: AKDD
 
 E.  New config.js option (ShowAirfieldNames) to show airfield/airport names that are now encoded in relevant geoJSON files
 
