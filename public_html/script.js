@@ -2778,20 +2778,43 @@ function exportRangePlot() {
 
 }
 
-function importRangePlot() {
-    fetch('./backup/maxRange.json')
-        .then((response) => response.json())
-        .then((json) => importMax(json));
+//function importRangePlot() {
+//    fetch('./backup/maxRange.json')
+//        .then((response) => response.json())
+//        .then((json) => importMax(json));
 
-    fetch('./backup/midRange.json')
-        .then((response) => response.json())
-        .then((json) => importMid(json));
+//    fetch('./backup/midRange.json')
+//        .then((response) => response.json())
+//        .then((json) => importMid(json));
 
-    fetch('./backup/minRange.json')
-        .then((response) => response.json())
-        .then((json) => importMin(json));
+//    fetch('./backup/minRange.json')
+//        .then((response) => response.json())
+//        .then((json) => importMin(json));
 
+//}
+
+async function importRangePlot() {
+  try {
+    const [maxRes, midRes, minRes] = await Promise.all([
+      fetch('./backup/maxRange.json', { cache: 'no-store' }),
+      fetch('./backup/midRange.json', { cache: 'no-store' }),
+      fetch('./backup/minRange.json', { cache: 'no-store' })
+    ]);
+
+    const [maxJson, midJson, minJson] = await Promise.all([
+      maxRes.json(),
+      midRes.json(),
+      minRes.json()
+    ]);
+
+    importMax(maxJson);
+    importMid(midJson);
+    importMin(minJson);
+  } catch (err) {
+    console.error("Import failed", err);
+  }
 }
+
 
 function importMax(json) {
     //console.log(json.length);
