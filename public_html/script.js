@@ -1016,7 +1016,8 @@ function initialize_map() {
     if (ShowSleafordRange) {
         // AKISSACK  Ref: AK8Y
         // This is just to show a range ring (based on current experience)
-        // for my home QTH. Not useful for anyone else other than as a technique
+        // for my home QTH. Not usefull for anyone else other than as a technique
+        // These points are stored in mySql as seen, and retrieved to draw this
 
         var SleafordRangeLayer = new ol.layer.Vector({
             name: "mrange",
@@ -2777,7 +2778,7 @@ function exportRangePlot() {
 
 }
 
-//function importRangePlot() {  // Issue #25
+//function importRangePlot() { // Issue #25
 //    fetch('./backup/maxRange.json')
 //        .then((response) => response.json())
 //        .then((json) => importMax(json));
@@ -2809,6 +2810,8 @@ async function importRangePlot() { // Issue #25
     importMax(maxJson);
     importMid(midJson);
     importMin(minJson);
+    //saveRangesToLocalStorage();
+
   } catch (err) {
     console.error("Import failed", err);
   }
@@ -2838,6 +2841,12 @@ function importMax(json) {
           MaxRngLon[obj[0]]   = obj[3]
       }
     } 
+    if (TypeOfStorageSession == 'Local') {
+        localStorage.setItem("MaxRngRange", JSON.stringify(MaxRngRange));
+        localStorage.setItem("MaxRngLat", JSON.stringify(MaxRngLat));
+        localStorage.setItem("MaxRngLon", JSON.stringify(MaxRngLon));
+        console.log("Saved imported max data to localStorage.");
+    }
     //console.log(MaxRngRange +" "+MaxRngLat+" "+MaxRngLon);
 }
 
@@ -2863,6 +2872,12 @@ function importMid(json) {
           MidRngLon[obj[0]]   = obj[3]
       }
     } 
+    if (TypeOfStorageSession == 'Local') {
+        localStorage.setItem("MidRngRange", JSON.stringify(MidRngRange));
+        localStorage.setItem("MidRngLat", JSON.stringify(MidRngLat));
+        localStorage.setItem("MidRngLon", JSON.stringify(MidRngLon));
+        console.log("Saved imported mid data to localStorage.");
+    }
 }
 
 function importMin(json) {
@@ -2887,6 +2902,12 @@ function importMin(json) {
           MinRngLon[obj[0]]   = obj[3]
       }
     } 
+    if (TypeOfStorageSession == 'Local') {
+        localStorage.setItem("MinRngRange", JSON.stringify(MinRngRange));
+        localStorage.setItem("MinRngLat", JSON.stringify(MinRngLat));
+        localStorage.setItem("MinRngLon", JSON.stringify(MinRngLon));
+        console.log("Saved imported min data to localStorage.");
+    }
 }
 
 
