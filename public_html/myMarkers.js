@@ -454,6 +454,13 @@ var MyCategoryIcons = {
         anchor: [64, 64],
         path: _my_f3_svg
     },
+    "F35": {
+        key: "Tornado",
+        scale: 0.15,
+        size: [128, 128],
+        anchor: [64, 64],
+        path: _my_f3_svg
+    },
     "Typhoon": {
         key: "Typhoon",
         scale: 0.15,
