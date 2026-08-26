@@ -29,7 +29,7 @@ function createBaseLayers() {
 
         world.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
-                        "url" : "https://{a-z}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png",
+                        "url" : `https://{a-z}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}.png?key=${CartoKey}`,
                         "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
                                + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
                 }),
@@ -41,7 +41,7 @@ function createBaseLayers() {
 
         world.push(new ol.layer.Tile({
                 source: new ol.source.OSM({
-                        "url" : "https://{a-z}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
+                        "url" : `https://{a-z}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png?key=${CartoKey}`,
                         "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
                                + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
                 }),
@@ -93,7 +93,9 @@ function createBaseLayers() {
     // ------------------------------------------------------------
     world.push(new ol.layer.Tile({
         source: new ol.source.OSM({
-            "url": "http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
+            "url": `http://{a-c}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png?key=${CartoKey}`,
+                "attributions" : 'Courtesy of <a href="https://carto.com">CARTO.com</a>'
+                       + ' using data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.',
         }),
         name: 'osm_light',
         title: 'OpenStreetMap Light',

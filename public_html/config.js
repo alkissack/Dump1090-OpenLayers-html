@@ -138,6 +138,8 @@ MapzenAPIKey = null;
 //
 OpenAIPAPIKey = null;
 
+// Carto maps now need a (free) API key: https://carto.com/basemaps/apikey/
+CartoKey = null;
 
 UseDefaultTerrainRings = true;    // default Terrian rings color, otherwise colored by altitude (color defined in TerrainColorByAlt)
 UseTerrainLineDash = true;        // true: dashed or false: solid terrain rings
@@ -214,5 +216,5 @@ ShowMyFindsLayer = false;   // Private plot (non-aircraft related)
 ShowSleafordRange = false;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
 SleafordMySql = false;      // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 //OpenAIPAPIKey = "redacted";
+CartoKey = "redacted";
 // ----------------------------------------------------------------------------------------------------------------------------
-
