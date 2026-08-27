@@ -37,6 +37,10 @@ SiteName = "Rx";	// tooltip of the marker
 DefaultCenterLat = SiteLat;
 DefaultCenterLon = SiteLon;
 
+// Default options for rain overlay - thanks https://github.com/wiedehopf/tar1090
+let rainViewerRadarOpacity = 0.30;
+let rainViewerCloudsOpacity = 0.30;
+
 // -- Marker settings -------------------------------------
 
 // These settings control the coloring of aircraft by altitude.
@@ -216,5 +220,5 @@ ShowMyFindsLayer = false;   // Private plot (non-aircraft related)
 ShowSleafordRange = false;  // This shows a range layer based on 53N -0.5W A more reasltic range layer for my antenna location --  AK9T
 SleafordMySql = false;      // Don't set this without reviewing the code - it is for me and a local mySql server on 192.168.1.11
 //OpenAIPAPIKey = "redacted";
-CartoKey = "redacted";
+//CartoKey = "redacted";
 // ----------------------------------------------------------------------------------------------------------------------------

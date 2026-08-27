@@ -1,6 +1,9 @@
 // -*- mode: javascript; indent-tabs-mode: nil; c-basic-offset: 8 -*-
 "use strict";
 
+// global object to store rain overlay - thanks https://github.com/wiedehopf/tar1090
+let g = {};
+
 // Base layers configuration
 
 function createBaseLayers() {
@@ -105,6 +108,72 @@ function createBaseLayers() {
     // ------------------------------------------------------------
     // ---------------------------------------------- ref: AK2A ends
     // ------------------------------------------------------------
+    if (true) {
+        var openaip = new ol.layer.Tile({
+            // https://docs.openaip.net/?urls.primaryName=Tiles%20API
+       	    name: 'openaip',
+            title: 'OpenAIP',
+            type: 'overlay',
+            source: new ol.source.OSM({
+               "url" : "https://api.tiles.openaip.net/api/data/openaip/{z}/{x}/{y}.png?apiKey="+OpenAIPAPIKey,
+	       // Below caused partial display of tiles
+               //"url" : "https://map.adsbexchange.com/mapproxy/tiles/1.0.0/openaip/ul_grid/{z}/{x}/{y}.png",
+               "attributions" : "OpenAIP.net",
+               attributionsCollapsible: false,
+               maxZoom: 12,
+               //transition: tileTransition,
+               opaque: false,
+               opacity: 0.5,
+               format: new ol.format.GeoJSON({
+                   defaultDataProjection: "EPSG:4326",
+                   projection: "EPSG:3857",
+               }),
+            }),
+        });
+        openaip.setVisible(false);
+
+        world.push(openaip);
+    }
+
+    //  Rain overlay - thanks to: https://github.com/wiedehopf/tar1090
+    if (true) {
+        g.getRainviewerMaps = async function() {
+            const response = await fetch("https://api.rainviewer.com/public/weather-maps.json", {credentials: "omit",});
+            return await response.json();
+        }
+
+        const rainviewerRadar = new ol.layer.Tile({
+            name: 'rainviewer_radar',
+            title: 'RainViewer Radar',
+            type: 'overlay',
+            opacity: rainViewerRadarOpacity,
+            visible: false,
+            zIndex: 99,
+        });
+
+        g.refreshRainviewerRadar = async function() {
+            const maps = await g.getRainviewerMaps();
+            const past = maps.radar.past;
+            const rainviewerRadarSource = new ol.source.XYZ({
+                url: maps.host + past[past.length - 1].path + '/512/{z}/{x}/{y}/6/1_1.png',
+                attributions: '<a href="https://www.rainviewer.com/api.html" target="_blank">RainViewer.com</a>',
+                attributionsCollapsible: false,
+                maxZoom: 7,
+            });
+            rainviewerRadar.setSource(rainviewerRadarSource);
+        };
+
+        rainviewerRadar.on('change:visible', function(evt) {
+            if (evt.target.getVisible()) {
+                g.refreshRainviewerRadar();
+                g.refreshRainviewerRadarInterval = window.setInterval(g.refreshRainviewerRadar, 2 * 60 * 1000);
+            } else {
+                clearInterval(g.refreshRainviewerRadarInterval);
+            }
+        });
+
+        world.push(rainviewerRadar);
+    }
 
     // ------------------------------------------------------------
     // AKISSACK - US Layers ---------------------- ref: AK3A starts
